@@ -34,12 +34,11 @@ public class TemperHumidityServiceImpl implements TemperHumidityService {
         return temperHumidDao.list();
     }
 
-    public List<TemperHumid> listNodeTHWithTime(String nodeMark, String startTime, String endTime, HttpSession session)
+    public List<TemperHumid> listNodeTHWithTime(String nodeMark,
+                                                String startTime,
+                                                String endTime,
+                                                HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-
-        if(nodeDao.findByMark(nodeMark) ==null) {
-            // TODO
-        }
 
         return null;
     }

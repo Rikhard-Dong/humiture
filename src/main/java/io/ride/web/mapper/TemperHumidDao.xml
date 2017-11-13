@@ -17,7 +17,7 @@
         t.humidity,
         t.report_time,
         t.type,
-        n.node_id      "parentNode.nodeId",
+        n.node_id      "parentNode.nodeMark",
         n.node_mark    "parentNode.nodeMark",
         n.getway_id    "parentNode.getwayId",
         n.spare_node   "parentNode.spareNode",
@@ -54,7 +54,7 @@
         SELECT
         <include refid="select_with_node"/>
         FROM t_temper_humid t INNER JOIN t_node n ON t.node_id = n.node_id
-        WHERE t.node_id = #{nodeId}
+        WHERE t.node_id = #{nodeMark}
     </select>
 
     <select id="listByNodeIdAndTimeSlot" resultType="io.ride.web.entity.TemperHumid">
@@ -62,7 +62,7 @@
         <include refid="base_select"/>
         FROM t_temper_humid t
         INNER JOIN t_node n ON t.node_id = n.node_id
-        WHERE t.node_id = #{nodeId} and t.report_time BETWEEN #{startTime} AND #{endTime}
+        WHERE t.node_id = #{nodeMark} and t.report_time BETWEEN #{startTime} AND #{endTime}
     </select>
 
     <select id="listByNodeMarkWithTime" resultType="io.ride.web.entity.TemperHumid">

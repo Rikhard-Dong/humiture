@@ -25,4 +25,7 @@ public interface BatchDeleteService {
 
     void batchDeleteNode(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException;
+
+    void batchDeleteRepair(String arg, HttpSession session)
+            throws NotFoundException, HasNoPermissionException, UpdateException;
 }

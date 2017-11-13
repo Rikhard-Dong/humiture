@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.ride.web.dao.RepairDao">
+
+    <insert id="add">
+        INSERT INTO t_repair
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="repair.nodeId != null">node_id,</if>
+            <if test="repair.faultDesc != null">fault_desc,</if>
+            <if test="repair.phone != null">phone,</if>
+            <if test="repair.person != null">person,</if>
+            <if test="repair.address != null">address,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="repair.nodeId != null">#{repair.nodeId},</if>
+            <if test="repair.faultDesc != null">#{repair.faultDesc},</if>
+            <if test="repair.phone != null">#{repair.phone},</if>
+            <if test="repair.person != null">#{repair.person},</if>
+            <if test="repair.address != null">#{repair.address},</if>
+        </trim>
+    </insert>
+
+    <update id="update">
+        UPDATE t_repair SET
+        <trim suffixOverrides=",">
+            <if test="repair.nodeId != null">node_id = #{repair.nodeId},</if>
+            <if test="repair.faultDesc != null">fault_desc = #{repair.faultDesc},</if>
+            <if test="repair.phone != null">phone = #{repair.phone},</if>
+            <if test="repair.person != null">person = #{repair.person},</if>
+            <if test="repair.address != null">address = #{repair.address},</if>
+            <if test="repair.status != null">`status` = #{repair.status},</if>
+        </trim>
+        WHERE repair_id = #{repair.repairId}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE t_repair
+        SET `status` = #{status}
+        WHERE repair_id = #{repairId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM t_repair
+        WHERE repair_id = #{repaitId}
+    </delete>
+
+    <select id="list" resultType="io.ride.web.entity.Repair">
+        <choose>
+            <!-- 系统管理员 -->
+            <when test="userType == 0">
+                SELECT * FROM t_repair
+            </when>
+            <!-- 单位管理员或者特权单位管理员 -->
+            <when test="userType == 1 or userType == 2">
+                SELECT * FROM t_repair WHERE node_id IN (SELECT n.node_id FROM t_node n, t_rent r, t_unit u
+                WHERE n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId})
+            </when>
+            <otherwise>
+                SELECT NULL;
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="search" resultType="io.ride.web.entity.Repair">
+        <choose>
+            <!-- 系统管理员 -->
+            <when test="userType == 0">
+                SELECT * FROM t_repair WHERE node_id IN (SELECT n.node_id FROM t_node n WHERE n.node_mark LIKE
+                '%${param}%') OR person LIKE '%${param}%'
+            </when>
+            <!-- 单位管理员或者特权单位管理员 -->
+            <when test="userType == 1 or userType == 2">
+                SELECT * FROM t_repair WHERE node_id IN (SELECT n.node_id FROM t_node n, t_rent r, t_unit u
+                WHERE n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId}) AND (node_id IN
+                (SELECT n.node_id FROM t_node n WHERE n.node_mark LIKE
+                '%${param}%') OR person LIKE '%${param}%')
+            </when>
+            <otherwise>
+                SELECT NULL;
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findById" resultType="io.ride.web.entity.Repair">
+        <choose>
+            <!-- 系统管理员 -->
+            <when test="userType == 0">
+                SELECT * FROM t_repair WHERE repair_id = #{repairId}
+            </when>
+            <!-- 单位管理员或者特权单位管理员 -->
+            <when test="userType == 1 or userType == 2">
+                SELECT * FROM t_repair WHERE node_id IN (SELECT n.node_id FROM t_node n, t_rent r, t_unit u
+                WHERE n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId}) AND repair_id =
+                #{repairId}
+            </when>
+            <otherwise>
+                SELECT NULL;
+            </otherwise>
+        </choose>
+    </select>
+
+
+</mapper>

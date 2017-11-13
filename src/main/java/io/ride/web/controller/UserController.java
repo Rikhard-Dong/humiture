@@ -36,7 +36,7 @@ public class UserController {
         try {
             user = userService.login(username, password);
         } catch (UsernameOrPasswordException e) {
-            LOGGER.error("用户登录失败", e);
+            LOGGER.error("用户登录失败");
             return new Result(false, -1, e.getMessage());
         }
         session.setAttribute("user", user);

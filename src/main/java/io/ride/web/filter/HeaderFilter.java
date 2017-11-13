@@ -31,8 +31,8 @@ public class HeaderFilter implements Filter {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
 //        response.setHeader("Content-Type", "application/json");
-        filterChain.doFilter(servletRequest, servletResponse);
         LOGGER.info("请求URL --------------------------> {}", showUrl((HttpServletRequest) servletRequest));
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     private String showUrl(HttpServletRequest request) {

@@ -6,6 +6,7 @@ import io.ride.web.exception.NotFoundException;
 import io.ride.web.exception.UpdateException;
 import io.ride.web.service.BatchDeleteService;
 import io.ride.web.util.ParamDivisionUtil;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.Arrays;
  * Date: 17-11-11
  * Time: 下午6:06
  * <p>
- *
+ * <p>
  * 批量删除操作
  */
 
@@ -43,14 +44,8 @@ public class BatchDeleteController {
         LOGGER.info("待删除用户: {}", Arrays.toString(ParamDivisionUtil.getParams(arg)));
         try {
             batchDeleteService.batchDeleteUser(arg, session);
-        } catch (HasNoPermissionException e) {
-            LOGGER.error("权限异常! ", e);
-            return new Result(false, -1, e.getMessage());
-        } catch (NotFoundException e) {
-            LOGGER.error("用户未找到异常! ", e);
-            return new Result(false, -1, e.getMessage());
-        } catch (UpdateException e) {
-            LOGGER.error("数据库更新异常", e);
+        } catch (Exception e) {
+            LOGGER.error("error message = {}! ", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
 
@@ -65,7 +60,7 @@ public class BatchDeleteController {
         try {
             batchDeleteService.batchDeleteUnit(arg, session);
         } catch (Exception e) {
-            LOGGER.error("权限异常! ", e);
+            LOGGER.error("error message = {}! ", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
 
@@ -78,9 +73,8 @@ public class BatchDeleteController {
         LOGGER.info("待删除网关: {}", Arrays.toString(ParamDivisionUtil.getParams(arg)));
 
         try {
-            deleteGetwayBatch(arg, session);
         } catch (Exception e) {
-            LOGGER.error("权限异常! ", e);
+            LOGGER.error("error message = {}! ", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
         return new Result(true, 1, "批量删除网关成功");
@@ -91,12 +85,24 @@ public class BatchDeleteController {
                                   HttpSession session) {
         LOGGER.info("待删除节点: {}", Arrays.toString(ParamDivisionUtil.getParams(arg)));
         try {
-            deleteNodeBatch(arg, session);
         } catch (Exception e) {
-            LOGGER.error("权限异常! ", e);
+            LOGGER.error("error message = {}! ", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
 
         return new Result(true, 1, "批量删除节点成功");
+    }
+
+    @DeleteMapping(value = "/repair/{arg}")
+    public Result deleteRepairBatch(@PathVariable("arg") String arg, HttpSession session) {
+        LOGGER.info("待删除报修信息: {}", Arrays.toString(ParamDivisionUtil.getParams(arg)));
+
+        try {
+            batchDeleteService.batchDeleteRepair(arg, session);
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
+            return new Result(false, -1, e.getMessage());
+        }
+        return new Result(true, 1, "批量删除报修信息成功");
     }
 }

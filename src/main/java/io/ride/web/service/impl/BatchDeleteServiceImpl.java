@@ -1,9 +1,6 @@
 package io.ride.web.service.impl;
 
-import io.ride.web.dao.GetwayDao;
-import io.ride.web.dao.NodeDao;
-import io.ride.web.dao.UnitDao;
-import io.ride.web.dao.UserInfoDao;
+import io.ride.web.dao.*;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
@@ -42,6 +39,9 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Autowired
     private NodeDao nodeDao;
 
+
+    @Autowired
+    private RepairDao repairDao;
 
     @Transactional
     public void batchDeleteUser(String arg, HttpSession session)
@@ -105,6 +105,29 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Transactional
     public void batchDeleteNode(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
+
+    }
+
+    @Transactional
+    public void batchDeleteRepair(String arg, HttpSession session)
+            throws NotFoundException, HasNoPermissionException, UpdateException {
+        UserInfo currentUser = PermissionUnit.isLogin(session);
+        int result;
+        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+            String[] repairIds = ParamDivisionUtil.getParams(arg);
+            for (String repairId : repairIds) {
+                Integer id = Integer.valueOf(repairId);
+                if (repairDao.findById(id, currentUser.getUserType(), currentUser.getUnitId()) == null) {
+                    throw new NotFoundException("保修信息未发现");
+                }
+                result = repairDao.delete(id);
+                if (result == 0) {
+                    throw new UpdateException("数据库信息更新异常");
+                }
+            }
+        } else {
+            throw new HasNoPermissionException("没有相应的权限");
+        }
 
     }
 }

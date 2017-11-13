@@ -18,13 +18,16 @@ public interface NodeDao {
 
     Node findById(int nodeId);
 
-    Node findByMark(String mark);
+    Node findByMark(@Param("mark") String mark,
+                    @Param("userType") Integer userType,
+                    @Param("unitId") Integer unitId);
 
     Node findByIdWithGetway(int nodeId);
 
     Node findByMarkWithGetway(String mask);
 
     Node findByUnitIdAndNodeId(@Param("unitId") Integer unitId, @Param("nodeId") Integer nodeId);
+
 
     int addNode(@Param(value = "node") Node node);
 

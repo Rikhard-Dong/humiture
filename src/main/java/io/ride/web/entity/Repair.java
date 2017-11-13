@@ -1,5 +1,7 @@
 package io.ride.web.entity;
 
+import io.ride.web.dto.RepairDto;
+
 import java.util.Date;
 
 /**
@@ -7,8 +9,8 @@ import java.util.Date;
  * User: ride
  * Date: 17-11-13
  * Time: 下午3:27
- *
- *
+ * <p>
+ * 节点保修信息实体
  */
 public class Repair {
 
@@ -19,7 +21,20 @@ public class Repair {
     private String person;
     private String address;
     private Date faultTime;
-    private Integer status;
+    private Integer status;     // 0. 未处理 1. 处理中 2.处理完成
+
+    public Repair() {
+    }
+
+
+    public Repair(RepairDto repairDto, Integer nodeId) {
+        this.repairId = repairDto.getRepairId();
+        this.nodeId = nodeId;
+        this.faultDesc = repairDto.getFaultDesc();
+        this.phone = repairDto.getPhone();
+        this.person = repairDto.getPerson();
+        this.address = repairDto.getAddress();
+    }
 
     private Node node;
 

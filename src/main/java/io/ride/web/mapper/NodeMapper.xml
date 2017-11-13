@@ -33,7 +33,7 @@
     <insert id="addNode">
         INSERT INTO t_node
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="node.nodeId != null">node_id,</if>
+            <if test="node.nodeMark != null">node_id,</if>
             <if test="node.nodeMark != null">node_mark,</if>
             <if test="node.getwayId != null">getway_id,</if>
             <if test="node.spareNode != null">spare_node,</if>
@@ -47,7 +47,7 @@
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="node.nodeId != null">#{node.nodeId},</if>
+            <if test="node.nodeMark != null">#{node.nodeMark},</if>
             <if test="node.nodeMark != null">#{node.nodeMark},</if>
             <if test="node.getwayId != null">#{node.getwayId},</if>
             <if test="node.spareNode != null">#{node.spareNode},</if>
@@ -76,13 +76,13 @@
             <if test="node.timeInter != null">time_inter = #{node.timeInter},</if>
             <if test="node.memo != null">memo = #{node.memo},</if>
         </trim>
-        WHERE node_id = #{node.nodeId};
+        WHERE node_id = #{node.nodeMark};
     </update>
 
     <update id="updateTemperAndHumidity">
         UPDATE t_node
         SET now_temper = #{temper}, now_humidity = #{humidity}
-        WHERE node_id = #{nodeId};
+        WHERE node_id = #{nodeMark};
     </update>
 
     <update id="updateNodeByMark">
@@ -118,14 +118,23 @@
     <select id="findById" resultType="io.ride.web.entity.Node">
         SELECT
         <include refid="base_select"/>
-        FROM t_node WHERE node_id = #{nodeId};
+        FROM t_node WHERE node_id = #{nodeMark};
     </select>
 
     <select id="findByMark" resultType="io.ride.web.entity.Node">
-        SELECT
-        <include refid="base_select"/>
-        FROM t_node
-        WHERE node_mark = #{mark};
+        <choose>
+            <when test="userType == 0">
+                SELECT
+                *
+                FROM t_node
+                WHERE node_mark = #{mark};
+            </when>
+            <when test="userType == 1 or userType == 2">
+                SELECT n.* FROM t_node n WHERE n.node_id IN (SELECT n.node_id FROM t_node n, t_unit u, t_rent r WHERE
+                n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId} AND current_timestamp
+                BETWEEN r.start_time AND r.end_time) AND n.node_mark = #{mark}
+            </when>
+        </choose>
     </select>
 
     <select id="findByIdWithGetway" resultType="io.ride.web.entity.Node">
@@ -133,7 +142,7 @@
         <include refid="select_with_getway"/>
         FROM t_node n
         INNER JOIN t_getway g ON n.getway_id = g.getway_id
-        WHERE node_id=#{nodeId};
+        WHERE node_id=#{nodeMark};
     </select>
 
     <select id="findByMarkWithGetway" resultType="io.ride.web.entity.Node">
@@ -148,16 +157,16 @@
         FROM t_node
         WHERE node_mark = #{mark};
     </select>
+
     <select id="findByUnitIdAndNodeId" resultType="io.ride.web.entity.Node">
         SELECT n.*
-        FROM t_node n, t_getway g, t_unit u
-        WHERE n.getway_id = g.getway_id AND g.getway_id IN (SELECT g.getway_id
-                                                            FROM t_getway g, t_unit u, t_rent r
-                                                            WHERE
-                                                                r.getway_id = g.getway_id AND u.unit_id = r.unit_id AND
-                                                                u.unit_id = #{unitId} AND
-                                                                current_time BETWEEN r.start_time AND end_time)
-              AND n.node_id = #{nodeId};
+        FROM t_node n
+        WHERE n.node_id IN (SELECT g.getway_id
+                            FROM t_getway g, t_unit u, t_rent r
+                            WHERE
+                                r.getway_id = g.getway_id AND u.unit_id = r.unit_id AND u.unit_id = #{unitId}
+                                AND current_timestamp BETWEEN r.start_time AND end_time)
+              AND n.node_id = #{nodeMark};
 
     </select>
 </mapper>

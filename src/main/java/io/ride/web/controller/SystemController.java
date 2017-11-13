@@ -1,9 +1,12 @@
 package io.ride.web.controller;
 
+import io.ride.web.dto.RepairDto;
 import io.ride.web.dto.Result;
+import io.ride.web.entity.Repair;
 import io.ride.web.entity.Unit;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.*;
+import io.ride.web.service.RepairService;
 import io.ride.web.service.UnitService;
 import io.ride.web.service.UserService;
 import io.ride.web.util.MD5Encrypt;
@@ -34,6 +37,9 @@ public class SystemController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RepairService repairService;
+
     /*******************************************************************
      **********************   单位管理   *********************************
      *******************************************************************/
@@ -43,14 +49,8 @@ public class SystemController {
         LOGGER.info("添加单位 = {}", unit);
         try {
             unitService.addUnit(unit, session);
-        } catch (HasNoPermissionException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (IsExistsException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (UpdateException e) {
-            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
 
@@ -64,14 +64,8 @@ public class SystemController {
 
         try {
             unitService.updateUnit(unit, session);
-        } catch (HasNoPermissionException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (NotFoundException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (UpdateException e) {
-            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
 
@@ -83,14 +77,8 @@ public class SystemController {
         LOGGER.info("title = {}", title);
         try {
             unitService.deleteUnit(title, session);
-        } catch (HasNoPermissionException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (NotFoundException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (UpdateException e) {
-            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
         return new Result(true, 1, "删除单位成功!");
@@ -106,14 +94,8 @@ public class SystemController {
         LOGGER.info("添加用户 = {}", user);
         try {
             userService.addUser(user, session);
-        } catch (IsExistsException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (HasNoPermissionException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (PasswordNotEqualsException e) {
-            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
         return new Result(true, 1, "添加用户成功");
@@ -124,14 +106,8 @@ public class SystemController {
         LOGGER.info("待修改用户信息 = {}", user);
         try {
             userService.updateUser(user, session);
-        } catch (NotFoundException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (HasNoPermissionException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (PasswordNotEqualsException e) {
-            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
 
@@ -142,15 +118,46 @@ public class SystemController {
     public Result deleteUser(@PathVariable("username") String username, HttpSession session) {
         try {
             userService.deleteUser(username, session);
-        } catch (HasNoPermissionException e) {
-            LOGGER.error(e.getMessage());
-            return new Result(false, -1, e.getMessage());
-        } catch (NotFoundException e) {
-            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
         return new Result(true, 1, "删除用户成功");
     }
 
+    /*******************************************************************
+     **********************   保修信息管理   ******************************
+     *******************************************************************/
 
+    @PostMapping(value = "/repair")
+    public Result addRepair(RepairDto repairDto, HttpSession session) {
+        try {
+            repairService.add(repairDto, session);
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
+            return new Result(false, -1, e.getMessage());
+        }
+        return new Result(true, 1, "添加保修信息成功");
+
+    }
+
+    @PostMapping(value = "/repair/update")
+    public Result updateRepair(RepairDto repairDto, HttpSession session) {
+        LOGGER.info("repair dto = {}", repairDto);
+        try {
+            repairService.update(repairDto, session);
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
+            return new Result(false, -1, e.getMessage());
+        }
+        return new Result(true, 1, "更新保修信息成功");
+    }
+
+    @PostMapping(value = "/repair/{repairId}")
+    public Result deleteRepair(@PathVariable(value = "repairId") Integer repairId, HttpSession session) {
+        // TODO 暂时不用 删除单个信息也使用批量删除的方法, 后续可能废弃
+
+        return new Result(true, 1, "删除保修信息成功");
+
+    }
 }

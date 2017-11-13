@@ -32,8 +32,6 @@ DROP TABLE db_humiture.t_unit;
 DROP TABLE db_humiture.t_getway;
 DROP TABLE IF EXISTS test;
 
-DROP PROCEDURE test_procedure;
-DROP EVENT second_event;
 
 CREATE TABLE IF NOT EXISTS t_getway (
   getway_id    INT(4)      NOT NULL AUTO_INCREMENT
@@ -112,7 +110,7 @@ CREATE TABLE IF NOT EXISTS t_user_info (
   COMMENT '单位ID, 外键',
   `name`      VARCHAR(20) COMMENT '用户姓名',
   `user_type` SMALLINT(2) NOT NULL
-  COMMENT '用户类型',
+  COMMENT '用户类型 0 系统管理员 1 特权单位管理员 2 单位管理员 3. 特权单位管理员',
   `username`  VARCHAR(32) NOT NULL UNIQUE
   COMMENT '登录名',
   `password`  VARCHAR(50) NOT NULL
@@ -193,22 +191,22 @@ CREATE TABLE IF NOT EXISTS t_temper_humid (
   ENGINE = InnoDB, CHARACTER SET utf8, COMMENT 'Temper温湿度信息表';
 
 CREATE TABLE IF NOT EXISTS t_repair (
-  `repair_id`  INT(4)       NOT NULL AUTO_INCREMENT
+  `repair_id`  INT(4)            NOT NULL AUTO_INCREMENT
   COMMENT '主键',
-  `node_id`    INT(4)       NOT NULL
+  `node_id`    INT(4)            NOT NULL
   COMMENT '故障节点ID, 外键',
-  `fault_desc` VARCHAR(100) NOT NULL
+  `fault_desc` VARCHAR(100)      NOT NULL
   COMMENT '故障描述',
-  `phone`      VARCHAR(20)  NOT NULL
+  `phone`      VARCHAR(20)       NOT NULL
   COMMENT '联系人电话',
-  `person`     VARCHAR(50)  NOT NULL
+  `person`     VARCHAR(50)       NOT NULL
   COMMENT '联系人',
-  `address`    VARCHAR(50)  NOT NULL
+  `address`    VARCHAR(50)       NOT NULL
   COMMENT '联系地址',
-  `fault_time` DATETIME     NOT NULL
+  `fault_time` DATETIME                   DEFAULT CURRENT_TIMESTAMP
   COMMENT '故障上报时间',
-  `status`     INT(4)       NOT NULL
-  COMMENT '状态',
+  `status`     INT(4) DEFAULT 0  NOT NULL
+  COMMENT '状态 0 未处理 1 处理中 2 处理完成',
   PRIMARY KEY (`repair_id`),
   FOREIGN KEY (`node_id`) REFERENCES t_node (`node_id`)
     ON UPDATE CASCADE
@@ -239,12 +237,12 @@ CREATE TABLE IF NOT EXISTS test (
   `value` INT NOT NULL
 );
 
-CREATE PROCEDURE test_procedure()
-  BEGIN
-    INSERT INTO test (value) VALUES ('111');
-  END;
-
-create event second_event
-  on schedule every 1 HOUR
-  on completion preserve ENABLE
-do call test_procedure();
+# CREATE PROCEDURE test_procedure()
+#   BEGIN
+#     INSERT INTO test (value) VALUES ('111');
+#   END;
+#
+# CREATE EVENT second_event
+#   ON SCHEDULE EVERY 1 HOUR
+#   ON COMPLETION PRESERVE ENABLE
+# DO CALL test_procedure();

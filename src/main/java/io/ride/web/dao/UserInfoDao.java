@@ -50,8 +50,8 @@ public interface UserInfoDao {
 
     List<UserInfo> listFromUnit(@Param("unitId") Integer unitId);
 
-    List<UserInfo> search(@Param("arg") String arg);
-
-    List<UserInfo> search2(@Param("arg") String arg, @Param("userType") Integer userIdType);
+    List<UserInfo> search(@Param("arg") String arg,
+                          @Param("userType") Integer userType,
+                          @Param("unitId") Integer unitId);
 
 }

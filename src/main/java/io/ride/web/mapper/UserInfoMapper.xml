@@ -121,19 +121,21 @@
     </select>
 
     <select id="search" resultType="io.ride.web.entity.UserInfo">
-        SELECT *
-        FROM t_user_info
-        WHERE name LIKE #{arg} OR username LIKE '%${arg}%'
-    </select>
-    <select id="search2" resultType="io.ride.web.entity.UserInfo">
-        <if test="userType == 0">
-            SELECT *
-            FROM t_user_info
-            WHERE name LIKE #{arg} OR username LIKE '%${arg}%'
-        </if>
-        <if test="userType == 1 or userType == 2">
+        <choose>
+            <when test="userType == 0">
+                SELECT *
+                FROM t_user_info
+                WHERE name LIKE #{arg} OR username LIKE '%${arg}%'
+            </when>
+            <when test="userType == 1 or userType == 2">
+                SELECT *
+                FROM t_user_info
+                WHERE unit_id = #{unitId} AND (name LIKE #{arg} OR username LIKE '%${arg}%')
+            </when>
+        </choose>
 
-        </if>
+
     </select>
+
 
 </mapper>

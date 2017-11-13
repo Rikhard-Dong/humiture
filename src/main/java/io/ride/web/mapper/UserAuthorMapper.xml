@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.ride.web.dao.UserAuthorDao">
     <insert id="add">
-        INSERT INTO t_user_author (user_id, node_id) VALUES (#{userId}, #{nodeId})
+        INSERT INTO t_user_author (user_id, node_id) VALUES (#{userId}, #{nodeMark})
     </insert>
 
     <delete id="delete">
         DELETE FROM t_user_author
-        WHERE user_id = #{userId} AND node_id = #{nodeId}
+        WHERE user_id = #{userId} AND node_id = #{nodeMark}
     </delete>
 
     <delete id="deleteById">
