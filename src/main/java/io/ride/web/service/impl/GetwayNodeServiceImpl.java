@@ -175,12 +175,17 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     }
 
     public Node findNodeByMark(String mark, HttpSession session) throws NotFoundException {
-        Node node = nodeDao.findByMark(mark);
-        if (node == null) {
-            LOGGER.error("节点不存在");
-            throw new NotFoundException("节点不存在");
+        UserInfo user = PermissionUnit.isLogin(session);
+        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+            Node node = nodeDao.findByMark(mark, user.getUserType(), user.getUnitId());
+            if (node == null) {
+                throw new NotFoundException("节点不存在");
+            }
+            return node;
+        } else {
+            throw new HasNoPermissionException("没有相应的操作权限");
         }
-        return node;
+
     }
 
     public void deleteGetway(String mark, HttpSession session)
@@ -215,7 +220,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (!nodeDao.isExists(mark)) {
             throw new NotFoundException("节点不存在");
         }
-        Node node = nodeDao.findByMark(mark);
+        Node node = nodeDao.findByMark(mark, user.getUserType(), user.getUnitId());
         int result;
         if (node.getType() == 0) {
             // 删除网关会自动删除对应的节点, 不需要在删除相应的节点了

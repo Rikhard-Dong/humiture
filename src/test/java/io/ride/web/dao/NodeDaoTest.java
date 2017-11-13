@@ -50,7 +50,6 @@ public class NodeDaoTest {
 
     @Test
     public void findByMarkTest() {
-        LOGGER.info("node find by mark = {}", nodeDao.findByMark("1111"));
     }
 
     @Test
@@ -69,10 +68,7 @@ public class NodeDaoTest {
 
     @Test
     public void updateNode() {
-        Node node = nodeDao.findByMark("10021");
-        System.out.println(node);
-        node.setMemo("this getway 1 subnode 2");
-        nodeDao.updateNode(node);
+
     }
 
     @Test

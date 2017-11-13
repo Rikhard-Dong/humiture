@@ -74,7 +74,7 @@ public class RepairServiceImpl implements RepairService {
             if (old == null) {
                 throw new NotFoundException("报修信息不存在, 所以无法修改");
             }
-            Node node = nodeDao.findByMark(repairDto.getNodeMark());
+            Node node = nodeDao.findByMark(repairDto.getNodeMark(), user.getUserType(), user.getUnitId());
             Repair repair = new Repair(repairDto, node.getNodeId());
             LOGGER.info("Repair update ---> repair --------> {}", repair);
             int result = repairDao.update(repair);
