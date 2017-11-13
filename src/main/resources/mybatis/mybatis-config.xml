@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <!-- 开启驼峰命名转换 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 使用jdbc的generatedKeys获取数据库自增主键 -->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!-- 使用列别名替换列别名默认true -->
+        <setting name="useColumnLabel" value="true"/>
+
+    </settings>
+
+    <typeAliases>
+        <package name="io.ride.web.entity"/>
+    </typeAliases>
+    <!-- 配置分页插件拦截器 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 分页参数合理化 -->
+            <property name="reasonable" value="true"/>
+            <property name="supportMethodsArguments" value="true"/>
+            <property name="params" value="pageNum=pageNumKey;pageSize=pageSizeKey;"/>
+        </plugin>
+    </plugins>
+</configuration>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.ride.web.dao.RentDao">
+    <insert id="add">
+
+        INSERT INTO t_rent
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="rent.getwayId != null">getway_id,</if>
+            <if test="rent.unitId != null">unit_id,</if>
+            <if test="rent.startTime != null">start_time,</if>
+            <if test="rent.endTime != null">end_time,</if>
+            <if test="rent.pay != null">pay,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="rent.getwayId != null">#{rent.getwayId},</if>
+            <if test="rent.unitId != null">#{rent.unitId},</if>
+            <if test="rent.startTime != null">#{rent.startTime},</if>
+            <if test="rent.endTime != null">#{rent.endTime},</if>
+            <if test="rent.pay != null">#{rent.pay},</if>
+        </trim>
+    </insert>
+
+    <update id="update">
+        UPDATE t_rent SET
+        <trim suffixOverrides=",">
+            <if test="rent.startTime != null">start_time = #{rent.startTime},</if>
+            <if test="rent.endTime != null">end_time = #{rent.endTime},</if>
+            <if test="rent.pay != null">pay = #{rent.pay},</if>
+        </trim>
+        WHERE rent_id = #{rent.rent_id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE t_rent
+        SET `status` = (CASE WHEN CURRENT_TIME > end_time
+            THEN 0
+                        WHEN CURRENT_TIME <![CDATA[<]]> start_time
+                            THEN 2
+                        ELSE 1 END)
+        WHERE rent_id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM t_rent
+        WHERE rent_id = #{id}
+    </delete>
+
+    <select id="list" resultType="io.ride.web.entity.Rent">
+        SELECT *
+        FROM t_rent;
+    </select>
+
+    <select id="listWithUnit" resultType="io.ride.web.entity.Rent">
+        SELECT *
+        FROM t_rent
+        WHERE unit_id = #{unitId};
+    </select>
+    <select id="findByTime" resultType="io.ride.web.entity.Rent">
+        SELECT *
+        FROM t_rent
+        WHERE (#{startTime} BETWEEN start_time AND end_time)
+              OR (#{endTime} BETWEEN start_time AND end_time);
+    </select>
+
+    <select id="findByRentId" resultType="io.ride.web.entity.Rent">
+        SELECT *
+        FROM t_rent
+        WHERE rent_id = #{rentId}
+    </select>
+
+</mapper>

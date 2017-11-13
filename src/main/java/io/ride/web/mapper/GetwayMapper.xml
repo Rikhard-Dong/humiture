@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.ride.web.dao.GetwayDao">
+    <insert id="addGetway">
+        INSERT INTO t_getway
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="getway.getwayMark != null">getway_mark,</if>
+            <if test="getway.spareNode != null">spare_node,</if>
+            <if test="getway.nodeNum != null">node_num,</if>
+            <if test="getway.status != null"><![CDATA[status]]>,</if>
+            <if test="getway.nowTemper != null">now_temper,</if>
+            <if test="getway.nowHumidity != null">now_humidity,</if>
+            <if test="getway.timeInter != null">time_inter,</if>
+            <if test="getway.memo != null">memo</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="getway.getwayMark != null">#{getway.getwayMark},</if>
+            <if test="getway.spareNode != null">#{getway.spareNode},</if>
+            <if test="getway.nodeNum != null">#{getway.nodeNum},</if>
+            <if test="getway.status != null">#{getway.status},</if>
+            <if test="getway.nowTemper != null">#{getway.nowTemper},</if>
+            <if test="getway.nowHumidity != null">#{getway.nowHumidity},</if>
+            <if test="getway.timeInter != null">#{getway.timeInter},</if>
+            <if test="getway.memo != null">#{getway.memo},</if>
+        </trim>
+        ;
+    </insert>
+    <update id="updateGetway">
+        UPDATE t_getway SET
+        <trim suffixOverrides=",">
+            <if test="getway.getwayMark != null">getway_mark = #{getway.getwayMark},</if>
+            <if test="getway.spareNode != null">spare_node = #{getway.spareNode},</if>
+            <if test="getway.nodeNum != null">node_num = #{getway.nodeNum},</if>
+            <if test="getway.status != null">`status` = #{getway.status},</if>
+            <if test="getway.nowTemper != null">now_temper = #{getway.nowTemper},</if>
+            <if test="getway.nowHumidity != null">now_humidity = #{getway.nowHumidity},</if>
+            <if test="getway.timeInter != null">time_inter = #{getway.timeInter},</if>
+            <if test="getway.memo != null">memo = #{getway.memo},</if>
+        </trim>
+        WHERE getway_id = #{getway.getwayId};
+    </update>
+
+    <update id="updateTemperAndHumidity">
+        UPDATE t_getway
+        SET now_temper = #{temper}, now_humidity = #{humidity}
+        WHERE getway_id = #{getwayId};
+    </update>
+
+    <update id="updateGetwayByMark">
+        UPDATE t_getway SET
+        <trim suffixOverrides=",">
+            <if test="getway.spareNode != null">spare_node = #{getway.spareNode},</if>
+            <if test="getway.nodeNum != null">node_num = #{getway.nodeNum},</if>
+            <if test="getway.status != null">`status` = #{getway.status},</if>
+            <if test="getway.nowTemper != null">now_temper = #{getway.nowTemper},</if>
+            <if test="getway.nowHumidity != null">now_humidity = #{getway.nowHumidity},</if>
+            <if test="getway.timeInter != null">time_inter = #{getway.timeInter},</if>
+            <if test="getway.memo != null">memo = #{getway.memo},</if>
+        </trim>
+        WHERE getway_mark = #{getway.getwayMark};
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_getway
+        WHERE getway_id = #{id};
+    </delete>
+
+    <delete id="deleteByMark">
+        DELETE FROM t_getway
+        WHERE getway_mark = #{mark}
+    </delete>
+
+    <select id="findById" resultType="io.ride.web.entity.Getway">
+        SELECT *
+        FROM t_getway
+        WHERE getway_id = #{getwayId}
+    </select>
+
+    <select id="findByMark" resultType="io.ride.web.entity.Getway">
+        SELECT *
+        FROM t_getway
+        WHERE getway_mark = #{mark}
+    </select>
+
+    <select id="list" resultType="io.ride.web.entity.Getway">
+        SELECT *
+        FROM t_getway
+    </select>
+
+    <select id="listSubNode" resultType="io.ride.web.entity.Node">
+        SELECT t_node.*
+        FROM t_getway
+            INNER JOIN t_node ON t_getway.getway_id = t_node.getway_id
+        WHERE t_node.getway_id = #{id}
+    </select>
+
+    <select id="isExists" resultType="java.lang.Boolean">
+        SELECT (COUNT(1) = 1)
+        FROM t_getway
+        WHERE getway_mark = #{mark}
+    </select>
+    <select id="listSubNodeByNodeMark" resultType="io.ride.web.entity.Node">
+        SELECT t_node.*
+        FROM t_getway
+            INNER JOIN t_node ON t_getway.getway_id = t_node.getway_id
+        WHERE t_getway.getway_mark = #{mark}
+    </select>
+
+</mapper>

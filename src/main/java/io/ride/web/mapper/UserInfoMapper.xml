@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.ride.web.dao.UserInfoDao">
+
+    <sql id="base_user">
+        u.user_id,
+        u.unit_id,
+        u.name,
+        u.user_type,
+        u.username,
+        u.username,
+        u.password,
+        u.memo
+    </sql>
+
+    <sql id="user_with_unit_info">
+        u.user_id,
+        u.unit_id,
+        u.name,
+        u.user_type,
+        u.username,
+        u.username,
+        u.password,
+        u.memo,
+        un.unit_id 'unit.unitId',
+        un.title 'unit.title',
+        un.address 'unit.address',
+        un.person 'unit.person',
+        un.phone 'unit.phone',
+        un.email 'unit.email',
+        un.unit_type 'unit.unitType',
+        un.memo 'unit.memo'
+    </sql>
+
+    <insert id="addUser">
+        INSERT INTO t_user_info
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="user.unitId != null">unit_id,</if>
+            <if test="user.name != null">`name`,</if>
+            <if test="user.userType != null">user_type,</if>
+            <if test="user.username != null">username,</if>
+            <if test="user.password != null">`password`,</if>
+            <if test="user.memo != null">memo,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffixOverrides="," suffix=");">
+            <if test="user.unitId != null">#{user.unitId},</if>
+            <if test="user.name != null">#{user.name},</if>
+            <if test="user.userType != null">#{user.userType},</if>
+            <if test="user.username != null">#{user.username},</if>
+            <if test="user.password != null">#{user.password},</if>
+            <if test="user.memo != null">#{user.memo},</if>
+        </trim>
+    </insert>
+
+    <update id="updateByUsername">
+        UPDATE t_user_info SET
+        <trim suffixOverrides=",">
+            <if test="user.unitId != null">unit_id = #{user.unitId},</if>
+            <if test="user.name != null">`name` = #{user.name},</if>
+            <if test="user.password != null">`password` = #{user.password},</if>
+            <if test="user.memo != null">memo = #{user.memo},</if>
+            <if test="user.userType!=null">user_type = #{user.userType},</if>
+        </trim>
+        WHERE username = #{user.username};
+    </update>
+
+    <delete id="deleteByUserId">
+        DELETE FROM t_user_info
+        WHERE user_id = #{id};
+    </delete>
+    <delete id="deleteByUsername">
+        DELETE FROM t_user_info
+        WHERE username = #{username};
+    </delete>
+
+    <select id="isAccountExists" resultType="java.lang.Boolean">
+        SELECT (count(1) = 1)
+        FROM t_user_info
+        WHERE username = #{username};
+    </select>
+    <select id="accountValidate" resultType="UserInfo">
+        SELECT
+        <include refid="user_with_unit_info"/>
+        FROM t_user_info u LEFT JOIN t_unit un ON u.unit_id = un.unit_id
+        WHERE u.username = #{username} AND u.password = #{password} LIMIT 1;
+    </select>
+    <select id="findByUserId" resultType="io.ride.web.entity.UserInfo">
+        SELECT *
+        FROM t_user_info
+        WHERE unit_id = #{id};
+    </select>
+
+    <select id="findByUsername" resultType="io.ride.web.entity.UserInfo">
+        SELECT *
+        FROM t_user_info
+        WHERE username = #{username};
+    </select>
+
+    <select id="list" resultType="io.ride.web.entity.UserInfo">
+        SELECT *
+        FROM t_user_info
+    </select>
+
+    <select id="listFromUnit" resultType="io.ride.web.entity.UserInfo">
+        SELECT *
+        FROM t_user_info
+            INNER JOIN t_unit ON t_user_info.unit_id = t_unit.unit_id
+        WHERE t_unit.unit_id = #{unitId}
+    </select>
+    <select id="findFromUnitWithUserId" resultType="io.ride.web.entity.UserInfo">
+        SELECT *
+        FROM t_user_info
+        WHERE user_id = #{userId} AND unit_id = #{unitId};
+    </select>
+
+    <select id="findFromUnitWithUsername" resultType="io.ride.web.entity.UserInfo">
+        SELECT *
+        FROM t_user_info
+        WHERE username = #{username} AND unit_id = #{unitId};
+    </select>
+
+    <select id="search" resultType="io.ride.web.entity.UserInfo">
+        SELECT *
+        FROM t_user_info
+        WHERE name LIKE #{arg} OR username LIKE '%${arg}%'
+    </select>
+    <select id="search2" resultType="io.ride.web.entity.UserInfo">
+        <if test="userType == 0">
+            SELECT *
+            FROM t_user_info
+            WHERE name LIKE #{arg} OR username LIKE '%${arg}%'
+        </if>
+        <if test="userType == 1 or userType == 2">
+
+        </if>
+    </select>
+
+</mapper>

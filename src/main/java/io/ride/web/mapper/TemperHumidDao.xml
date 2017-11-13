@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.ride.web.dao.TemperHumidDao">
+    <sql id="base_select">
+        t.temper_humid_id,
+        t.node_id,
+        t.temper,
+        t.humidity,
+        t.report_time,
+        t.type
+    </sql>
+
+    <sql id="select_with_node">
+        t.temper_humid_id,
+        t.node_id,
+        t.temper,
+        t.humidity,
+        t.report_time,
+        t.type,
+        n.node_id      "parentNode.nodeId",
+        n.node_mark    "parentNode.nodeMark",
+        n.getway_id    "parentNode.getwayId",
+        n.spare_node   "parentNode.spareNode",
+        n.node_num     "parentNode.nodeNum",
+        n.type         "parentNode.type",
+        n.status       "parentNode.status",
+        n.now_temper   "parentNode.nowTemper",
+        n.now_humidity "parentNode.nowHumidity",
+        n.time_inter   "parentNode.timeInter",
+        n.memo         "parentNode.memo"
+    </sql>
+
+
+    <select id="list" resultType="io.ride.web.entity.TemperHumid">
+        SELECT
+        <include refid="select_with_node"/>
+        FROM t_temper_humid t INNER JOIN t_node n ON t.node_id = n.node_id
+    </select>
+    <select id="findByIdWithNodeInfo" resultType="TemperHumid">
+        SELECT
+        <include refid="select_with_node"/>
+
+        FROM t_temper_humid t INNER JOIN t_node n ON t.node_id = n.node_id
+        WHERE t.temper_humid_id = #{temperHumidId}
+    </select>
+    <select id="findById" resultType="io.ride.web.entity.TemperHumid">
+        SELECT
+        <include refid="base_select"/>
+        FROM t_temper_humid t
+        WHERE t.temper_humid_id = #{temperHumidId}
+    </select>
+
+    <select id="listByNodeId" resultType="io.ride.web.entity.TemperHumid">
+        SELECT
+        <include refid="select_with_node"/>
+        FROM t_temper_humid t INNER JOIN t_node n ON t.node_id = n.node_id
+        WHERE t.node_id = #{nodeId}
+    </select>
+
+    <select id="listByNodeIdAndTimeSlot" resultType="io.ride.web.entity.TemperHumid">
+        SELECT
+        <include refid="base_select"/>
+        FROM t_temper_humid t
+        INNER JOIN t_node n ON t.node_id = n.node_id
+        WHERE t.node_id = #{nodeId} and t.report_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+
+    <select id="listByNodeMarkWithTime" resultType="io.ride.web.entity.TemperHumid">
+        SELECT
+        <include refid="base_select"/>
+        FROM t_temper_humid t
+        INNER JOIN t_node n ON t.node_id = n.node_id
+        WHERE n.node_mark = #{nodeMark} and t.report_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+</mapper>

@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="温度湿度采集数据库">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
+    <root id="1"/>
+    <schema id="2" parent="1" name="db_humiture">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="dbrelease"/>
+    <schema id="4" parent="1" name="db_forum"/>
+    <schema id="5" parent="1" name="db_message_board"/>
+    <schema id="6" parent="1" name="db_paging"/>
+    <schema id="7" parent="1" name="db_rbac"/>
+    <schema id="8" parent="1" name="db_shiro_jx"/>
+    <schema id="9" parent="1" name="db_test"/>
+    <schema id="10" parent="1" name="demo"/>
+    <schema id="11" parent="1" name="information_schema"/>
+    <schema id="12" parent="1" name="mysite"/>
+    <schema id="13" parent="1" name="mysql"/>
+    <schema id="14" parent="1" name="performance_schema"/>
+    <schema id="15" parent="1" name="seckill"/>
+    <schema id="16" parent="1" name="sec_kill"/>
+    <schema id="17" parent="1" name="shiro"/>
+    <schema id="18" parent="1" name="ShoppingManagerSystem"/>
+    <schema id="19" parent="1" name="spring_jdbc"/>
+    <schema id="20" parent="1" name="spring_tm"/>
+    <schema id="21" parent="1" name="ssm_crud"/>
+    <schema id="22" parent="1" name="sys"/>
+    <schema id="23" parent="1" name="wms_db"/>
+    <table id="24" parent="2" name="t_getway">
+      <Comment>网关信息表</Comment>
+    </table>
+    <table id="25" parent="2" name="t_node">
+      <Comment>node节点信息表</Comment>
+    </table>
+    <table id="26" parent="2" name="t_rent">
+      <Comment>Rent租赁表</Comment>
+    </table>
+    <table id="27" parent="2" name="t_repair">
+      <Comment>Repair报修表</Comment>
+    </table>
+    <table id="28" parent="2" name="t_temper_humid">
+      <Comment>Temper温湿度信息表</Comment>
+    </table>
+    <table id="29" parent="2" name="t_unit">
+      <Comment>Unit单位信息表</Comment>
+    </table>
+    <table id="30" parent="2" name="t_user_author">
+      <Comment>UserAuthor用户授权表</Comment>
+    </table>
+    <table id="31" parent="2" name="t_user_bind">
+      <Comment>UserBind用户绑定表</Comment>
+    </table>
+    <table id="32" parent="2" name="t_user_info">
+      <Comment>UserInfo用户信息表</Comment>
+    </table>
+    <table id="33" parent="2" name="test"/>
+    <routine id="34" parent="2" name="test_procedure">
+      <RoutineKind>procedure</RoutineKind>
+    </routine>
+    <column id="35" parent="24" name="getway_id">
+      <Position>1</Position>
+      <Comment>网关ID</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="36" parent="24" name="getway_mark">
+      <Position>2</Position>
+      <Comment>节点盒子对应的ID</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="37" parent="24" name="spare_node">
+      <Position>3</Position>
+      <Comment>是否为备用节点</Comment>
+      <DataType>tinyint(1)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="38" parent="24" name="node_num">
+      <Position>4</Position>
+      <Comment>DTU的SNR</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="39" parent="24" name="status">
+      <Position>5</Position>
+      <Comment>节点状态</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="40" parent="24" name="now_temper">
+      <Position>6</Position>
+      <Comment>当前温度</Comment>
+      <DataType>float|0</DataType>
+    </column>
+    <column id="41" parent="24" name="now_humidity">
+      <Position>7</Position>
+      <Comment>当前湿度</Comment>
+      <DataType>float|0</DataType>
+    </column>
+    <column id="42" parent="24" name="time_inter">
+      <Position>8</Position>
+      <Comment>上报时间间隔</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="43" parent="24" name="memo">
+      <Position>9</Position>
+      <Comment>当前湿度</Comment>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <index id="44" parent="24" name="getway_mark">
+      <ColNames>getway_mark</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="45" parent="24" name="getway_mark_2">
+      <ColNames>getway_mark</ColNames>
+    </index>
+    <key id="46" parent="24" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>getway_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="47" parent="24" name="getway_mark">
+      <ColNames>getway_mark</ColNames>
+      <UnderlyingIndexName>getway_mark</UnderlyingIndexName>
+    </key>
+    <column id="48" parent="25" name="node_id">
+      <Position>1</Position>
+      <Comment>主键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="49" parent="25" name="node_mark">
+      <Position>2</Position>
+      <Comment>节点盒子对应ID</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="50" parent="25" name="getway_id">
+      <Position>3</Position>
+      <Comment>所属网关节点ID</Comment>
+      <DataType>int(4)|0</DataType>
+    </column>
+    <column id="51" parent="25" name="spare_node">
+      <Position>4</Position>
+      <Comment>是否备用节点</Comment>
+      <DataType>tinyint(1)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="52" parent="25" name="node_num">
+      <Position>5</Position>
+      <Comment>节点号</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="53" parent="25" name="type">
+      <Position>6</Position>
+      <Comment>节点类型 0为网关, 1为节点</Comment>
+      <DataType>smallint(2)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="54" parent="25" name="status">
+      <Position>7</Position>
+      <Comment>节点状态 0 在线 1不在线</Comment>
+      <DataType>smallint(2)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="55" parent="25" name="now_temper">
+      <Position>8</Position>
+      <Comment>当前节点温度</Comment>
+      <DataType>float|0</DataType>
+    </column>
+    <column id="56" parent="25" name="now_humidity">
+      <Position>9</Position>
+      <Comment>当前节点湿度</Comment>
+      <DataType>float|0</DataType>
+    </column>
+    <column id="57" parent="25" name="time_inter">
+      <Position>10</Position>
+      <Comment>上报时间间隔</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="58" parent="25" name="memo">
+      <Position>11</Position>
+      <Comment>备注</Comment>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <index id="59" parent="25" name="getway_id">
+      <ColNames>getway_id</ColNames>
+    </index>
+    <index id="60" parent="25" name="node_mark">
+      <ColNames>node_mark</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="61" parent="25" name="node_num">
+      <ColNames>node_num</ColNames>
+    </index>
+    <index id="62" parent="25" name="node_mark_2">
+      <ColNames>node_mark</ColNames>
+    </index>
+    <key id="63" parent="25" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>node_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="64" parent="25" name="node_mark">
+      <ColNames>node_mark</ColNames>
+      <UnderlyingIndexName>node_mark</UnderlyingIndexName>
+    </key>
+    <foreign-key id="65" parent="25" name="t_node_ibfk_1">
+      <ColNames>getway_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_getway</RefTableName>
+      <RefColNames>getway_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="66" parent="26" name="rent_id">
+      <Position>1</Position>
+      <Comment>租赁ID 主键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="67" parent="26" name="getway_id">
+      <Position>2</Position>
+      <Comment>节点ID 外键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="68" parent="26" name="unit_id">
+      <Position>3</Position>
+      <Comment>单位ID 外键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="69" parent="26" name="start_time">
+      <Position>4</Position>
+      <Comment>租用开始时间</Comment>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="70" parent="26" name="end_time">
+      <Position>5</Position>
+      <Comment>租用结束时间</Comment>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="71" parent="26" name="create_time">
+      <Position>6</Position>
+      <Comment>提交时间</Comment>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+    </column>
+    <column id="72" parent="26" name="pay">
+      <Position>7</Position>
+      <Comment>费用</Comment>
+      <DataType>float|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="73" parent="26" name="status">
+      <Position>8</Position>
+      <Comment>租赁状态, 0-过期 1-租约中 2-未开始</Comment>
+      <DataType>int(4)|0</DataType>
+    </column>
+    <index id="74" parent="26" name="getway_id">
+      <ColNames>getway_id</ColNames>
+    </index>
+    <index id="75" parent="26" name="unit_id">
+      <ColNames>unit_id</ColNames>
+    </index>
+    <key id="76" parent="26" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>rent_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="77" parent="26" name="t_rent_ibfk_1">
+      <ColNames>getway_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_getway</RefTableName>
+      <RefColNames>getway_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="78" parent="26" name="t_rent_ibfk_2">
+      <ColNames>unit_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_unit</RefTableName>
+      <RefColNames>unit_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="79" parent="27" name="repair_id">
+      <Position>1</Position>
+      <Comment>主键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="80" parent="27" name="node_id">
+      <Position>2</Position>
+      <Comment>故障节点ID, 外键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="81" parent="27" name="fault_desc">
+      <Position>3</Position>
+      <Comment>故障描述</Comment>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="82" parent="27" name="phone">
+      <Position>4</Position>
+      <Comment>联系人电话</Comment>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="83" parent="27" name="person">
+      <Position>5</Position>
+      <Comment>联系人</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="84" parent="27" name="address">
+      <Position>6</Position>
+      <Comment>联系地址</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="85" parent="27" name="fault_time">
+      <Position>7</Position>
+      <Comment>故障上报时间</Comment>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="86" parent="27" name="status">
+      <Position>8</Position>
+      <Comment>状态</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="87" parent="27" name="node_id">
+      <ColNames>node_id</ColNames>
+    </index>
+    <key id="88" parent="27" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>repair_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="89" parent="27" name="t_repair_ibfk_1">
+      <ColNames>node_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_node</RefTableName>
+      <RefColNames>node_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="90" parent="28" name="temper_humid_id">
+      <Position>1</Position>
+      <Comment>主键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="91" parent="28" name="node_id">
+      <Position>2</Position>
+      <Comment>节点ID</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="92" parent="28" name="temper">
+      <Position>3</Position>
+      <Comment>温度</Comment>
+      <DataType>float|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="93" parent="28" name="humidity">
+      <Position>4</Position>
+      <Comment>湿度</Comment>
+      <DataType>float|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="94" parent="28" name="report_time">
+      <Position>5</Position>
+      <Comment>上报时间</Comment>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="95" parent="28" name="type">
+      <Position>6</Position>
+      <Comment>上报类型(0为网管, 1为节点)</Comment>
+      <DataType>smallint(1)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="96" parent="28" name="node_id">
+      <ColNames>node_id</ColNames>
+    </index>
+    <key id="97" parent="28" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>temper_humid_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="98" parent="28" name="t_temper_humid_ibfk_1">
+      <ColNames>node_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_node</RefTableName>
+      <RefColNames>node_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="99" parent="29" name="unit_id">
+      <Position>1</Position>
+      <Comment>主键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="100" parent="29" name="title">
+      <Position>2</Position>
+      <Comment>单位名称</Comment>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="101" parent="29" name="address">
+      <Position>3</Position>
+      <Comment>单位地址</Comment>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="102" parent="29" name="person">
+      <Position>4</Position>
+      <Comment>联系人</Comment>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="103" parent="29" name="phone">
+      <Position>5</Position>
+      <Comment>联系人电话</Comment>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="104" parent="29" name="email">
+      <Position>6</Position>
+      <Comment>联系人邮箱</Comment>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="105" parent="29" name="unit_type">
+      <Position>7</Position>
+      <Comment>单位类型</Comment>
+      <DataType>smallint(2)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="106" parent="29" name="memo">
+      <Position>8</Position>
+      <Comment>备注</Comment>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <index id="107" parent="29" name="title">
+      <ColNames>title</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="108" parent="29" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>unit_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="109" parent="29" name="title">
+      <ColNames>title</ColNames>
+      <UnderlyingIndexName>title</UnderlyingIndexName>
+    </key>
+    <column id="110" parent="30" name="user_author_id">
+      <Position>1</Position>
+      <Comment>主键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="111" parent="30" name="node_id">
+      <Position>2</Position>
+      <Comment>节点ID</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="112" parent="30" name="user_id">
+      <Position>3</Position>
+      <Comment>用户ID</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="113" parent="30" name="node_id">
+      <ColNames>node_id</ColNames>
+    </index>
+    <index id="114" parent="30" name="user_id">
+      <ColNames>user_id</ColNames>
+    </index>
+    <key id="115" parent="30" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>user_author_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="116" parent="30" name="t_user_author_ibfk_1">
+      <ColNames>node_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_node</RefTableName>
+      <RefColNames>node_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="117" parent="30" name="t_user_author_ibfk_2">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_user_info</RefTableName>
+      <RefColNames>user_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="118" parent="31" name="user_bind_id">
+      <Position>1</Position>
+      <Comment>主键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="119" parent="31" name="open_id">
+      <Position>2</Position>
+      <Comment>微信号</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="120" parent="31" name="node_id">
+      <Position>3</Position>
+      <Comment>节点ID</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="121" parent="31" name="status">
+      <Position>4</Position>
+      <Comment>节点状态</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="122" parent="31" name="name">
+      <Position>5</Position>
+      <Comment>用户姓名</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="123" parent="31" name="node_id">
+      <ColNames>node_id</ColNames>
+    </index>
+    <key id="124" parent="31" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>user_bind_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="125" parent="31" name="t_user_bind_ibfk_1">
+      <ColNames>node_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_node</RefTableName>
+      <RefColNames>node_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="126" parent="32" name="user_id">
+      <Position>1</Position>
+      <Comment>用户ID, 主键</Comment>
+      <DataType>int(4)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="127" parent="32" name="unit_id">
+      <Position>2</Position>
+      <Comment>单位ID, 外键</Comment>
+      <DataType>int(4)|0</DataType>
+    </column>
+    <column id="128" parent="32" name="name">
+      <Position>3</Position>
+      <Comment>用户姓名</Comment>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="129" parent="32" name="user_type">
+      <Position>4</Position>
+      <Comment>用户类型</Comment>
+      <DataType>smallint(2)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="130" parent="32" name="username">
+      <Position>5</Position>
+      <Comment>登录名</Comment>
+      <DataType>varchar(32)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="131" parent="32" name="password">
+      <Position>6</Position>
+      <Comment>用户密码</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="132" parent="32" name="memo">
+      <Position>7</Position>
+      <Comment>备注</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="133" parent="32" name="unit_id">
+      <ColNames>unit_id</ColNames>
+    </index>
+    <index id="134" parent="32" name="username">
+      <ColNames>username</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="135" parent="32" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>user_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="136" parent="32" name="username">
+      <ColNames>username</ColNames>
+      <UnderlyingIndexName>username</UnderlyingIndexName>
+    </key>
+    <foreign-key id="137" parent="32" name="t_user_info_ibfk_1">
+      <ColNames>unit_id</ColNames>
+      <RefSchemaName>db_humiture</RefSchemaName>
+      <RefTableName>t_unit</RefTableName>
+      <RefColNames>unit_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="138" parent="33" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="139" parent="33" name="value">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="140" parent="33" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>
