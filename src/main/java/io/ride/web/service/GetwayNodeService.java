@@ -1,8 +1,11 @@
 package io.ride.web.service;
 
+import io.ride.web.dto.GetwayDto;
+import io.ride.web.dto.UserAuthorDto;
 import io.ride.web.entity.Getway;
 import io.ride.web.entity.Node;
 import io.ride.web.entity.TemperHumid;
+import io.ride.web.entity.UserAuthor;
 import io.ride.web.exception.*;
 import org.apache.ibatis.annotations.Update;
 
@@ -31,7 +34,7 @@ public interface GetwayNodeService {
      * @return
      * @throws HasNoPermissionException
      */
-    List<Getway> listGetwaySimple(HttpSession session) throws HasNoPermissionException;
+    List<GetwayDto> listGetwaySimple(HttpSession session) throws HasNoPermissionException;
 
     /**
      * 查看单个网关的所有节点
@@ -41,7 +44,9 @@ public interface GetwayNodeService {
      * @return
      * @throws HasNoPermissionException
      */
-    List<Node> listNodeWithGetway(String mark, HttpSession session) throws HasNoPermissionException;
+    List<Node> listNodeWithGetway(String mark, HttpSession session)
+            throws HasNoPermissionException;
+
 
     /**
      * 查询单位租期内的网关信息
@@ -61,7 +66,6 @@ public interface GetwayNodeService {
      */
     Getway findGetwayByMark(String mark, HttpSession session) throws NotFoundException;
 
-    Node findNodeById(Integer nodeId, HttpSession session) throws NotFoundException, HasNoPermissionException;
 
     /**
      * 根据mark返回节点信息
@@ -71,6 +75,9 @@ public interface GetwayNodeService {
      * @throws NotFoundException 节点不存在
      */
     Node findNodeByMark(String mark, HttpSession session) throws NotFoundException;
+
+    Node findNodeById(Integer nodeId, HttpSession session) throws
+            NotFoundException, HasNoPermissionException;
 
     /**
      * 删除网关
@@ -126,15 +133,6 @@ public interface GetwayNodeService {
     void updateNode(Node node, HttpSession session) throws HasNoPermissionException, NotFoundException;
 
     /**
-     * @param nodeId
-     * @param startTime
-     * @param endTime
-     * @return
-     * @throws NotFoundException
-     */
-    List<TemperHumid> getTempersForTimeSlot(int nodeId, String startTime, String endTime) throws NotFoundException;
-
-    /**
      * @param session
      * @return
      * @throws HasNoPermissionException
@@ -171,4 +169,7 @@ public interface GetwayNodeService {
     void nodeReleaseAuthorization(Integer userId, Integer nodeId, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException;
 
+
+    void authorNode(UserAuthorDto dto, HttpSession session)
+            throws HasNoPermissionException, NotFoundException, UpdateException;
 }

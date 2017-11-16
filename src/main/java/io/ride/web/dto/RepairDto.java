@@ -1,5 +1,8 @@
 package io.ride.web.dto;
 
+import io.ride.web.entity.Repair;
+import io.ride.web.util.MyDateFormat;
+
 /**
  * Created by IDEA
  * User: ride
@@ -21,6 +24,17 @@ public class RepairDto {
     public RepairDto() {
     }
 
+    public RepairDto(Repair repair, String nodeMark) {
+        this.repairId = repair.getRepairId();
+        this.nodeMark = nodeMark;
+        this.faultDesc = repair.getFaultDesc();
+        this.person = repair.getPerson();
+        this.address = repair.getAddress();
+        this.phone = repair.getPhone();
+        this.status = repair.getStatus();
+        this.repairTime = MyDateFormat.format(repair.getFaultTime());
+    }
+
 
     @Override
     public String toString() {
@@ -35,7 +49,6 @@ public class RepairDto {
                 ", repairTime='" + repairTime + '\'' +
                 '}';
     }
-
 
 
     public Integer getRepairId() {

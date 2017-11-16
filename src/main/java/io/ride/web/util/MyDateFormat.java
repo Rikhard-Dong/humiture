@@ -23,8 +23,8 @@ public class MyDateFormat {
             return formatter.parse(strDate);
         } catch (ParseException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
 }

@@ -72,20 +72,48 @@
     </delete>
 
     <select id="findById" resultType="io.ride.web.entity.Getway">
-        SELECT *
-        FROM t_getway
-        WHERE getway_id = #{getwayId}
+        <choose>
+            <when test="userType == 0">
+                SELECT *
+                FROM t_getway
+                WHERE getway_id = #{getwayId}
+            </when>
+            <when test="userType == 1 || userType == 2">
+                SELECT g.* FROM t_getway g, t_unit u, t_rent r WHERE r.getway_id = g.getway_id AND u.unit_id = r.unit_id
+                AND current_timestamp BETWEEN r.start_time AND r.end_time AND r.unit_id = #{unitId} AND g.getway_id =
+                #{getwayId}
+            </when>
+        </choose>
+
     </select>
 
     <select id="findByMark" resultType="io.ride.web.entity.Getway">
-        SELECT *
-        FROM t_getway
-        WHERE getway_mark = #{mark}
+        <choose>
+            <when test="userType == 0">
+                SELECT *
+                FROM t_getway
+                WHERE getway_mark = #{mark}
+            </when>
+            <when test="userType == 1 or userType == 2">
+                SELECT g.* FROM t_getway g, t_unit u, t_rent r WHERE r.getway_id = g.getway_id AND u.unit_id = r.unit_id
+                AND current_timestamp BETWEEN r.start_time AND r.end_time AND r.unit_id = #{unitId} AND getway_mark =
+                #{mark}
+            </when>
+        </choose>
     </select>
 
     <select id="list" resultType="io.ride.web.entity.Getway">
-        SELECT *
-        FROM t_getway
+        <choose>
+            <when test="userType == 0">
+                SELECT *
+                FROM t_getway
+            </when>
+            <when test="userType == 1 or userType == 2">
+                SELECT g.* FROM t_getway g, t_unit u, t_rent r WHERE r.getway_id = g.getway_id AND u.unit_id = r.unit_id
+                AND current_timestamp BETWEEN r.start_time AND r.end_time AND r.unit_id = #{unitId}
+            </when>
+        </choose>
+
     </select>
 
     <select id="listSubNode" resultType="io.ride.web.entity.Node">
@@ -105,6 +133,19 @@
         FROM t_getway
             INNER JOIN t_node ON t_getway.getway_id = t_node.getway_id
         WHERE t_getway.getway_mark = #{mark}
+    </select>
+
+    <select id="search" resultType="io.ride.web.entity.Getway">
+        <choose>
+            <when test="userType == 0">
+                SELECT * FROM t_getway WHERE getway_mark LIKE '%${arg}%'
+            </when>
+            <when test="userType == 1 or userType == 2">
+                SELECT g.* FROM t_getway g, t_rent r, t_unit u WHERE g.getway_id = r.getway_id AND r.unit_id = u.unit_id
+                AND (g.getway_mark LIKE '%${arg}%' OR (current_timestamp BETWEEN r.start_time AND r.end_time AND u.title
+                LIKE '%${arg}%'))
+            </when>
+        </choose>
     </select>
 
 </mapper>

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.ride.web.dao.UnitDao;
 import io.ride.web.dto.DataTableResult;
+import io.ride.web.dto.GetwayDto;
 import io.ride.web.entity.Repair;
 import io.ride.web.entity.Unit;
 import io.ride.web.entity.UserInfo;
@@ -45,7 +46,6 @@ public class SearchController {
         PageInfo<UserInfo> pageInfo;
         try {
             PageHelper.startPage(page, rows);
-            arg = "%" + arg + "%";
             users = searchService.searchUser(arg, session);
             pageInfo = new PageInfo<UserInfo>(users);
         } catch (Exception e) {
@@ -87,6 +87,25 @@ public class SearchController {
             pageInfo = new PageInfo<Repair>(repairs);
         } catch (Exception e) {
             LOGGER.info("error message = {}", e.getMessage());
+            return null;
+        }
+        return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    @PostMapping(value = "/getway/{arg}")
+    public DataTableResult searchGetway(@PathVariable("arg") String arg,
+                                        @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                        @RequestParam(value = "rows", required = false, defaultValue = "20") Integer rows,
+                                        HttpSession session) {
+        List<GetwayDto> getwayDtos;
+        PageInfo<GetwayDto> pageInfo;
+
+        try {
+            PageHelper.startPage(page, rows);
+            getwayDtos = searchService.searchGetway(arg, session);
+            pageInfo = new PageInfo<GetwayDto>(getwayDtos);
+        } catch (Exception e) {
+            LOGGER.info("search getways error message = {}", e.getMessage());
             return null;
         }
         return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());

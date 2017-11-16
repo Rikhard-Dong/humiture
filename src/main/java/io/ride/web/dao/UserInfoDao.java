@@ -40,7 +40,9 @@ public interface UserInfoDao {
 
     UserInfo findByUserId(@Param("id") Integer id);
 
-    UserInfo findByUsername(@Param("username") String username);
+    UserInfo findByUsername(@Param("username") String username,
+                            @Param("userType") Integer userType,
+                            @Param("unitId") Integer unitId);
 
     UserInfo findFromUnitWithUserId(@Param("userId") Integer userId, @Param("unitId") Integer unitId);
 

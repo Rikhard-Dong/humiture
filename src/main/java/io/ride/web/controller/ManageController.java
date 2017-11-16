@@ -1,6 +1,7 @@
 package io.ride.web.controller;
 
 import io.ride.web.dto.Result;
+import io.ride.web.dto.UserAuthorDto;
 import io.ride.web.entity.Getway;
 import io.ride.web.entity.Node;
 import io.ride.web.entity.UserInfo;
@@ -135,5 +136,9 @@ public class ManageController {
         return new Result(true, 1, "更新节点成功");
     }
 
+    @PostMapping("/node/author")
+    public Result authorNode(UserAuthorDto userAuthorDto, HttpSession session) {
 
+        return new Result(true, 1, "节点授权成功");
+    }
 }

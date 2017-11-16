@@ -50,7 +50,7 @@ public class RentServiceImpl implements RentService {
             throw new HasNoPermissionException("当前用户没有该权限");
         }
         Unit unit = unitDao.findById(rent.getGetwayId());
-        Getway getway = getwayDao.findById(rent.getGetwayId());
+        Getway getway = getwayDao.findById(rent.getGetwayId(), user.getUserType(), user.getUnitId());
         if (unit == null) {
             throw new NotFoundException("单位未找到");
         }
@@ -111,9 +111,9 @@ public class RentServiceImpl implements RentService {
         }
 
         List<Map<String, Object>> result = null;
-        if(PermissionUnit.isAdmin(user)) {
+        if (PermissionUnit.isAdmin(user)) {
 
-        } else if(PermissionUnit.isUnitAdmin(user)) {
+        } else if (PermissionUnit.isUnitAdmin(user)) {
 
         }
 

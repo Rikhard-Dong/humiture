@@ -62,4 +62,29 @@ public interface RentDao {
 
 
     Rent findByRentId(@Param("rentId") int rentId);
+
+    /**
+     * 根据网关Id和单位title查询当前时间内的租约信息
+     *
+     * @param getwayId
+     * @param title
+     * @return
+     */
+    Rent findByGetwayIdAndUnitTileAndCurrentTime(@Param("getwayId") Integer getwayId,
+                                                 @Param("title") String title);
+
+    /**
+     * 查询该特权单位在该时间段内是否有租用信息
+     *
+     * @param unitId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Rent findByUnitIdAndStartTimeAndEndTime(@Param("unitId") Integer unitId,
+                                            @Param("startTime") String startTime,
+                                            @Param("endTime") String endTime);
+
+    Rent findByUnitTypeAndStartTimeAndEndTime(@Param("startTime") String statTime,
+                                              @Param("endTime") String endTime);
 }

@@ -77,7 +77,7 @@
     <select id="isAccountExists" resultType="java.lang.Boolean">
         SELECT (count(1) = 1)
         FROM t_user_info
-        WHERE username = #{username};
+        WHERE username = #{username}
     </select>
     <select id="accountValidate" resultType="UserInfo">
         SELECT
@@ -92,9 +92,18 @@
     </select>
 
     <select id="findByUsername" resultType="io.ride.web.entity.UserInfo">
-        SELECT *
-        FROM t_user_info
-        WHERE username = #{username};
+        <choose>
+            <when test="userType == 0">
+                SELECT *
+                FROM t_user_info
+                WHERE username = #{username};
+            </when>
+            <when test="userType == 1 or userType == 2">
+                SELECT u.* FROM t_user_info u, t_unit unit WHERE u.unit_id = unit.unit_id AND username = #{username} and
+                u.unit_id = #{unitId}
+            </when>
+        </choose>
+
     </select>
 
     <select id="list" resultType="io.ride.web.entity.UserInfo">
@@ -125,12 +134,12 @@
             <when test="userType == 0">
                 SELECT *
                 FROM t_user_info
-                WHERE name LIKE #{arg} OR username LIKE '%${arg}%'
+                WHERE name LIKE '%${arg}%' OR username LIKE '%${arg}%'
             </when>
             <when test="userType == 1 or userType == 2">
                 SELECT *
                 FROM t_user_info
-                WHERE unit_id = #{unitId} AND (name LIKE #{arg} OR username LIKE '%${arg}%')
+                WHERE unit_id = #{unitId} AND (name LIKE '%${arg}%' OR username LIKE '%${arg}%')
             </when>
         </choose>
 

@@ -15,11 +15,14 @@ import javax.servlet.ServletContextListener;
  */
 public class SocketInitListener implements ServletContextListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(SocketInitListener.class);
+    private Thread t;
 
     /* 初始 */
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         LOGGER.info("启动socket服务器!");
-        Thread t = new StartThread();
+        if (t == null) {
+            t = new StartThread();
+        }
         t.start();
     }
 

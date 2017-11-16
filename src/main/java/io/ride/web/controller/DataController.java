@@ -4,6 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sun.org.apache.regexp.internal.RE;
 import io.ride.web.dto.DataTableResult;
+import io.ride.web.dto.GetwayDto;
+import io.ride.web.dto.RepairDto;
 import io.ride.web.entity.*;
 import io.ride.web.dto.Result;
 import io.ride.web.exception.HasNoPermissionException;
@@ -149,12 +151,12 @@ public class DataController {
                                                       HttpSession session) {
         LOGGER.info("getways simple, page = {}, rows = {}", page, rows);
         PageHelper.startPage(page, rows);
-        List<Getway> getways = null;
-        PageInfo<Getway> pageInfo = null;
+        List<GetwayDto> getways = null;
+        PageInfo<GetwayDto> pageInfo = null;
         try {
             PageHelper.startPage(page, rows);
             getways = getwayNodeService.listGetwaySimple(session);
-            pageInfo = new PageInfo<Getway>(getways);
+            pageInfo = new PageInfo<GetwayDto>(getways);
 
         } catch (HasNoPermissionException e) {
             LOGGER.error(e.getMessage());
@@ -289,7 +291,6 @@ public class DataController {
         PageInfo<UserInfo> pageInfo;
 
         try {
-            tempers = getwayNodeService.getTempersForTimeSlot(nodeId, startTime, endTime);
         } catch (NotFoundException e) {
             LOGGER.error("e={}", e.getMessage());
             return new Result(false, -1, "节点不存在");
@@ -516,13 +517,13 @@ public class DataController {
     public DataTableResult listRepairs(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                        @RequestParam(value = "rows", required = false, defaultValue = "20") Integer rows,
                                        HttpSession session) {
-        List<Repair> repairs;
-        PageInfo<Repair> pageInfo;
+        List<RepairDto> repairs;
+        PageInfo<RepairDto> pageInfo;
 
         try {
             PageHelper.startPage(page, rows);
             repairs = repairService.list(session);
-            pageInfo = new PageInfo<Repair>(repairs);
+            pageInfo = new PageInfo<RepairDto>(repairs);
         } catch (HasNoPermissionException e) {
             LOGGER.error("错误! message = {}", e.getMessage());
             return null;

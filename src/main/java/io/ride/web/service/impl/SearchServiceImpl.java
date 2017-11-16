@@ -1,6 +1,7 @@
 package io.ride.web.service.impl;
 
 import io.ride.web.dao.*;
+import io.ride.web.dto.GetwayDto;
 import io.ride.web.entity.*;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +41,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private RepairDao repairDao;
 
+    @Autowired
+    private RentDao rentDao;
+
     public List<UserInfo> searchUser(String arg, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
         UserInfo currentUser = PermissionUnit.isLogin(session);
@@ -65,9 +70,24 @@ public class SearchServiceImpl implements SearchService {
         return units;
     }
 
-    public List<Getway> searchGetway(String arg, HttpSession session)
+    public List<GetwayDto> searchGetway(String arg, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        return null;
+        UserInfo user = PermissionUnit.isLogin(session);
+        List<GetwayDto> getwayDtos = new ArrayList<GetwayDto>();
+        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+            List<Getway> getways = getwayDao.search(arg, user.getUserType(), user.getUnitId());
+            for (Getway getway : getways) {
+                if (PermissionUnit.isAdmin(user)) {
+                    getwayDtos.add(new GetwayDto(getway));
+                } else if (PermissionUnit.isUnitAdmin(user)) {
+                    Rent rent = rentDao.findByGetwayIdAndUnitTileAndCurrentTime(getway.getGetwayId(), user.getUnit().getTitle());
+                    getwayDtos.add(new GetwayDto(getway, rent.getEndTime()));
+                }
+            }
+        } else {
+            throw new HasNoPermissionException("当前用户没有权限");
+        }
+        return getwayDtos;
     }
 
     public List<Node> searchNode(String arg, HttpSession session)

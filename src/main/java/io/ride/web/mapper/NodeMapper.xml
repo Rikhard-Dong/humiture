@@ -76,7 +76,7 @@
             <if test="node.timeInter != null">time_inter = #{node.timeInter},</if>
             <if test="node.memo != null">memo = #{node.memo},</if>
         </trim>
-        WHERE node_id = #{node.nodeMark};
+        WHERE node_id = #{node.nodeId};
     </update>
 
     <update id="updateTemperAndHumidity">
@@ -116,9 +116,20 @@
     </select>
 
     <select id="findById" resultType="io.ride.web.entity.Node">
-        SELECT
-        <include refid="base_select"/>
-        FROM t_node WHERE node_id = #{nodeMark};
+        <choose>
+            <when test="userType == 0">
+                SELECT
+                *
+                FROM t_node
+                WHERE node_id = #{nodeId}
+            </when>
+            <when test="userType == 1 or userType == 2">
+                SELECT n.* FROM t_node n WHERE n.node_id IN (SELECT n.node_id FROM t_node n, t_unit u, t_rent r WHERE
+                n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId} AND current_timestamp
+                BETWEEN r.start_time AND r.end_time) AND n.node_id = #{nodeId}
+            </when>
+        </choose>
+
     </select>
 
     <select id="findByMark" resultType="io.ride.web.entity.Node">
@@ -158,15 +169,9 @@
         WHERE node_mark = #{mark};
     </select>
 
-    <select id="findByUnitIdAndNodeId" resultType="io.ride.web.entity.Node">
-        SELECT n.*
-        FROM t_node n
-        WHERE n.node_id IN (SELECT g.getway_id
-                            FROM t_getway g, t_unit u, t_rent r
-                            WHERE
-                                r.getway_id = g.getway_id AND u.unit_id = r.unit_id AND u.unit_id = #{unitId}
-                                AND current_timestamp BETWEEN r.start_time AND end_time)
-              AND n.node_id = #{nodeMark};
-
+    <select id="findByNum" resultType="io.ride.web.entity.Node">
+        SELECT *
+        FROM t_node
+        WHERE node_num = #{num}
     </select>
 </mapper>

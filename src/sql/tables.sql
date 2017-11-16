@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS t_getway (
   node_num     VARCHAR(50) NOT NULL
   COMMENT 'DTU的SNR',
   status       INT(4)      NOT NULL
-  COMMENT '节点状态',
+  COMMENT '节点状态 0 不在线 1 在线',
   now_temper   FLOAT COMMENT '当前温度',
   now_humidity FLOAT COMMENT '当前湿度',
   `time_inter` INT(4)      NOT NULL
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS t_node (
   `type`         SMALLINT(2) NOT NULL
   COMMENT '节点类型 0为网关, 1为节点',
   `status`       SMALLINT(2) NOT NULL
-  COMMENT '节点状态 0 在线 1不在线',
+  COMMENT '节点状态 0 不在线 1在线',
   `now_temper`   FLOAT(4)
   COMMENT '当前节点温度',
   `now_humidity` FLOAT(4)

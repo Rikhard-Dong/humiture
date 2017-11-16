@@ -3,6 +3,7 @@ package io.ride.socket.single;
 import io.ride.web.entity.TemperHumid;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +27,13 @@ public class SingletonPattern {
     // 在线socket
     private Map<String, Socket> onlineSocket;
 
-    // 返回信息
+    // 返回信息 废弃
     private String sendResponse = "";
 
-    public static SingletonPattern getSingletonPattern() {
+    // 返回信息处理
+    private List<String> msgList;
+
+    public synchronized static SingletonPattern getInstance() {
         return singletonPattern;
     }
 
@@ -63,5 +67,30 @@ public class SingletonPattern {
 
     public void setSendResponse(String sendResponse) {
         this.sendResponse = sendResponse;
+    }
+
+    public List<String> getMsgList() {
+        if (msgList == null) {
+            msgList = new ArrayList<String>();
+        }
+        return msgList;
+    }
+
+    public void setMsgList(List<String> msgList) {
+        this.msgList = msgList;
+    }
+
+    public void add(String str) {
+        if (msgList == null) {
+            msgList = new ArrayList<String>();
+        }
+        msgList.add(str);
+    }
+
+    public void remove(String str) {
+        if (msgList == null) {
+            return;
+        }
+        msgList.remove(str);
     }
 }

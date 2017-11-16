@@ -38,25 +38,20 @@ public class GetwayDaoTest {
 
     @Test
     public void findById() {
-        System.out.println(getwayDao.findById(1));
     }
 
     @Test
     public void findByMark() {
-        System.out.println(getwayDao.findByMark("12345"));
     }
 
     @Test
     public void updateGetway() {
-        Getway getway = getwayDao.findByMark("1002");
-        System.out.println(getway);
-        getway.setMemo("1111112222");
-        System.out.println(getwayDao.updateGetwayByMark(getway));
+
     }
 
     @Test
     public void list() {
-        System.out.println(getwayDao.list());
+        System.out.println(getwayDao.list(2, 1));
     }
 
     @Test

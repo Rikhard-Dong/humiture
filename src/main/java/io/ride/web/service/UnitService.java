@@ -91,6 +91,8 @@ public interface UnitService {
     Unit findUnit(Integer id, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
 
+    Unit findUnit(Integer id) throws NotFoundException;
+
     /**
      * 根据单位title查找
      *

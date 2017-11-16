@@ -131,6 +131,7 @@ public class SystemController {
 
     @PostMapping(value = "/repair")
     public Result addRepair(RepairDto repairDto, HttpSession session) {
+        LOGGER.info("repair dto is {}", repairDto);
         try {
             repairService.add(repairDto, session);
         } catch (Exception e) {

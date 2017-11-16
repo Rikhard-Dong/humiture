@@ -1,5 +1,6 @@
 package io.ride.web.service;
 
+import io.ride.web.dto.GetwayDto;
 import io.ride.web.entity.*;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
@@ -20,7 +21,7 @@ public interface SearchService {
     List<Unit> searchUnit(String arg, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
 
-    List<Getway> searchGetway(String arg, HttpSession session)
+    List<GetwayDto> searchGetway(String arg, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
 
     List<Node> searchNode(String arg, HttpSession session)

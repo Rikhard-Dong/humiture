@@ -48,25 +48,50 @@
 
     <select id="list" resultType="io.ride.web.entity.Rent">
         SELECT *
-        FROM t_rent;
+        FROM t_rent
     </select>
 
     <select id="listWithUnit" resultType="io.ride.web.entity.Rent">
         SELECT *
         FROM t_rent
-        WHERE unit_id = #{unitId};
+        WHERE unit_id = #{unitId}
     </select>
     <select id="findByTime" resultType="io.ride.web.entity.Rent">
         SELECT *
         FROM t_rent
         WHERE (#{startTime} BETWEEN start_time AND end_time)
-              OR (#{endTime} BETWEEN start_time AND end_time);
+              OR (#{endTime} BETWEEN start_time AND end_time)
     </select>
 
     <select id="findByRentId" resultType="io.ride.web.entity.Rent">
         SELECT *
         FROM t_rent
         WHERE rent_id = #{rentId}
+    </select>
+    <select id="findByGetwayIdAndUnitTileAndCurrentTime" resultType="io.ride.web.entity.Rent">
+        SELECT *
+        FROM t_rent
+        WHERE (current_timestamp BETWEEN start_time AND end_time) AND getway_id = #{getwayId}
+              AND unit_id IN (SELECT unit_id
+                              FROM t_unit
+                              WHERE title = #{title})
+    </select>
+
+    <select id="findByUnitIdAndStartTimeAndEndTime" resultType="io.ride.web.entity.Rent">
+        SELECT r.*
+        FROM t_rent r, t_unit u
+        WHERE r.unit_id = u.unit_id AND r.unit_id = #{unitId} AND
+              (start_time BETWEEN #{startTime} AND #{endTime} OR end_time BETWEEN #{startTime} AND #{endTime})
+        LIMIT 1
+    </select>
+    <select id="findByUnitTypeAndStartTimeAndEndTime" resultType="io.ride.web.entity.Rent">
+        SELECT r.*
+        FROM t_rent r, t_unit u
+        WHERE r.unit_id = u.unit_id AND r.unit_id IN (SELECT unit_id
+                                                      FROM t_unit
+                                                      WHERE unit_type = 1) AND
+              (start_time BETWEEN #{startTime} AND #{endTime} OR end_time BETWEEN #{startTime} AND #{endTime})
+        LIMIT 1
     </select>
 
 </mapper>

@@ -32,7 +32,7 @@ public interface RepairService {
      * @return
      * @throws HasNoPermissionException
      */
-    List<Repair> list(HttpSession session)
+    List<RepairDto> list(HttpSession session)
             throws HasNoPermissionException;
 
 

@@ -73,6 +73,7 @@ public class BatchDeleteController {
         LOGGER.info("待删除网关: {}", Arrays.toString(ParamDivisionUtil.getParams(arg)));
 
         try {
+            batchDeleteService.batchDeleteGetway(arg, session);
         } catch (Exception e) {
             LOGGER.error("error message = {}! ", e.getMessage());
             return new Result(false, -1, e.getMessage());
@@ -85,6 +86,7 @@ public class BatchDeleteController {
                                   HttpSession session) {
         LOGGER.info("待删除节点: {}", Arrays.toString(ParamDivisionUtil.getParams(arg)));
         try {
+            batchDeleteService.batchDeleteNode(arg, session);
         } catch (Exception e) {
             LOGGER.error("error message = {}! ", e.getMessage());
             return new Result(false, -1, e.getMessage());

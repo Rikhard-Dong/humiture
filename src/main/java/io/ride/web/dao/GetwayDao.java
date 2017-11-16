@@ -37,7 +37,9 @@ public interface GetwayDao {
      * @param getwayId id
      * @return getway
      */
-    Getway findById(Integer getwayId);
+    Getway findById(@Param("getwayId") Integer getwayId,
+                    @Param("userType") Integer userType,
+                    @Param("unitId") Integer unitId);
 
     /**
      * 根据节点盒子ID查找
@@ -45,7 +47,9 @@ public interface GetwayDao {
      * @param mark mark
      * @return getway
      */
-    Getway findByMark(String mark);
+    Getway findByMark(@Param("mark") String mark,
+                      @Param("userType") Integer userType,
+                      @Param("unitId") Integer unitId);
 
     /**
      * 根据实体更新
@@ -68,7 +72,8 @@ public interface GetwayDao {
      *
      * @return
      */
-    List<Getway> list();
+    List<Getway> list(@Param("userType") Integer userType,
+                      @Param("unitId") Integer unitId);
 
 
     /**
@@ -81,6 +86,7 @@ public interface GetwayDao {
 
     /**
      * mark
+     *
      * @param mark
      * @return
      */
@@ -113,4 +119,16 @@ public interface GetwayDao {
      * @return 更新数目
      */
     int deleteByMark(@Param("mark") String mark);
+
+    /**
+     * 根据网关号和单位title进行模糊搜索
+     *
+     * @param arg
+     * @param userType
+     * @param unitId
+     * @return
+     */
+    List<Getway> search(@Param("arg") String arg,
+                        @Param("userType") Integer userType,
+                        @Param("unitId") Integer unitId);
 }

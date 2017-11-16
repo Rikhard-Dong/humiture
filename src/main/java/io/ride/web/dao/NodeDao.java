@@ -16,17 +16,19 @@ public interface NodeDao {
 
     List<Node> list();
 
-    Node findById(int nodeId);
+    Node findById(@Param("nodeId") int nodeId,
+                  @Param("userType") Integer userType,
+                  @Param("unitId") Integer unitId);
 
     Node findByMark(@Param("mark") String mark,
                     @Param("userType") Integer userType,
                     @Param("unitId") Integer unitId);
 
+    Node findByNum(@Param("num") String num);
+
     Node findByIdWithGetway(int nodeId);
 
     Node findByMarkWithGetway(String mask);
-
-    Node findByUnitIdAndNodeId(@Param("unitId") Integer unitId, @Param("nodeId") Integer nodeId);
 
 
     int addNode(@Param(value = "node") Node node);

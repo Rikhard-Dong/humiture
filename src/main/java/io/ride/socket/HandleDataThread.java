@@ -33,7 +33,7 @@ public class HandleDataThread implements Runnable {
     List<String> splitRtn = new ArrayList<String>();
 
     // 单例
-    private SingletonPattern singleton = SingletonPattern.getSingletonPattern();
+    private SingletonPattern singleton = SingletonPattern.getInstance();
 
     public HandleDataThread(Socket request, int requestId) {
         this.request = request;
@@ -67,17 +67,17 @@ public class HandleDataThread implements Runnable {
 
                     // 对接收到的数据进行处理
                     for (String reqStr : splitRtn) {
-                        /*
-                        * '7374' --> st 设置
-                        * '6378' --> cx 查询
-                        * '6371' --> cq 重启
-                        * '7362' --> sb 上报
-                        **/
-                        if (reqStr.contains("7374") || reqStr.contains("6378") ||
-                                reqStr.contains("6371") || reqStr.contains("7362")) {
-                            singleton.setSendResponse(hexStr);
-                        }
                         if (CRCUtil.check(reqStr)) {
+                            /*
+                            * '7374' --> st 设置
+                            * '6378' --> cx 查询
+                            * '6371' --> cq 重启
+                            * '7362' --> sb 上报
+                            **/
+                            if (reqStr.contains("7374") || reqStr.contains("6378") ||
+                                    reqStr.contains("6371") || reqStr.contains("7362")) {
+                                singleton.add(reqStr);
+                            }
                             String cla = DataUtil.getValueByCode(reqStr, "cla");
                             String dataStr = DataUtil.getValueByCode(reqStr, "data");
                             LOGGER.info("clr={}", cla);
@@ -92,7 +92,9 @@ public class HandleDataThread implements Runnable {
                             } else if (cla.equals("sb")) {
                                 // TODO 上报
                             } else if (cla.equals("wd")) {
-                                // TODO 温度 上报
+                                // TODO 温度
+                                ReceiverStringUtil.updateNowAndAllTH(singleton,dataStr);
+                                ReceiverStringUtil.writeString("WD", request);
                             } else if (cla.equals("by")) {
                                 // TODO 是否启用备用
                             } else if (cla.equals("cx")) {

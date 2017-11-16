@@ -9,6 +9,7 @@ import io.ride.web.exception.NotFoundException;
 import io.ride.web.exception.UpdateException;
 import io.ride.web.service.UnitService;
 import io.ride.web.util.PermissionUnit;
+import org.aspectj.weaver.ast.Not;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +124,10 @@ public class UnitServiceImpl implements UnitService {
             throw new NotFoundException("单位不存在");
         }
         return unit;
+    }
+
+    public Unit findUnit(Integer id) throws NotFoundException {
+        return unitDao.findById(id);
     }
 
     public Unit findUnit(String title, HttpSession session)

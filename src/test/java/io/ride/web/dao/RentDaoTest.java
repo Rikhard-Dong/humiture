@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = "classpath:spring/spring-mybatis.xml")
 public class RentDaoTest {
+
     @Autowired
     private RentDao rentDao;
 
@@ -67,4 +68,21 @@ public class RentDaoTest {
         Rent rent = rentDao.findByRentId(1);
         System.out.println(rent);
     }
+
+    @Test
+    public void findByUnitIdAndStartTimeAndEndTime() throws Exception {
+        System.out.println(rentDao.findByUnitIdAndStartTimeAndEndTime(3,
+                "2017-1-1 0:0:0", "2018-1-1 0:0:0"));
+        System.out.println(rentDao.findByUnitIdAndStartTimeAndEndTime(3,
+                "2018-12-11 0:0:0", "2019-1-1 0:0:0"));
+    }
+
+    @Test
+    public void findByUnitTypeAndStartTimeAndEndTime() throws Exception {
+        System.out.println(rentDao.findByUnitTypeAndStartTimeAndEndTime(
+                "2017-1-1 0:0:0", "2018-1-1 0:0:0"));
+        System.out.println(rentDao.findByUnitTypeAndStartTimeAndEndTime(
+                "2018-12-11 0:0:0", "2019-1-1 0:0:0"));
+    }
+
 }

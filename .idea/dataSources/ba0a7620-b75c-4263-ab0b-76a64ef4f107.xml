@@ -83,7 +83,7 @@
     </column>
     <column id="38" parent="24" name="status">
       <Position>5</Position>
-      <Comment>节点状态</Comment>
+      <Comment>节点状态 0 不在线 1 在线</Comment>
       <DataType>int(4)|0</DataType>
       <NotNull>1</NotNull>
     </column>
@@ -163,7 +163,7 @@
     </column>
     <column id="53" parent="25" name="status">
       <Position>7</Position>
-      <Comment>节点状态 0 在线 1不在线</Comment>
+      <Comment>节点状态 0 不在线 1在线</Comment>
       <DataType>smallint(2)|0</DataType>
       <NotNull>1</NotNull>
     </column>

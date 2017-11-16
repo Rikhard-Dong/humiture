@@ -1,14 +1,14 @@
 package io.ride.web.service.impl;
 
 import io.ride.web.dao.*;
-import io.ride.web.entity.Getway;
-import io.ride.web.entity.Node;
-import io.ride.web.entity.TemperHumid;
-import io.ride.web.entity.UserInfo;
+import io.ride.web.dto.GetwayDto;
+import io.ride.web.dto.UserAuthorDto;
+import io.ride.web.entity.*;
 import io.ride.web.exception.*;
 import io.ride.web.service.GetwayNodeService;
 import io.ride.web.util.ParamDivisionUtil;
 import io.ride.web.util.PermissionUnit;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +49,9 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     @Autowired
     private UnitDao unitDao;
 
+    @Autowired
+    private RentDao rentDao;
+
     @Transactional
     public void updateGetway(Getway getway, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
@@ -83,6 +86,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     public void updateNode(Node node, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
         UserInfo user = PermissionUnit.isLogin(session);
+        Integer unitId = user.getUnitId();
         if (!PermissionUnit.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要系统管理员权限!");
         }
@@ -93,7 +97,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         // 如果当前节点网关, 则连同更新网关信息
         if (node.getType() == 0) {
             LOGGER.info("当前节点为网关节点, 同步更新网关表");
-            Getway getway = getwayDao.findByMark(node.getNodeMark());
+            Getway getway = getwayDao.findByMark(node.getNodeMark(), user.getUserType(), unitId);
             getway.setSpareNode(node.getSpareNode());
             getway.setNodeNum(node.getNodeNum());
             getway.setStatus(node.getStatus());
@@ -110,22 +114,17 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         }
     }
 
-    public List<TemperHumid> getTempersForTimeSlot(int nodeId, String startTime, String endTime) throws NotFoundException {
-        Node node = nodeDao.findById(nodeId);
-        if (node == null) {
-            throw new NotFoundException("节点不存在");
-        }
-        List<TemperHumid> tempers = temperDao.listByNodeIdAndTimeSlot(nodeId, startTime, endTime);
-        return tempers;
-    }
-
     public List<Getway> listGetwayWithSubnode(HttpSession session) {
-        List<Getway> getways = getwayDao.list();
+        UserInfo user = PermissionUnit.isLogin(session);
+        Integer unitId = user.getUnit() == null ? null : user.getUnitId();
+
+        List<Getway> getways = getwayDao.list(user.getUserType(), unitId);
         for (Getway getway : getways) {
             getway.setNodes(getwayDao.listSubNode(getway.getGetwayId()));
         }
         return getways;
     }
+
 
     /**
      * 查看该单位当前租期内的所有节点
@@ -141,20 +140,36 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         return getways;
     }
 
-    public List<Getway> listGetwaySimple(HttpSession session) throws HasNoPermissionException {
-        // todo 权限
-        return getwayDao.list();
+    public List<GetwayDto> listGetwaySimple(HttpSession session) throws HasNoPermissionException {
+        UserInfo user = PermissionUnit.isLogin(session);
+        List<Getway> getways = getwayDao.list(user.getUserType(), user.getUnitId());
+        List<GetwayDto> getwayDtos = new ArrayList<GetwayDto>();
+        for (Getway getway : getways) {
+            if (user.getUserType() == 0) {
+                getwayDtos.add(new GetwayDto(getway));
+            } else {
+                Rent rent = rentDao.findByGetwayIdAndUnitTileAndCurrentTime(getway.getGetwayId(),
+                        user.getUnit().getTitle());
+                getwayDtos.add(new GetwayDto(getway, rent.getEndTime()));
+            }
+        }
+
+        return getwayDtos;
     }
 
 
     public List<Node> listNodeWithGetway(String mark, HttpSession session) throws HasNoPermissionException {
-        List<Node> nodes = getwayDao.listSubNodeByNodeMark(mark);
-        return nodes;
+        UserInfo user = PermissionUnit.isLogin(session);
+
+        return getwayDao.listSubNodeByNodeMark(mark);
     }
 
     public Getway findGetwayByMark(String mark, HttpSession session) throws NotFoundException {
+        UserInfo user = PermissionUnit.isLogin(session);
+        Integer unitId = user.getUnitId();
+
         LOGGER.info("mark = {}", mark);
-        Getway getway = getwayDao.findByMark(mark);
+        Getway getway = getwayDao.findByMark(mark, user.getUserType(), unitId);
         if (getway == null) {
             LOGGER.error("1111网关不存在");
             throw new NotFoundException("网关不存在");
@@ -162,16 +177,6 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
 //        getway.setNodes(getwayDao.listSubNode(getway.getGetwayId()));
         LOGGER.info(getway.toString());
         return getway;
-    }
-
-    public Node findNodeById(Integer nodeId, HttpSession session) throws NotFoundException, HasNoPermissionException {
-        // TODO 权限
-        Node node = nodeDao.findById(nodeId);
-        if (node == null) {
-            LOGGER.error("节点不存在");
-            throw new NotFoundException("节点不存在");
-        }
-        return node;
     }
 
     public Node findNodeByMark(String mark, HttpSession session) throws NotFoundException {
@@ -186,6 +191,20 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
             throw new HasNoPermissionException("没有相应的操作权限");
         }
 
+    }
+
+    public Node findNodeById(Integer nodeId, HttpSession session)
+            throws NotFoundException, HasNoPermissionException {
+        UserInfo user = PermissionUnit.isLogin(session);
+        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+            Node node = nodeDao.findById(nodeId, user.getUserType(), user.getUnitId());
+            if (node == null) {
+                throw new NotFoundException("节点不存在");
+            }
+            return node;
+        } else {
+            throw new HasNoPermissionException("权限异常");
+        }
     }
 
     public void deleteGetway(String mark, HttpSession session)
@@ -237,13 +256,14 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     public void addGetway(Getway getway, HttpSession session)
             throws IsExistsException, HasNoPermissionException, IsExistsException, UpdateException {
         UserInfo user = PermissionUnit.isLogin(session);
+        Integer unitId = user.getUnitId();
         if (!PermissionUnit.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要超级管理员权限!");
         }
         if (getwayDao.isExists(getway.getGetwayMark())) {
             throw new IsExistsException("此网关已存在");
         }
-        if (getwayDao.findByMark(getway.getGetwayMark()) != null) {
+        if (getwayDao.findByMark(getway.getGetwayMark(), user.getUserType(), unitId) != null) {
             throw new IsExistsException("网关已存在");
         }
         int result = getwayDao.addGetway(getway);
@@ -251,7 +271,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
             throw new UpdateException("添加网关失败");
         }
         // 根据网关信息创建节点
-        getway = getwayDao.findByMark(getway.getGetwayMark());
+        getway = getwayDao.findByMark(getway.getGetwayMark(), user.getUserType(), unitId);
 
         Node node = new Node();
         node.setNodeMark(getway.getGetwayMark());
@@ -333,7 +353,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (subUser == null) {
             throw new NotFoundException("本单位没有该用户");
         }
-        Node node = nodeDao.findByUnitIdAndNodeId(user.getUnitId(), nodeId);
+        Node node = nodeDao.findById(nodeId, user.getUserType(), user.getUnitId());
         if (node == null) {
             throw new NotFoundException("节点不存在或者没有该节点租约");
         }
@@ -357,6 +377,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         }
     }
 
+    @Transactional
     public void nodeReleaseAuthorization(Integer userId, Integer nodeId, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
         UserInfo user = PermissionUnit.isLogin(session);
@@ -367,7 +388,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (subUser == null) {
             throw new NotFoundException("本单位没有该用户");
         }
-        Node node = nodeDao.findByUnitIdAndNodeId(user.getUnitId(), nodeId);
+        Node node = nodeDao.findById(nodeId, user.getUserType(), user.getUnitId());
         if (node == null) {
             throw new NotFoundException("节点不存在或者没有该节点租约");
         }
@@ -388,6 +409,28 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
                     throw new UpdateException("数据更新异常");
                 }
             }
+        }
+    }
+
+    public void authorNode(UserAuthorDto dto, HttpSession session)
+            throws HasNoPermissionException, NotFoundException, UpdateException {
+        UserInfo currentUser = PermissionUnit.isLogin(session);
+        if (!PermissionUnit.isUnitAdmin(currentUser)) {
+            UserInfo user = userInfoDao.findByUsername(dto.getUsername(),
+                    currentUser.getUserType(), currentUser.getUnitId());
+            if (user == null) {
+                throw new NotFoundException("用户不存在");
+            }
+            if (user.getUserType() != 3) {
+                throw new RuntimeException("只能授权给普通用户");
+            }
+            Node node = nodeDao.findByMark(dto.getNodeMark(), user.getUserType(), user.getUnitId());
+            if (node == null) {
+                throw new NotFoundException("节点不存在");
+            }
+            userAuthorDao.add(user.getUserId(), node.getNodeId());
+        } else {
+            throw new HasNoPermissionException("没有操作权限");
         }
     }
 }

@@ -1,8 +1,11 @@
 package io.ride.web.controller;
 
+import io.ride.web.dto.CurrentUserDto;
 import io.ride.web.dto.Result;
+import io.ride.web.entity.Unit;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.UsernameOrPasswordException;
+import io.ride.web.service.UnitService;
 import io.ride.web.service.UserService;
 import org.apache.ibatis.annotations.ResultType;
 import org.slf4j.Logger;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpSession;
  * Date: 17-11-6
  * Time: 下午10:41
  */
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @ResponseBody
 @RequestMapping("/user")
@@ -27,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UnitService unitService;
 
     @PostMapping("/login")
     public Result login(@RequestParam("username") String username,
@@ -40,7 +47,9 @@ public class UserController {
             return new Result(false, -1, e.getMessage());
         }
         session.setAttribute("user", user);
-        return new Result(true, 1, "用户登录成功");
+        CurrentUserDto currentUserDto = new CurrentUserDto(user);
+        LOGGER.info("user login success --> {}", String.valueOf(session.getAttribute("user")));
+        return new Result(true, 1, "用户登录成功").add("user", currentUserDto);
     }
 
     /**
@@ -50,13 +59,13 @@ public class UserController {
      * @return json
      */
     @GetMapping("/loginUser")
-    public Result loginUser(HttpSession session) {
+    public CurrentUserDto loginUser(HttpSession session) {
         UserInfo user = (UserInfo) session.getAttribute("user");
+        LOGGER.info("user login = {}", user);
         if (user == null) {
-            return new Result(false, -1, "当前没有用户登录");
+            return new CurrentUserDto();
         }
-        return new Result(true, 1, "当前有用户登录")
-                .add("user", user);
+        return new CurrentUserDto(user);
     }
 
     /**

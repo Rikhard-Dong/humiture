@@ -8,6 +8,7 @@ import io.ride.web.exception.UpdateException;
 import io.ride.web.service.BatchDeleteService;
 import io.ride.web.util.ParamDivisionUtil;
 import io.ride.web.util.PermissionUnit;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
                         throw new HasNoPermissionException("用户删除失败{}, 本单位不存在该用户");
                     }
                 }
-                if (userInfoDao.findByUsername(username) == null) {
+                if (userInfoDao.findByUsername(username, currentUser.getUserType(), currentUser.getUnitId()) == null) {
                     throw new NotFoundException("删除用户" + username + "失败, 因为该用户不存在");
                 }
                 result = userInfoDao.deleteByUsername(username);
@@ -99,13 +100,43 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Transactional
     public void batchDeleteGetway(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
+        UserInfo user = PermissionUnit.isLogin(session);
+        int result;
+        if (PermissionUnit.isAdmin(user)) {
+            String[] marks = ParamDivisionUtil.getParams(arg);
+            for (String mark : marks) {
+                if (getwayDao.findByMark(mark, user.getUserType(), user.getUnitId()) == null) {
+                    throw new NotFoundException("网关未找到");
+                }
+                result = getwayDao.deleteByMark(mark);
+                if (result == 0) {
+                    throw new UpdateException("删除" + mark + "网关失败! 数据库更新异常!");
+                }
+            }
+            LOGGER.info("批量删除网关<------- {} ---------->成功", Arrays.toString(marks));
 
+        }
     }
 
     @Transactional
     public void batchDeleteNode(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
+        UserInfo user = PermissionUnit.isLogin(session);
+        int result;
+        if (PermissionUnit.isAdmin(user)) {
+            String[] marks = ParamDivisionUtil.getParams(arg);
+            for (String mark : marks) {
+                if (nodeDao.findByMark(mark, user.getUserType(), user.getUnitId()) == null) {
+                    throw new NotFoundException("节点未找到");
+                }
+                result = nodeDao.deleteByMark(mark);
+                if (result == 0) {
+                    throw new UpdateException("删除" + mark + "节点失败! 数据库更新异常!");
+                }
+            }
+            LOGGER.info("批量删除节点<------- {} ---------->成功", Arrays.toString(marks));
 
+        }
     }
 
     @Transactional

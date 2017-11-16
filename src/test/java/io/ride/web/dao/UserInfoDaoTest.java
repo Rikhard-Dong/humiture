@@ -27,7 +27,6 @@ public class UserInfoDaoTest {
     @Test
     public void findByUsername() throws Exception {
 
-        System.out.println(userInfoDao.findByUsername("unit2user5"));
     }
 
     @Autowired

@@ -1,6 +1,9 @@
 package io.ride.web.dao;
 
+import io.ride.web.entity.UserAuthor;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * Created by IDEA
@@ -17,5 +20,9 @@ public interface UserAuthorDao {
 
     int deleteById(@Param("userAuthorId") Integer userAuthorId);
 
+    int isExists(@Param("userId") Integer userId,
+                 @Param("nodeId") Integer nodeId);
+
+    List<UserAuthor> list(@Param("unitId") Integer unitId);
 
 }

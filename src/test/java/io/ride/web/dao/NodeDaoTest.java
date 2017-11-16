@@ -45,7 +45,6 @@ public class NodeDaoTest {
 
     @Test
     public void findByIdTest() {
-        LOGGER.info("node find by id={}", nodeDao.findById(1));
     }
 
     @Test

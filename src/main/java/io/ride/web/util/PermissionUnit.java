@@ -29,9 +29,9 @@ public class PermissionUnit {
      * @throws HasNoPermissionException 当前未登录
      */
     public static UserInfo isLogin(HttpSession session) throws HasNoPermissionException {
-        session.setAttribute("user", TEST_ADMIN);
+//        session.setAttribute("user", TEST_UNIT_ADMIN);
         UserInfo user = (UserInfo) session.getAttribute("user");
-//        LOGGER.info("isLogin() ---> user = {}", user);
+        LOGGER.info("isLogin() ---> user = {}", user);
         if (user == null) {
             throw new HasNoPermissionException("登录后操作!");
         }
@@ -56,6 +56,20 @@ public class PermissionUnit {
      */
     public static boolean isUnitAdmin(UserInfo currentUser) {
         return currentUser.getUserType() == 2 || currentUser.getUserType() == 1;
+    }
+
+    public static boolean isUser(UserInfo currentUser) {
+        return currentUser.getUserType() == 3;
+    }
+
+    /**
+     * 返回非系统管理员
+     *
+     * @param currentUser
+     * @return
+     */
+    public static boolean isNotAdmin(UserInfo currentUser) {
+        return currentUser.getUserType() == 1 || currentUser.getUserType() == 2 || currentUser.getUserType() == 3;
     }
 
     private static UserInfo GET_TEST_ADMIN() {

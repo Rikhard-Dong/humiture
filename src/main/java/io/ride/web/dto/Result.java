@@ -16,6 +16,9 @@ public class Result implements Serializable {
     private String message;
     private Map<String, Object> data = new HashMap<String, Object>();
 
+    public Result() {
+    }
+
     public Result(boolean success, int code, String message) {
         this.success = success;
         this.code = code;

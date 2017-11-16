@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,11 +57,19 @@ public class RepairServiceImpl implements RepairService {
         }
     }
 
-    public List<Repair> list(HttpSession session)
+    public List<RepairDto> list(HttpSession session)
             throws HasNoPermissionException {
         UserInfo user = PermissionUnit.isLogin(session);
         if (PermissionUnit.isUnitAdmin(user) || PermissionUnit.isAdmin(user)) {
-            return repairDao.list(user.getUserType(), user.getUnitId());
+            List<Repair> repairs = repairDao.list(user.getUserType(), user.getUnitId());
+            List<RepairDto> repairDtos = new ArrayList<RepairDto>();
+            for (Repair repair : repairs) {
+                Node node = nodeDao.findById(repair.getNodeId(), user.getUserType(), user.getUnitId());
+                RepairDto repairDto = new RepairDto(repair, node.getNodeMark());
+                repairDtos.add(repairDto);
+            }
+
+            return repairDtos;
         } else {
             throw new HasNoPermissionException("没有相应的权限");
         }
