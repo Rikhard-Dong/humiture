@@ -2,48 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.ride.web.dao.NodeDao">
 
-    <sql id="base_select">
-        node_id, node_mark, getway_id, spare_node, node_num, type, <![CDATA[
-        status
-        ]]>, now_temper, now_humidity, time_inter, memo
-    </sql>
+    <resultMap id="nodeResult" type="Node">
+        <id property="nodeId" column="NodeId"/>
+        <result property="nodeMark" column="NodeMark"/>
+        <result property="spareNode" column="SpareNode"/>
+        <result property="nodeNum" column="NodeNum"/>
+        <result property="type" column="Type"/>
+        <result property="status" column="Status"/>
+        <result property="nowTemper" column="NowTemper"/>
+        <result property="nowHumidity" column="Humidity"/>
+        <result property="memo" column="Memo"/>
+        <result property="getwayId" column="GetwayId"/>
+    </resultMap>
 
-    <sql id="select_with_getway">
-        n.node_id,
-        n.node_mark,
-        n.getway_id,
-        n.spare_node,
-        n.node_num,
-        n.type,
-        n.status,
-        n.now_temper,
-        n.now_humidity,
-        n.time_inter,
-        n.memo,
-        g.getway_id     "getway.getwayId",
-        g.getway_mark   "getway.getwayMark",
-        g.spare_node    "getway.spareNode",
-        g.node_num      "getway.nodeNum",
-        g.status        "getway.status",
-        g.now_temper    "getway.nowTemper",
-        g.now_humidity  "getway.nowHumidity",
-        g.time_inter    "getway.timeInter",
-        g.memo          "getway.memo"
-    </sql>
     <insert id="addNode">
-        INSERT INTO t_node
+        INSERT INTO Node
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="node.nodeMark != null">node_id,</if>
-            <if test="node.nodeMark != null">node_mark,</if>
-            <if test="node.getwayId != null">getway_id,</if>
-            <if test="node.spareNode != null">spare_node,</if>
-            <if test="node.nodeNum != null">node_num,</if>
-            <if test="node.type != null">type,</if>
-            <if test="node.status != null">`status`,</if>
-            <if test="node.nowTemper != null">now_temper,</if>
-            <if test="node.nowHumidity != null">now_humidity,</if>
-            <if test="node.timeInter != null">time_inter,</if>
-            <if test="node.memo != null">memo,</if>
+            <if test="node.nodeMark != null">NodeId,</if>
+            <if test="node.nodeMark != null">NodeMark,</if>
+            <if test="node.getwayId != null">GetwayId,</if>
+            <if test="node.spareNode != null">SpareNode,</if>
+            <if test="node.nodeNum != null">NodeNum,</if>
+            <if test="node.type != null">Type,</if>
+            <if test="node.status != null">Status,</if>
+            <if test="node.nowTemper != null">NowTemper,</if>
+            <if test="node.nowHumidity != null">Humidity,</if>
+            <if test="node.timeInter != null">TimeInter,</if>
+            <if test="node.memo != null">Memo,</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -59,130 +44,126 @@
             <if test="node.timeInter != null">#{node.timeInter},</if>
             <if test="node.memo != null">#{node.memo},</if>
         </trim>
-        ;
     </insert>
 
     <update id="updateNode">
-        UPDATE t_node SET
+        UPDATE Node SET
         <trim suffixOverrides=",">
-            <if test="node.nodeMark != null">node_mark = #{node.nodeMark},</if>
-            <if test="node.getwayId != null">getway_id = #{node.getwayId},</if>
-            <if test="node.spareNode != null">spare_node = #{node.spareNode},</if>
-            <if test="node.nodeNum != null">node_num = #{node.nodeNum},</if>
-            <if test="node.type != null">type =#{node.type},</if>
-            <if test="node.status != null">status = #{node.status},</if>
-            <if test="node.nowTemper != null">now_temper = #{node.nowTemper},</if>
-            <if test="node.nowHumidity != null">now_humidity = #{node.nowHumidity},</if>
-            <if test="node.timeInter != null">time_inter = #{node.timeInter},</if>
-            <if test="node.memo != null">memo = #{node.memo},</if>
+            <if test="node.nodeMark != null">NodeMark = #{node.nodeMark},</if>
+            <if test="node.getwayId != null">GetwayId = #{node.getwayId},</if>
+            <if test="node.spareNode != null">SpareNode = #{node.spareNode},</if>
+            <if test="node.nodeNum != null">NodeNum = #{node.nodeNum},</if>
+            <if test="node.type != null">Type =#{node.type},</if>
+            <if test="node.status != null">Status = #{node.status},</if>
+            <if test="node.nowTemper != null">NowTemper = #{node.nowTemper},</if>
+            <if test="node.nowHumidity != null">Humidity = #{node.nowHumidity},</if>
+            <if test="node.timeInter != null">TimeInter = #{node.timeInter},</if>
+            <if test="node.memo != null">Memo = #{node.memo},</if>
         </trim>
-        WHERE node_id = #{node.nodeId};
+        WHERE NodeId = #{node.nodeId}
     </update>
 
     <update id="updateTemperAndHumidity">
-        UPDATE t_node
-        SET now_temper = #{temper}, now_humidity = #{humidity}
-        WHERE node_id = #{nodeMark};
+        UPDATE Node
+        SET NowTemper = #{temper}, Humidity = #{humidity}
+        WHERE NodeId = #{nodeMark};
     </update>
 
     <update id="updateNodeByMark">
-        UPDATE t_node SET
+        UPDATE Node SET
         <trim suffixOverrides=",">
-            <if test="node.spareNode != null">spare_node = #{node.spareNode},</if>
-            <if test="node.nodeNum != null">node_num = #{node.nodeNum},</if>
-            <if test="node.type != null">type =#{node.type},</if>
-            <if test="node.status != null">status = #{node.status},</if>
-            <if test="node.nowTemper != null">now_temper = #{node.nowTemper},</if>
-            <if test="node.nowHumidity != null">now_humidity = #{node.nowHumidity},</if>
-            <if test="node.timeInter != null">time_inter = #{node.timeInter},</if>
-            <if test="node.memo != null">memo = #{node.memo},</if>
+            <if test="node.spareNode != null">SpareNode = #{node.spareNode},</if>
+            <if test="node.nodeNum != null">NodeNum = #{node.nodeNum},</if>
+            <if test="node.type != null">Type =#{node.type},</if>
+            <if test="node.status != null">Status = #{node.status},</if>
+            <if test="node.nowTemper != null">NowTemper = #{node.nowTemper},</if>
+            <if test="node.nowHumidity != null">Humidity = #{node.nowHumidity},</if>
+            <if test="node.timeInter != null">TimeInter = #{node.timeInter},</if>
+            <if test="node.memo != null">Memo = #{node.memo},</if>
         </trim>
-        WHERE node_mark = #{node.nodeMark};
+        WHERE NodeMark = #{node.nodeMark};
     </update>
 
     <delete id="deleteById">
-        DELETE FROM t_node
-        WHERE node_id = #{id};
+        DELETE FROM Node
+        WHERE NodeId = #{id};
     </delete>
     <delete id="deleteByMark">
-        DELETE FROM t_node
-        WHERE node_mark = #{mark};
+        DELETE FROM Node
+        WHERE NodeMark = #{mark};
     </delete>
 
-    <select id="list" resultType="io.ride.web.entity.Node">
-        SELECT
-        <include refid="base_select"/>
-        FROM t_node;
+    <select id="list" resultMap="nodeResult">
+        SELECT *
+        FROM Node;
     </select>
 
-    <select id="findById" resultType="io.ride.web.entity.Node">
+    <select id="findById" resultMap="nodeResult">
         <choose>
             <when test="userType == 0">
                 SELECT
                 *
-                FROM t_node
-                WHERE node_id = #{nodeId}
+                FROM Node
+                WHERE NodeId = #{nodeId}
             </when>
             <when test="userType == 1 or userType == 2">
-                SELECT n.* FROM t_node n WHERE n.node_id IN (SELECT n.node_id FROM t_node n, t_unit u, t_rent r WHERE
-                n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId} AND current_timestamp
-                BETWEEN r.start_time AND r.end_time) AND n.node_id = #{nodeId}
+                SELECT n.* FROM Node n WHERE n.NodeId IN (SELECT n.NodeId FROM Node n, Unit u, Rent r WHERE
+                n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId} AND current_timestamp
+                BETWEEN r.StartTime AND r.EndTime) AND n.NodeId = #{nodeId}
             </when>
         </choose>
 
     </select>
 
-    <select id="findByMark" resultType="io.ride.web.entity.Node">
+    <select id="findByMark" resultMap="nodeResult">
         <choose>
             <when test="userType == 0">
                 SELECT
                 *
-                FROM t_node
-                WHERE node_mark = #{mark};
+                FROM Node
+                WHERE NodeMark = #{mark};
             </when>
             <when test="userType == 1 or userType == 2">
-                SELECT n.* FROM t_node n WHERE n.node_id IN (SELECT n.node_id FROM t_node n, t_unit u, t_rent r WHERE
-                n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId} AND current_timestamp
-                BETWEEN r.start_time AND r.end_time) AND n.node_mark = #{mark}
+                SELECT n.* FROM Node n WHERE n.NodeId IN (SELECT n.NodeId FROM Node n, Unit u, Rent r WHERE
+                n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId} AND current_timestamp
+                BETWEEN r.StartTime AND r.EndTime) AND n.NodeMark = #{mark}
             </when>
         </choose>
     </select>
 
-    <select id="findByIdWithGetway" resultType="io.ride.web.entity.Node">
-        SELECT
-        <include refid="select_with_getway"/>
-        FROM t_node n
-        INNER JOIN t_getway g ON n.getway_id = g.getway_id
-        WHERE node_id=#{nodeMark};
+    <select id="findByIdWithGetway" resultMap="nodeResult">
+        SELECT n.*
+        FROM Node n
+            INNER JOIN Getway g ON n.GetwayId = g.GetwayId
+        WHERE NodeId = #{nodeMark};
     </select>
 
-    <select id="findByMarkWithGetway" resultType="io.ride.web.entity.Node">
-        SELECT
-        <include refid="select_with_getway"/>
-        FROM t_node n
-        INNER JOIN t_getway g ON n.getway_id = g.getway_id
-        WHERE node_mark=#{mark};
+    <select id="findByMarkWithGetway" resultMap="nodeResult">
+        SELECT n.*
+        FROM Node n
+            INNER JOIN Getway g ON n.GetwayId = g.GetwayId
+        WHERE NodeMark = #{mark};
     </select>
     <select id="isExists" resultType="java.lang.Boolean">
-        SELECT (count(1) = 1)
-        FROM t_node
-        WHERE node_mark = #{mark};
+        SELECT count(1)
+        FROM Node
+        WHERE NodeMark = #{mark};
     </select>
 
-    <select id="findByNum" resultType="io.ride.web.entity.Node">
+    <select id="findByNum" resultMap="nodeResult">
         SELECT *
-        FROM t_node
-        WHERE node_num = #{num}
+        FROM Node
+        WHERE NodeNum = #{num}
     </select>
 
-    <select id="search" resultType="io.ride.web.entity.Node">
+    <select id="search" resultMap="nodeResult">
         <choose>
             <when test="userType == 0">
-                SELECT * FROM t_node WHERE node_mark LIKE '%${arg}%'
+                SELECT * FROM Node WHERE NodeMark LIKE '%${arg}%'
             </when>
             <when test="userType == 1 or userType == 2">
-                SELECT n.* FROM t_node n, t_unit u, t_rent r WHERE r.getway_id = n.getway_id AND r.unit_id = u.unit_id
-                AND node_mark LIKE '%${arg}%' AND current_timestamp BETWEEN r.start_time AND r.end_time AND u.unit_id =
+                SELECT n.* FROM Node n, Unit u, Rent r WHERE r.GetwayId = n.GetwayId AND r.UnitId = u.UnitId
+                AND NodeMark LIKE '%${arg}%' AND current_timestamp BETWEEN r.StartTime AND r.EndTime AND u.UnitId =
                 #{unitId}
             </when>
         </choose>

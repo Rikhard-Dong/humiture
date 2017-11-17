@@ -11,11 +11,11 @@ import java.util.List;
 public class Getway {
     private Integer getwayId;
     private String getwayMark;
-    private Integer spareNode;
+    private String spareNode;
     private String nodeNum;
     private Integer status;
-    private Integer nowTemper;
-    private Integer nowHumidity;
+    private String nowTemper;
+    private String nowHumidity;
     private Integer timeInter;
     private String memo;
 
@@ -37,11 +37,11 @@ public class Getway {
         this.getwayMark = getwayMark;
     }
 
-    public Integer getSpareNode() {
+    public String getSpareNode() {
         return spareNode;
     }
 
-    public void setSpareNode(Integer spareNode) {
+    public void setSpareNode(String spareNode) {
         this.spareNode = spareNode;
     }
 
@@ -61,19 +61,19 @@ public class Getway {
         this.status = status;
     }
 
-    public Integer getNowTemper() {
+    public String getNowTemper() {
         return nowTemper;
     }
 
-    public void setNowTemper(Integer nowTemper) {
+    public void setNowTemper(String nowTemper) {
         this.nowTemper = nowTemper;
     }
 
-    public Integer getNowHumidity() {
+    public String getNowHumidity() {
         return nowHumidity;
     }
 
-    public void setNowHumidity(Integer nowHumidity) {
+    public void setNowHumidity(String nowHumidity) {
         this.nowHumidity = nowHumidity;
     }
 

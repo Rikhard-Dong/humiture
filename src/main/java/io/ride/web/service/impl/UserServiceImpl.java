@@ -3,6 +3,7 @@ package io.ride.web.service.impl;
 import com.github.pagehelper.PageInfo;
 import io.ride.web.dao.UnitDao;
 import io.ride.web.dao.UserInfoDao;
+import io.ride.web.entity.Unit;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.*;
 import io.ride.web.service.UserService;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserInfoDao userInfoDao;
 
+
     @Autowired
     private UnitDao unitDao;
 
@@ -44,11 +46,14 @@ public class UserServiceImpl implements UserService {
             LOGGER.error("用户名或者密码错误!登录失败");
             throw new UsernameOrPasswordException("用户名或者密码错误!");
         }
-        String enctyptPassword = MD5Encrypt.encrypt(password);
-        UserInfo user = userInfoDao.accountValidate(username, enctyptPassword);
+        UserInfo user = userInfoDao.accountValidate(username, password);
         if (user == null) {
             LOGGER.error("用户名或者密码错误!登录失败");
             throw new UsernameOrPasswordException("用户名或者密码错误!");
+        }
+        if (!PermissionUnit.isAdmin(user)) {
+            Unit unit = unitDao.findById(user.getUnitId());
+            user.setUnit(unit);
         }
         LOGGER.info("{}在{}登录本系统!", username, MyDateFormat.format(new Date()));
         return user;
@@ -57,7 +62,7 @@ public class UserServiceImpl implements UserService {
     public void addUser(UserInfo user, HttpSession session)
             throws IsExistsException, HasNoPermissionException, PasswordNotEqualsException {
         UserInfo currentUser = PermissionUnit.isLogin(session);
-        user.setPassword(MD5Encrypt.encrypt(user.getPassword()));
+        user.setPassword(user.getPassword());
         int result = 0;
         if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
             if (userInfoDao.isAccountExists(user.getUsername())) {

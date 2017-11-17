@@ -28,7 +28,7 @@ public class GetwayDaoTest {
     public void addGetway() throws Exception {
         Getway getway = new Getway();
         getway.setGetwayMark("12345");
-        getway.setSpareNode(0);
+        getway.setSpareNode("0");
         getway.setNodeNum("11111");
         getway.setTimeInter(10);
         getway.setStatus(0);
@@ -51,7 +51,7 @@ public class GetwayDaoTest {
 
     @Test
     public void list() {
-        System.out.println(getwayDao.list(2, 1));
+        System.out.println(getwayDao.list(0, null));
     }
 
     @Test

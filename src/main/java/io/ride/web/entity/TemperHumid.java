@@ -13,14 +13,15 @@ import java.util.Date;
  * Time: 下午7:35
  */
 public class TemperHumid {
-    private Integer temperHumidId;       // 上报温度ID
+    private Integer temperHumidId;  // 上报温度ID
     private Integer nodeId;         // 上报节点ID
-    private Float temper;       // 上报温度
-    private Float humidity;        // 上报温度
-    private Date reportTime;    // 上报时间
-    private short type;         // 上报类型, 0为网关, 1为节点
+    private String nodeMark;        // 上报节点
+    private String temper;          // 上报温度
+    private String humidity;        // 上报温度
+    private Date reportTime;        // 上报时间
+    private Integer type;           // 上报类型, 0为网关, 1为节点
 
-    private Node parentNode;    // 父节点
+    private Node parentNode;        // 父节点
 
     public Integer getTemperHumidId() {
         return temperHumidId;
@@ -38,11 +39,11 @@ public class TemperHumid {
         this.nodeId = nodeId;
     }
 
-    public Float getTemper() {
+    public String getTemper() {
         return temper;
     }
 
-    public void setTemper(Float temper) {
+    public void setTemper(String temper) {
         this.temper = temper;
     }
 
@@ -54,11 +55,11 @@ public class TemperHumid {
         this.reportTime = reportTime;
     }
 
-    public short getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(short type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -70,12 +71,20 @@ public class TemperHumid {
         this.parentNode = parentNode;
     }
 
-    public Float getHumidity() {
+    public String getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(Float humidity) {
+    public void setHumidity(String humidity) {
         this.humidity = humidity;
+    }
+
+    public String getNodeMark() {
+        return nodeMark;
+    }
+
+    public void setNodeMark(String nodeMark) {
+        this.nodeMark = nodeMark;
     }
 
     @Override
@@ -83,9 +92,10 @@ public class TemperHumid {
         return "TemperHumid{" +
                 "temperHumidId=" + temperHumidId +
                 ", nodeId=" + nodeId +
-                ", temper=" + temper +
-                ", humidity=" + humidity +
-                ", reportTime=" + MyDateFormat.format(reportTime) +
+                ", nodeMark='" + nodeMark + '\'' +
+                ", temper='" + temper + '\'' +
+                ", humidity='" + humidity + '\'' +
+                ", reportTime=" + reportTime +
                 ", type=" + type +
                 ", parentNode=" + parentNode +
                 '}';

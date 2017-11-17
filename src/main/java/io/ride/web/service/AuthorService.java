@@ -19,6 +19,10 @@ import java.util.List;
  */
 public interface AuthorService {
 
+    /*
+    * 网关授权管理
+     */
+
     void authorGetway(RentDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException;
 
@@ -28,9 +32,19 @@ public interface AuthorService {
     void deleteRent(Integer id, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
 
+
+
+
+    /*
+    * 节点授权管理
+     */
+
     void authorNode(UserAuthorDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException;
 
     DataTableResult listNodeAuthor(Integer page, Integer rows, HttpSession session)
             throws HasNoPermissionException;
+
+    void deleteAuthorNode(Integer id, HttpSession session)
+            throws HasNoPermissionException, NotFoundException;
 }

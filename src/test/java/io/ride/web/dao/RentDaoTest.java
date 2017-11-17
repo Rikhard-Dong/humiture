@@ -25,6 +25,8 @@ public class RentDaoTest {
 
     @Test
     public void list() throws Exception {
+        System.out.println(rentDao.list());
+        System.out.println(rentDao.findByRentId(1));
     }
 
     @Test
@@ -38,7 +40,7 @@ public class RentDaoTest {
         rent.setUnitId(2);
         rent.setStartTime(MyDateFormat.str2Date("2017-10-20 10:10:10"));
         rent.setEndTime(MyDateFormat.str2Date("2018-10-10 00:00:00"));
-        rent.setPay(9000000f);
+        rent.setPay(String.valueOf(9000000f));
         System.out.println(rent);
         rentDao.add(rent);
         System.out.println(rent);

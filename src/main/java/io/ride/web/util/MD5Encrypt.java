@@ -9,12 +9,14 @@ import org.springframework.util.DigestUtils;
  * User: ride
  * Date: 17-11-5
  * Time: 下午1:31
+ *
+ * 密码不适用加密
  */
 public class MD5Encrypt {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MD5Encrypt.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(MD5Encrypt.class);
 
-    public static final String encrypt(String text) {
-        return DigestUtils.md5DigestAsHex(text.getBytes());
-    }
+//    public static final String encrypt(String text) {
+//        return DigestUtils.md5DigestAsHex(text.getBytes());
+//    }
 }

@@ -15,7 +15,7 @@
     <!-- 配置数据源资源文件 -->
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
           id="propertyPlaceholderConfigurer">
-        <property name="location" value="classpath:jdbc.properties"/>
+        <property name="location" value="classpath:jdbc2.properties"/>
     </bean>
 
     <!-- 配置数据源 -->

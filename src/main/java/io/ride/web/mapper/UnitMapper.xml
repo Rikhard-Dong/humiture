@@ -3,15 +3,15 @@
 <mapper namespace="io.ride.web.dao.UnitDao">
 
     <insert id="add">
-        INSERT INTO t_unit
+        INSERT INTO Unit
         <trim prefix="(" suffixOverrides="," suffix=")">
-            <if test="unit.unitId != null">unit_id,</if>
-            <if test="unit.title != null">title,</if>
-            <if test="unit.address != null">address,</if>
-            <if test="unit.person != null">person,</if>
-            <if test="unit.phone != null">phone,</if>
-            <if test="unit.email != null">email,</if>
-            <if test="unit.unitType != null">unit_type,</if>
+            <if test="unit.unitId != null">UnitId,</if>
+            <if test="unit.title != null">Title,</if>
+            <if test="unit.address != null">Address,</if>
+            <if test="unit.person != null">Person,</if>
+            <if test="unit.phone != null">Phone,</if>
+            <if test="unit.email != null">Email,</if>
+            <if test="unit.unitType != null">UnitType,</if>
             <if test="unit.memo != null">memo,</if>
         </trim>
         VALUES
@@ -21,77 +21,77 @@
             <if test="unit.address != null">#{unit.address},</if>
             <if test="unit.person != null">#{unit.person},</if>
             <if test="unit.phone != null">#{unit.phone},</if>
-            <if test="unit.email != null">#{unit.email},</if>
+            <if test="unit.email != null">#{unit.Email},</if>
             <if test="unit.unitType != null">#{unit.unitType},</if>
             <if test="unit.memo != null">#{unit.memo},</if>
         </trim>
     </insert>
 
     <update id="update">
-        UPDATE t_unit SET
+        UPDATE Unit SET
         <trim suffixOverrides=",">
-            <if test="unit.address != null">address = #{unit.address},</if>
-            <if test="unit.person != null">person = #{unit.person},</if>
-            <if test="unit.phone != null">phone = #{unit.phone},</if>
-            <if test="unit.email != null">email = #{unit.email},</if>
-            <if test="unit.unitType != null">unit_type = #{unit.unitType},</if>
+            <if test="unit.address != null">Address = #{unit.address},</if>
+            <if test="unit.person != null">Person = #{unit.person},</if>
+            <if test="unit.phone != null">Phone = #{unit.phone},</if>
+            <if test="unit.email != null">Email = #{unit.email},</if>
+            <if test="unit.unitType != null">UnitType = #{unit.unitType},</if>
             <if test="unit.memo != null">memo = #{unit.memo},</if>
         </trim>
-        WHERE title = #{unit.title};
+        WHERE Title = #{unit.title};
     </update>
 
     <delete id="deleteById">
-        DELETE FROM t_unit
-        WHERE unit_id = #{id}
+        DELETE FROM Unit
+        WHERE UnitId = #{id}
     </delete>
 
     <delete id="deleteByTitle">
-        DELETE FROM t_unit
-        WHERE title = #{title}
+        DELETE FROM Unit
+        WHERE Title = #{title}
     </delete>
 
     <select id="list" resultType="io.ride.web.entity.Unit">
         SELECT *
-        FROM t_unit
+        FROM Unit
     </select>
 
     <select id="listUnitUser" resultType="io.ride.web.entity.UserInfo">
-        SELECT t_user_info.*
-        FROM t_unit
-            INNER JOIN t_user_info ON t_unit.unit_id = t_user_info.unit_id
-        WHERE t_user_info.unit_id = #{id}
+        SELECT userInfo.*
+        FROM Unit
+            INNER JOIN userInfo ON Unit.UnitId = userInfo.UnitId
+        WHERE userInfo.UnitId = #{id}
     </select>
 
     <select id="findById" resultType="io.ride.web.entity.Unit">
         SELECT *
-        FROM t_unit
-        WHERE unit_id = #{id}
+        FROM Unit
+        WHERE UnitId = #{id}
     </select>
 
     <select id="isExists" resultType="java.lang.Boolean">
         SELECT COUNT(*) = 1
-        FROM t_unit
-        WHERE unit_id = #{id}
+        FROM Unit
+        WHERE UnitId = #{id}
     </select>
 
     <select id="findByTitle" resultType="io.ride.web.entity.Unit">
         SELECT *
-        FROM t_unit
-        WHERE title = #{title}
+        FROM Unit
+        WHERE Title = #{title}
     </select>
 
     <select id="listRentingGetway" resultType="io.ride.web.entity.Getway">
         SELECT g.*
-        FROM t_getway g, t_rent r, t_unit u
+        FROM Getway g, Rent r, Unit u
         WHERE
-            g.getway_id = r.getway_id AND r.unit_id = u.unit_id
-            AND CURRENT_TIME BETWEEN r.start_time AND r.end_time
-            AND u.title = #{title}
+            g.getway_id = r.getway_id AND r.UnitId = u.UnitId
+            AND CURRENT_TIME BETWEEN r.StartTime AND r.EndTime
+            AND u.Title = #{title}
     </select>
 
     <select id="search" resultType="io.ride.web.entity.Unit">
         SELECT *
-        FROM t_unit
-        WHERE title LIKE '%${arg}%'
+        FROM Unit
+        WHERE Title LIKE '%${arg}%'
     </select>
 </mapper>

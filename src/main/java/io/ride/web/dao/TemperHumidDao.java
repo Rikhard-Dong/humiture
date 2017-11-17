@@ -15,15 +15,9 @@ public interface TemperHumidDao {
 
     List<TemperHumid> list();
 
-    List<TemperHumid> listByNodeId(int nodeId);
-
     TemperHumid findById(int temperId);
 
-    TemperHumid findByIdWithNodeInfo(int temperId);
-
-    List<TemperHumid> listByNodeIdAndTimeSlot(@Param("nodeId") int nodeId,
-                                              @Param("startTime") String startTime,
-                                              @Param("endTime") String endTime);
+    List<TemperHumid> listByNodeMark(@Param("mark") String mark);
 
     List<TemperHumid> listByNodeMarkWithTime(@Param("nodeMark") String nodeMark,
                                              @Param("startTime") String startTime,

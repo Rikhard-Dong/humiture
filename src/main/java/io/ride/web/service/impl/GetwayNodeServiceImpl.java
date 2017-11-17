@@ -66,7 +66,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         // 更新网关信息同时更新节点表中对应节点的信息
         Node node = new Node();
         node.setNodeMark(getway.getGetwayMark());
-        node.setSpareNode(getway.getSpareNode());
+        node.setSpareNode(Integer.valueOf(getway.getSpareNode()));
         node.setNodeNum(getway.getNodeNum());
         node.setStatus(getway.getStatus());
         node.setTimeInter(getway.getTimeInter());
@@ -98,7 +98,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (node.getType() == 0) {
             LOGGER.info("当前节点为网关节点, 同步更新网关表");
             Getway getway = getwayDao.findByMark(node.getNodeMark(), user.getUserType(), unitId);
-            getway.setSpareNode(node.getSpareNode());
+            getway.setSpareNode(String.valueOf(node.getSpareNode()));
             getway.setNodeNum(node.getNodeNum());
             getway.setStatus(node.getStatus());
             getway.setTimeInter(node.getTimeInter());
@@ -277,7 +277,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         node.setNodeMark(getway.getGetwayMark());
         node.setGetwayId(getway.getGetwayId());
         node.setType(0);
-        node.setSpareNode(getway.getSpareNode());
+        node.setSpareNode(Integer.valueOf(getway.getSpareNode()));
         node.setNodeNum(getway.getNodeNum());
         node.setStatus(getway.getStatus());
         node.setTimeInter(getway.getTimeInter());

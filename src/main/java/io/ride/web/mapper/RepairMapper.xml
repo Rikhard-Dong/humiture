@@ -3,13 +3,13 @@
 <mapper namespace="io.ride.web.dao.RepairDao">
 
     <insert id="add">
-        INSERT INTO t_repair
+        INSERT INTO Repair
         <trim prefix="(" suffixOverrides="," suffix=")">
-            <if test="repair.nodeId != null">node_id,</if>
-            <if test="repair.faultDesc != null">fault_desc,</if>
-            <if test="repair.phone != null">phone,</if>
-            <if test="repair.person != null">person,</if>
-            <if test="repair.address != null">address,</if>
+            <if test="repair.nodeId != null">NodeId,</if>
+            <if test="repair.faultDesc != null">FaultDesc,</if>
+            <if test="repair.phone != null">Phone,</if>
+            <if test="repair.person != null">Person,</if>
+            <if test="repair.address != null">Address,</if>
         </trim>
         VALUES
         <trim prefix="(" suffixOverrides="," suffix=")">
@@ -22,39 +22,39 @@
     </insert>
 
     <update id="update">
-        UPDATE t_repair SET
+        UPDATE Repair SET
         <trim suffixOverrides=",">
-            <if test="repair.nodeId != null">node_id = #{repair.nodeId},</if>
-            <if test="repair.faultDesc != null">fault_desc = #{repair.faultDesc},</if>
-            <if test="repair.phone != null">phone = #{repair.phone},</if>
-            <if test="repair.person != null">person = #{repair.person},</if>
-            <if test="repair.address != null">address = #{repair.address},</if>
-            <if test="repair.status != null">`status` = #{repair.status},</if>
+            <if test="repair.nodeId != null">NodeId = #{repair.nodeId},</if>
+            <if test="repair.faultDesc != null">FaultDesc = #{repair.faultDesc},</if>
+            <if test="repair.phone != null">Phone = #{repair.phone},</if>
+            <if test="repair.person != null">Person = #{repair.person},</if>
+            <if test="repair.address != null">Address = #{repair.address},</if>
+            <if test="repair.status != null">Status = #{repair.status},</if>
         </trim>
-        WHERE repair_id = #{repair.repairId}
+        WHERE RepairId = #{repair.repairId}
     </update>
 
     <update id="updateStatus">
-        UPDATE t_repair
-        SET `status` = #{status}
-        WHERE repair_id = #{repairId}
+        UPDATE Repair
+        SET Status = #{status}
+        WHERE RepairId = #{repairId}
     </update>
 
     <delete id="delete">
-        DELETE FROM t_repair
-        WHERE repair_id = #{repaitId}
+        DELETE FROM Repair
+        WHERE RepairId = #{repaitId}
     </delete>
 
     <select id="list" resultType="io.ride.web.entity.Repair">
         <choose>
             <!-- 系统管理员 -->
             <when test="userType == 0">
-                SELECT * FROM t_repair
+                SELECT * FROM Repair
             </when>
             <!-- 单位管理员或者特权单位管理员 -->
             <when test="userType == 1 or userType == 2">
-                SELECT * FROM t_repair WHERE node_id IN (SELECT n.node_id FROM t_node n, t_rent r, t_unit u
-                WHERE n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId})
+                SELECT * FROM Repair WHERE NodeId IN (SELECT n.NodeId FROM Node n, Rent r, Unit u
+                WHERE n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId})
             </when>
             <otherwise>
                 SELECT NULL;
@@ -66,14 +66,14 @@
         <choose>
             <!-- 系统管理员 -->
             <when test="userType == 0">
-                SELECT * FROM t_repair WHERE node_id IN (SELECT n.node_id FROM t_node n WHERE n.node_mark LIKE
+                SELECT * FROM Repair WHERE NodeId IN (SELECT n.NodeId FROM Node n WHERE n.NodeMark LIKE
                 '%${param}%') OR person LIKE '%${param}%'
             </when>
             <!-- 单位管理员或者特权单位管理员 -->
             <when test="userType == 1 or userType == 2">
-                SELECT * FROM t_repair WHERE node_id IN (SELECT n.node_id FROM t_node n, t_rent r, t_unit u
-                WHERE n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId}) AND (node_id IN
-                (SELECT n.node_id FROM t_node n WHERE n.node_mark LIKE
+                SELECT * FROM Repair WHERE NodeId IN (SELECT n.NodeId FROM Node n, Rent r, Unit u
+                WHERE n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId}) AND (NodeId IN
+                (SELECT n.NodeId FROM Node n WHERE n.NodeMark LIKE
                 '%${param}%') OR person LIKE '%${param}%')
             </when>
             <otherwise>
@@ -86,12 +86,12 @@
         <choose>
             <!-- 系统管理员 -->
             <when test="userType == 0">
-                SELECT * FROM t_repair WHERE repair_id = #{repairId}
+                SELECT * FROM Repair WHERE RepairId = #{repairId}
             </when>
             <!-- 单位管理员或者特权单位管理员 -->
             <when test="userType == 1 or userType == 2">
-                SELECT * FROM t_repair WHERE node_id IN (SELECT n.node_id FROM t_node n, t_rent r, t_unit u
-                WHERE n.getway_id = r.getway_id AND r.unit_id = u.unit_id AND u.unit_id = #{unitId}) AND repair_id =
+                SELECT * FROM Repair WHERE NodeId IN (SELECT n.NodeId FROM Node n, Rent r, Unit u
+                WHERE n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId}) AND RepairId =
                 #{repairId}
             </when>
             <otherwise>

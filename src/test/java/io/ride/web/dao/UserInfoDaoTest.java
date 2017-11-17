@@ -24,6 +24,8 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = "classpath:spring/spring-mybatis.xml")
 public class UserInfoDaoTest {
+
+
     @Test
     public void findByUsername() throws Exception {
 
@@ -34,22 +36,23 @@ public class UserInfoDaoTest {
 
     @Test
     public void isAccountExists() throws Exception {
-        boolean result = userInfoDao.isAccountExists("admin");
+        boolean result = userInfoDao.isAccountExists("中铁十二局七公司");
+        System.out.println(result);
         assertTrue(result);
-        result = userInfoDao.isAccountExists("admin1");
+        result = userInfoDao.isAccountExists("admin111");
         assertFalse(result);
+        System.out.println(result);
     }
 
     @Test
     public void accountValidate() throws Exception {
-        UserInfo result = userInfoDao.accountValidate("admin", "21232f297a57a5a743894a0e4a801fc3");
-        System.out.println(result);
-        result = userInfoDao.accountValidate("admin", "admin");
-        assertNull(result);
-        result = userInfoDao.accountValidate("unit1", "21232f297a57a5a743894a0e4a801fc3");
-        System.out.println(result);
+        System.out.println(userInfoDao.accountValidate("admin", "55555"));
     }
 
+    @Test
+    public void list() throws Exception {
+        System.out.println(userInfoDao.list());
+    }
 
     @Test
     public void addUser() {
@@ -59,7 +62,6 @@ public class UserInfoDaoTest {
         user.setMemo("unit1admin");
         user.setUnitId(1);
         user.setUserType(1);
-        user.setPassword(MD5Encrypt.encrypt("admin"));
         userInfoDao.addUser(user);
     }
 

@@ -31,17 +31,14 @@ public class TemperDaoTest {
 
     @Test
     public void finByIdWithNodeInfoTest() {
-        System.out.println(temperDao.findByIdWithNodeInfo(15));
     }
 
     @Test
     public void listByNodeIdTest() {
-        System.out.println(temperDao.listByNodeId(1));
     }
 
 
     @Test
     public void listByNodeIdAndTimeSlotTest() {
-        System.out.println(temperDao.listByNodeIdAndTimeSlot(1, "2017-10-31 12:00:00", "2017-10-31 12:30:00"));
     }
 }

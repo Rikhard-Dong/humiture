@@ -2,45 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.ride.web.dao.UserInfoDao">
 
+    <resultMap id="userResultMap" type="UserInfo">
+        <id property="userId" column="UserId"/>
+        <result property="unitId" column="UnitId"/>
+        <result property="name" column="Name"/>
+        <result property="username" column="UserName"/>
+        <result property="userType" column="UserType"/>
+        <result property="password" column="Password"/>
+        <result property="memo" column="Memo"/>
+    </resultMap>
+
     <sql id="base_user">
-        u.user_id,
-        u.unit_id,
-        u.name,
-        u.user_type,
-        u.username,
-        u.username,
-        u.password,
-        u.memo
+        u.UserId,
+        u.UnitId,
+        u.Name,
+        u.UserType,
+        u.UserName,
+        u.Password,
+        u.Memo
     </sql>
 
-    <sql id="user_with_unit_info">
-        u.user_id,
-        u.unit_id,
-        u.name,
-        u.user_type,
-        u.username,
-        u.username,
-        u.password,
-        u.memo,
-        un.unit_id 'unit.unitId',
-        un.title 'unit.title',
-        un.address 'unit.address',
-        un.person 'unit.person',
-        un.phone 'unit.phone',
-        un.email 'unit.email',
-        un.unit_type 'unit.unitType',
-        un.memo 'unit.memo'
-    </sql>
 
     <insert id="addUser">
-        INSERT INTO t_user_info
+        INSERT INTO UserInfo
         <trim prefix="(" suffixOverrides="," suffix=")">
-            <if test="user.unitId != null">unit_id,</if>
-            <if test="user.name != null">`name`,</if>
-            <if test="user.userType != null">user_type,</if>
-            <if test="user.username != null">username,</if>
-            <if test="user.password != null">`password`,</if>
-            <if test="user.memo != null">memo,</if>
+            <if test="user.unitId != null">UnitId,</if>
+            <if test="user.name != null">`Name`,</if>
+            <if test="user.userType != null">UserType,</if>
+            <if test="user.Username != null">UserName,</if>
+            <if test="user.password != null">`Password`,</if>
+            <if test="user.memo != null">Memo,</if>
         </trim>
         VALUES
         <trim prefix="(" suffixOverrides="," suffix=");">
@@ -54,53 +45,55 @@
     </insert>
 
     <update id="updateByUsername">
-        UPDATE t_user_info SET
+        UPDATE UserInfo SET
         <trim suffixOverrides=",">
-            <if test="user.unitId != null">unit_id = #{user.unitId},</if>
-            <if test="user.name != null">`name` = #{user.name},</if>
-            <if test="user.password != null">`password` = #{user.password},</if>
-            <if test="user.memo != null">memo = #{user.memo},</if>
-            <if test="user.userType!=null">user_type = #{user.userType},</if>
+            <if test="user.unitId != null">UnitId = #{user.unitId},</if>
+            <if test="user.name != null">Name = #{user.name},</if>
+            <if test="user.password != null">Password = #{user.password},</if>
+            <if test="user.memo != null">Memo = #{user.memo},</if>
+            <if test="user.userType!=null">UserType = #{user.userType},</if>
         </trim>
-        WHERE username = #{user.username};
+        WHERE UserName = #{user.username};
     </update>
 
     <delete id="deleteByUserId">
-        DELETE FROM t_user_info
-        WHERE user_id = #{id};
+        DELETE FROM UserInfo
+        WHERE UserId = #{id};
     </delete>
+
     <delete id="deleteByUsername">
-        DELETE FROM t_user_info
-        WHERE username = #{username};
+        DELETE FROM UserInfo
+        WHERE UserName = #{username};
     </delete>
 
     <select id="isAccountExists" resultType="java.lang.Boolean">
-        SELECT (count(1) = 1)
-        FROM t_user_info
-        WHERE username = #{username}
+        SELECT count(1)
+        FROM UserInfo
+        WHERE UserName = #{username}
     </select>
-    <select id="accountValidate" resultType="UserInfo">
-        SELECT
-        <include refid="user_with_unit_info"/>
-        FROM t_user_info u
-        WHERE u.username = #{username} AND u.password = #{password} LIMIT 1;
+
+    <select id="accountValidate" resultType="UserInfo" resultMap="userResultMap">
+        SELECT *
+        FROM UserInfo
+        WHERE UserName = #{username} AND Password = #{password}
     </select>
+
     <select id="findByUserId" resultType="io.ride.web.entity.UserInfo">
         SELECT *
-        FROM t_user_info
-        WHERE unit_id = #{id};
+        FROM UserInfo
+        WHERE UnitId = #{id};
     </select>
 
     <select id="findByUsername" resultType="io.ride.web.entity.UserInfo">
         <choose>
             <when test="userType == 0">
                 SELECT *
-                FROM t_user_info
+                FROM UserInfo
                 WHERE username = #{username};
             </when>
             <when test="userType == 1 or userType == 2">
-                SELECT u.* FROM t_user_info u, t_unit unit WHERE u.unit_id = unit.unit_id AND username = #{username} and
-                u.unit_id = #{unitId}
+                SELECT u.* FROM UserInfo u, Unit unit WHERE u.UnitId = unit.UnitId AND username = #{username} and
+                u.UnitId = #{unitId}
             </when>
         </choose>
 
@@ -108,43 +101,39 @@
 
     <select id="list" resultType="io.ride.web.entity.UserInfo">
         SELECT *
-        FROM t_user_info
+        FROM UserInfo
     </select>
 
     <select id="listFromUnit" resultType="io.ride.web.entity.UserInfo">
         SELECT *
-        FROM t_user_info
-            INNER JOIN t_unit ON t_user_info.unit_id = t_unit.unit_id
-        WHERE t_unit.unit_id = #{unitId}
+        FROM UserInfo
+            INNER JOIN Unit ON UserInfo.UnitId = Unit.UnitId
+        WHERE Unit.UnitId = #{unitId}
     </select>
     <select id="findFromUnitWithUserId" resultType="io.ride.web.entity.UserInfo">
         SELECT *
-        FROM t_user_info
-        WHERE user_id = #{userId} AND unit_id = #{unitId};
+        FROM UserInfo
+        WHERE UserId = #{userId} AND UnitId = #{unitId};
     </select>
 
     <select id="findFromUnitWithUsername" resultType="io.ride.web.entity.UserInfo">
         SELECT *
-        FROM t_user_info
-        WHERE username = #{username} AND unit_id = #{unitId};
+        FROM UserInfo
+        WHERE username = #{username} AND UnitId = #{unitId};
     </select>
 
     <select id="search" resultType="io.ride.web.entity.UserInfo">
         <choose>
             <when test="userType == 0">
                 SELECT *
-                FROM t_user_info
-                WHERE name LIKE '%${arg}%' OR username LIKE '%${arg}%'
+                FROM UserInfo
+                WHERE Name LIKE '%${arg}%' OR username LIKE '%${arg}%'
             </when>
             <when test="userType == 1 or userType == 2">
                 SELECT *
-                FROM t_user_info
-                WHERE unit_id = #{unitId} AND (name LIKE '%${arg}%' OR username LIKE '%${arg}%')
+                FROM UserInfo
+                WHERE UnitId = #{unitId} AND (Name LIKE '%${arg}%' OR username LIKE '%${arg}%')
             </when>
         </choose>
-
-
     </select>
-
-
 </mapper>

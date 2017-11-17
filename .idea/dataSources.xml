@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@localhost" uuid="c430a20f-5cc2-4259-a377-ab8500403d3c">
-      <driver-ref>mysql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
-      <driver-properties>
-        <property name="autoReconnect" value="true" />
-        <property name="zeroDateTimeBehavior" value="convertToNull" />
-        <property name="tinyInt1isBit" value="false" />
-        <property name="characterEncoding" value="utf8" />
-        <property name="characterSetResults" value="utf8" />
-        <property name="yearIsDateType" value="false" />
-      </driver-properties>
-    </data-source>
     <data-source source="LOCAL" name="温度湿度采集数据库" uuid="ba0a7620-b75c-4263-ab0b-76a64ef4f107">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
@@ -29,11 +15,11 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="@115.29.175.26" uuid="48034732-9b56-4dd1-aac6-9ba8b217a68c">
+    <data-source source="LOCAL" name="NewTemperMonit_new@115.29.175.26" uuid="18762dbc-b8b4-4a9f-8d9f-e043cf30d23b">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
-      <jdbc-url>jdbc:sqlserver://115.29.175.26</jdbc-url>
+      <jdbc-url>jdbc:sqlserver://115.29.175.26;database=NewTemperMonit_new</jdbc-url>
       <driver-properties>
         <property name="applicationName" value="DataGrip" />
       </driver-properties>

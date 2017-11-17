@@ -15,7 +15,7 @@ public class Rent {
     private Date startTime;
     private Date endTime;
     private Date createTime;
-    private Float pay;
+    private String pay;
     private Integer status;
 
     private Unit unit;
@@ -69,11 +69,11 @@ public class Rent {
         this.createTime = createTime;
     }
 
-    public Float getPay() {
+    public String getPay() {
         return pay;
     }
 
-    public void setPay(Float pay) {
+    public void setPay(String pay) {
         this.pay = pay;
     }
 

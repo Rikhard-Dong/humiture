@@ -18,7 +18,7 @@ public class RentDto {
     private String startTime;
     private String endTime;
     private String createTime;
-    private Float pay;
+    private Integer pay;
     private String status;
 
 
@@ -32,7 +32,7 @@ public class RentDto {
         this.startTime = MyDateFormat.format(rent.getStartTime());
         this.endTime = MyDateFormat.format(rent.getEndTime());
         this.createTime = MyDateFormat.format(rent.getCreateTime());
-        this.pay = rent.getPay();
+        this.pay = Integer.valueOf(rent.getPay());
         this.status = getStatus(rent);
     }
 
@@ -96,11 +96,11 @@ public class RentDto {
         this.createTime = createTime;
     }
 
-    public Float getPay() {
+    public Integer getPay() {
         return pay;
     }
 
-    public void setPay(Float pay) {
+    public void setPay(Integer pay) {
         this.pay = pay;
     }
 

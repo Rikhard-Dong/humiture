@@ -88,4 +88,16 @@ public class AuthorController {
             return new DataTableResult();
         }
     }
+
+    @DeleteMapping("/nodeAuthor/{id}")
+    public Result deleteAuthorNode(@PathVariable("id") Integer id,
+                                   HttpSession session) {
+        try {
+            authorService.deleteAuthorNode(id, session);
+            return new Result(true, 1, "删除成功");
+        } catch (Exception e) {
+            LOGGER.error("author node delete error = {}", e.getMessage());
+            return new Result(false, -1, e.getMessage());
+        }
+    }
 }

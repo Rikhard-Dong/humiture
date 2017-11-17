@@ -15,8 +15,8 @@ public class Node {
     private String nodeNum;         // 节点号SNR
     private Integer type;             // 节点类型
     private Integer status;           // 节点状态
-    private Float nowTemper;        // 节点当前温度
-    private Float nowHumidity;      // 节点当前湿度
+    private String nowTemper;        // 节点当前温度
+    private String nowHumidity;      // 节点当前湿度
     private Integer timeInter;          // 上报时间间隔
     private String memo;            // 备注
 
@@ -89,19 +89,19 @@ public class Node {
         this.status = status;
     }
 
-    public Float getNowTemper() {
+    public String getNowTemper() {
         return nowTemper;
     }
 
-    public void setNowTemper(Float nowTemper) {
+    public void setNowTemper(String nowTemper) {
         this.nowTemper = nowTemper;
     }
 
-    public Float getNowHumidity() {
+    public String getNowHumidity() {
         return nowHumidity;
     }
 
-    public void setNowHumidity(Float nowHumidity) {
+    public void setNowHumidity(String nowHumidity) {
         this.nowHumidity = nowHumidity;
     }
 

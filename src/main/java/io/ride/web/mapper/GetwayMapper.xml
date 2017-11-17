@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.ride.web.dao.GetwayDao">
+    <resultMap id="getwayResult" type="Getway">
+        <id property="getwayId" column="GetwayId"/>
+        <result property="getwayMark" column="GetwayMark"/>
+        <result property="spareNode" column="SpareNode"/>
+        <result property="nodeNum" column="NodeNum"/>
+        <result property="nowTemper" column="NowTemper"/>
+        <result property="nowHumidity" column="Humidity"/>
+        <result property="status" column="Status"/>
+        <result property="timeInter" column="TimeInter"/>
+        <result property="memo" column="Memo"/>
+    </resultMap>
+
     <insert id="addGetway">
-        INSERT INTO t_getway
+        INSERT INTO Getway
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="getway.getwayMark != null">getway_mark,</if>
-            <if test="getway.spareNode != null">spare_node,</if>
-            <if test="getway.nodeNum != null">node_num,</if>
-            <if test="getway.status != null"><![CDATA[status]]>,</if>
-            <if test="getway.nowTemper != null">now_temper,</if>
-            <if test="getway.nowHumidity != null">now_humidity,</if>
-            <if test="getway.timeInter != null">time_inter,</if>
+            <if test="getway.getwayMark != null">GetwayMark,</if>
+            <if test="getway.spareNode != null">SpareNode,</if>
+            <if test="getway.nodeNum != null">NodeNum,</if>
+            <if test="getway.status != null"><![CDATA[Status]]>,</if>
+            <if test="getway.nowTemper != null">NowTemper,</if>
+            <if test="getway.nowHumidity != null">Humidity,</if>
+            <if test="getway.timeInter != null">TimeInter,</if>
             <if test="getway.memo != null">memo</if>
         </trim>
         VALUES
@@ -27,122 +39,122 @@
         ;
     </insert>
     <update id="updateGetway">
-        UPDATE t_getway SET
+        UPDATE Getway SET
         <trim suffixOverrides=",">
-            <if test="getway.getwayMark != null">getway_mark = #{getway.getwayMark},</if>
-            <if test="getway.spareNode != null">spare_node = #{getway.spareNode},</if>
-            <if test="getway.nodeNum != null">node_num = #{getway.nodeNum},</if>
-            <if test="getway.status != null">`status` = #{getway.status},</if>
-            <if test="getway.nowTemper != null">now_temper = #{getway.nowTemper},</if>
-            <if test="getway.nowHumidity != null">now_humidity = #{getway.nowHumidity},</if>
-            <if test="getway.timeInter != null">time_inter = #{getway.timeInter},</if>
+            <if test="getway.getwayMark != null">GetwayMark = #{getway.getwayMark},</if>
+            <if test="getway.spareNode != null">SpareNode = #{getway.spareNode},</if>
+            <if test="getway.nodeNum != null">NodeNum = #{getway.nodeNum},</if>
+            <if test="getway.status != null">Status = #{getway.status},</if>
+            <if test="getway.nowTemper != null">NowTemper = #{getway.nowTemper},</if>
+            <if test="getway.nowHumidity != null">Humidity = #{getway.nowHumidity},</if>
+            <if test="getway.timeInter != null">TimeInter = #{getway.timeInter},</if>
             <if test="getway.memo != null">memo = #{getway.memo},</if>
         </trim>
-        WHERE getway_id = #{getway.getwayId};
+        WHERE GetwayId = #{getway.getwayId};
     </update>
 
     <update id="updateTemperAndHumidity">
-        UPDATE t_getway
-        SET now_temper = #{temper}, now_humidity = #{humidity}
-        WHERE getway_id = #{getwayId};
+        UPDATE Getway
+        SET NowTemper = #{temper}, Humidity = #{humidity}
+        WHERE GetwayId = #{getwayId};
     </update>
 
     <update id="updateGetwayByMark">
-        UPDATE t_getway SET
+        UPDATE Getway SET
         <trim suffixOverrides=",">
-            <if test="getway.spareNode != null">spare_node = #{getway.spareNode},</if>
-            <if test="getway.nodeNum != null">node_num = #{getway.nodeNum},</if>
-            <if test="getway.status != null">`status` = #{getway.status},</if>
-            <if test="getway.nowTemper != null">now_temper = #{getway.nowTemper},</if>
-            <if test="getway.nowHumidity != null">now_humidity = #{getway.nowHumidity},</if>
-            <if test="getway.timeInter != null">time_inter = #{getway.timeInter},</if>
+            <if test="getway.spareNode != null">SpareNode = #{getway.spareNode},</if>
+            <if test="getway.nodeNum != null">NodeNum = #{getway.nodeNum},</if>
+            <if test="getway.status != null">Status = #{getway.status},</if>
+            <if test="getway.nowTemper != null">NowTemper = #{getway.nowTemper},</if>
+            <if test="getway.nowHumidity != null">Humidity = #{getway.nowHumidity},</if>
+            <if test="getway.timeInter != null">TimeInter = #{getway.timeInter},</if>
             <if test="getway.memo != null">memo = #{getway.memo},</if>
         </trim>
-        WHERE getway_mark = #{getway.getwayMark};
+        WHERE GetwayMark = #{getway.getwayMark};
     </update>
 
     <delete id="deleteById">
-        DELETE FROM t_getway
-        WHERE getway_id = #{id};
+        DELETE FROM Getway
+        WHERE GetwayId = #{id};
     </delete>
 
     <delete id="deleteByMark">
-        DELETE FROM t_getway
-        WHERE getway_mark = #{mark}
+        DELETE FROM Getway
+        WHERE GetwayMark = #{mark}
     </delete>
 
-    <select id="findById" resultType="io.ride.web.entity.Getway">
+    <select id="findById" resultMap="getwayResult">
         <choose>
             <when test="userType == 0">
                 SELECT *
-                FROM t_getway
-                WHERE getway_id = #{getwayId}
+                FROM Getway
+                WHERE GetwayId = #{getwayId}
             </when>
             <when test="userType == 1 || userType == 2">
-                SELECT g.* FROM t_getway g, t_unit u, t_rent r WHERE r.getway_id = g.getway_id AND u.unit_id = r.unit_id
-                AND current_timestamp BETWEEN r.start_time AND r.end_time AND r.unit_id = #{unitId} AND g.getway_id =
+                SELECT g.* FROM Getway g, Unit u, Rent r WHERE r.GetwayId = g.GetwayId AND u.UnitId = r.UnitId
+                AND current_timestamp BETWEEN r.StartTime AND r.EndTime AND r.UnitId = #{unitId} AND g.GetwayId =
                 #{getwayId}
             </when>
         </choose>
 
     </select>
 
-    <select id="findByMark" resultType="io.ride.web.entity.Getway">
+    <select id="findByMark" resultMap="getwayResult">
         <choose>
             <when test="userType == 0">
                 SELECT *
-                FROM t_getway
-                WHERE getway_mark = #{mark}
+                FROM Getway
+                WHERE GetwayMark = #{mark}
             </when>
             <when test="userType == 1 or userType == 2">
-                SELECT g.* FROM t_getway g, t_unit u, t_rent r WHERE r.getway_id = g.getway_id AND u.unit_id = r.unit_id
-                AND current_timestamp BETWEEN r.start_time AND r.end_time AND r.unit_id = #{unitId} AND getway_mark =
+                SELECT g.* FROM Getway g, Unit u, Rent r WHERE r.GetwayId = g.GetwayId AND u.UnitId = r.UnitId
+                AND current_timestamp BETWEEN r.StartTime AND r.EndTime AND r.UnitId = #{unitId} AND GetwayMark =
                 #{mark}
             </when>
         </choose>
     </select>
 
-    <select id="list" resultType="io.ride.web.entity.Getway">
+    <select id="list" resultMap="getwayResult">
         <choose>
             <when test="userType == 0">
                 SELECT *
-                FROM t_getway
+                FROM Getway
             </when>
             <when test="userType == 1 or userType == 2">
-                SELECT g.* FROM t_getway g, t_unit u, t_rent r WHERE r.getway_id = g.getway_id AND u.unit_id = r.unit_id
-                AND current_timestamp BETWEEN r.start_time AND r.end_time AND r.unit_id = #{unitId}
+                SELECT g.* FROM Getway g, Unit u, Rent r WHERE r.GetwayId = g.GetwayId AND u.UnitId = r.UnitId
+                AND current_timestamp BETWEEN r.StartTime AND r.EndTime AND r.UnitId = #{unitId}
             </when>
         </choose>
 
     </select>
 
     <select id="listSubNode" resultType="io.ride.web.entity.Node">
-        SELECT t_node.*
-        FROM t_getway
-            INNER JOIN t_node ON t_getway.getway_id = t_node.getway_id
-        WHERE t_node.getway_id = #{id}
+        SELECT Node.*
+        FROM Getway
+            INNER JOIN Node ON Getway.GetwayId = Node.GetwayId
+        WHERE Node.GetwayId = #{id}
     </select>
 
     <select id="isExists" resultType="java.lang.Boolean">
         SELECT (COUNT(1) = 1)
-        FROM t_getway
-        WHERE getway_mark = #{mark}
+        FROM Getway
+        WHERE GetwayMark = #{mark}
     </select>
     <select id="listSubNodeByNodeMark" resultType="io.ride.web.entity.Node">
-        SELECT t_node.*
-        FROM t_getway
-            INNER JOIN t_node ON t_getway.getway_id = t_node.getway_id
-        WHERE t_getway.getway_mark = #{mark}
+        SELECT Node.*
+        FROM Getway
+            INNER JOIN Node ON Getway.GetwayId = Node.GetwayId
+        WHERE Getway.GetwayMark = #{mark}
     </select>
 
-    <select id="search" resultType="io.ride.web.entity.Getway">
+    <select id="search" resultMap="getwayResult">
         <choose>
             <when test="userType == 0">
-                SELECT * FROM t_getway WHERE getway_mark LIKE '%${arg}%'
+                SELECT * FROM Getway WHERE GetwayMark LIKE '%${arg}%'
             </when>
             <when test="userType == 1 or userType == 2">
-                SELECT g.* FROM t_getway g, t_rent r, t_unit u WHERE g.getway_id = r.getway_id AND r.unit_id = u.unit_id
-                AND (g.getway_mark LIKE '%${arg}%' OR (current_timestamp BETWEEN r.start_time AND r.end_time AND u.title
+                SELECT g.* FROM Getway g, Rent r, Unit u WHERE g.GetwayId = r.GetwayId AND r.UnitId = u.UnitId
+                AND (g.GetwayMark LIKE '%${arg}%' OR (current_timestamp BETWEEN r.StartTime AND r.EndTime AND u.title
                 LIKE '%${arg}%'))
             </when>
         </choose>

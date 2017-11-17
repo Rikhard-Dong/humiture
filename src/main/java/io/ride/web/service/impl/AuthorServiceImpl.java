@@ -87,7 +87,7 @@ public class AuthorServiceImpl implements AuthorService {
             rent.setUnitId(unit.getUnitId());
             rent.setStartTime(MyDateFormat.str2Date(dto.getStartTime()));
             rent.setEndTime(MyDateFormat.str2Date(dto.getEndTime()));
-            rent.setPay(dto.getPay());
+            rent.setPay(String.valueOf(dto.getPay()));
             if (rentDao.add(rent) == 0) {
                 throw new UpdateException("更新异常");
             }
@@ -177,5 +177,19 @@ public class AuthorServiceImpl implements AuthorService {
             throw new HasNoPermissionException("没有权限");
         }
 
+    }
+
+
+    public void deleteAuthorNode(Integer id, HttpSession session)
+            throws HasNoPermissionException, NotFoundException {
+        UserInfo userInfo = PermissionUnit.isLogin(session);
+        if (PermissionUnit.isUnitAdmin(userInfo)) {
+            if (userAuthorDao.deleteById(id) == 0) {
+                throw new UpdateException("数据库更新异常");
+            }
+
+        } else {
+            throw new HasNoPermissionException("没有权限");
+        }
     }
 }

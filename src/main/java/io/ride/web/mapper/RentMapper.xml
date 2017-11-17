@@ -3,13 +3,13 @@
 <mapper namespace="io.ride.web.dao.RentDao">
     <insert id="add">
 
-        INSERT INTO t_rent
+        INSERT INTO Rent
         <trim prefix="(" suffixOverrides="," suffix=")">
-            <if test="rent.getwayId != null">getway_id,</if>
-            <if test="rent.unitId != null">unit_id,</if>
-            <if test="rent.startTime != null">start_time,</if>
-            <if test="rent.endTime != null">end_time,</if>
-            <if test="rent.pay != null">pay,</if>
+            <if test="rent.getwayId != null">GetwayId,</if>
+            <if test="rent.unitId != null">UnitId,</if>
+            <if test="rent.startTime != null">StatTime,</if>
+            <if test="rent.endTime != null">EndTime,</if>
+            <if test="rent.pay != null">Pay,</if>
         </trim>
         VALUES
         <trim prefix="(" suffixOverrides="," suffix=")">
@@ -22,75 +22,75 @@
     </insert>
 
     <update id="update">
-        UPDATE t_rent SET
+        UPDATE Rent SET
         <trim suffixOverrides=",">
-            <if test="rent.startTime != null">start_time = #{rent.startTime},</if>
-            <if test="rent.endTime != null">end_time = #{rent.endTime},</if>
-            <if test="rent.pay != null">pay = #{rent.pay},</if>
+            <if test="rent.startTime != null">StatTime = #{rent.startTime},</if>
+            <if test="rent.endTime != null">EndTime = #{rent.endTime},</if>
+            <if test="rent.pay != null">Pay = #{rent.pay},</if>
         </trim>
-        WHERE rent_id = #{rent.rent_id}
+        WHERE RentId = #{rent.RentId}
     </update>
 
     <update id="updateStatus">
-        UPDATE t_rent
-        SET `status` = (CASE WHEN CURRENT_TIME > end_time
+        UPDATE Rent
+        SET `status` = (CASE WHEN CURRENT_TIME > EndTime
             THEN 0
-                        WHEN CURRENT_TIME <![CDATA[<]]> start_time
+                        WHEN CURRENT_TIME <![CDATA[<]]> StatTime
                             THEN 2
                         ELSE 1 END)
-        WHERE rent_id = #{id}
+        WHERE RentId = #{id}
     </update>
 
     <delete id="delete">
-        DELETE FROM t_rent
-        WHERE rent_id = #{id}
+        DELETE FROM Rent
+        WHERE RentId = #{id}
     </delete>
 
     <select id="list" resultType="io.ride.web.entity.Rent">
         SELECT *
-        FROM t_rent
+        FROM Rent
     </select>
 
     <select id="listWithUnit" resultType="io.ride.web.entity.Rent">
         SELECT *
-        FROM t_rent
-        WHERE unit_id = #{unitId}
+        FROM Rent
+        WHERE UnitId = #{unitId}
     </select>
     <select id="findByTime" resultType="io.ride.web.entity.Rent">
         SELECT *
-        FROM t_rent
-        WHERE (#{startTime} BETWEEN start_time AND end_time)
-              OR (#{endTime} BETWEEN start_time AND end_time)
+        FROM Rent
+        WHERE (#{startTime} BETWEEN StatTime AND EndTime)
+              OR (#{endTime} BETWEEN StatTime AND EndTime)
     </select>
 
     <select id="findByRentId" resultType="io.ride.web.entity.Rent">
         SELECT *
-        FROM t_rent
-        WHERE rent_id = #{rentId}
+        FROM Rent
+        WHERE RentId = #{rentId}
     </select>
     <select id="findByGetwayIdAndUnitTileAndCurrentTime" resultType="io.ride.web.entity.Rent">
         SELECT *
-        FROM t_rent
-        WHERE (current_timestamp BETWEEN start_time AND end_time) AND getway_id = #{getwayId}
-              AND unit_id IN (SELECT unit_id
-                              FROM t_unit
+        FROM Rent
+        WHERE (current_timestamp BETWEEN StatTime AND EndTime) AND GetwayId = #{getwayId}
+              AND UnitId IN (SELECT UnitId
+                              FROM Unit
                               WHERE title = #{title})
     </select>
 
     <select id="findByUnitIdAndStartTimeAndEndTime" resultType="io.ride.web.entity.Rent">
         SELECT r.*
-        FROM t_rent r, t_unit u
-        WHERE r.unit_id = u.unit_id AND r.unit_id = #{unitId} AND
-              (start_time BETWEEN #{startTime} AND #{endTime} OR end_time BETWEEN #{startTime} AND #{endTime})
+        FROM Rent r, Unit u
+        WHERE r.UnitId = u.UnitId AND r.UnitId = #{unitId} AND
+              (StatTime BETWEEN #{startTime} AND #{endTime} OR EndTime BETWEEN #{startTime} AND #{endTime})
         LIMIT 1
     </select>
     <select id="findByUnitTypeAndStartTimeAndEndTime" resultType="io.ride.web.entity.Rent">
         SELECT r.*
-        FROM t_rent r, t_unit u
-        WHERE r.unit_id = u.unit_id AND r.unit_id IN (SELECT unit_id
-                                                      FROM t_unit
-                                                      WHERE unit_type = 1) AND
-              (start_time BETWEEN #{startTime} AND #{endTime} OR end_time BETWEEN #{startTime} AND #{endTime})
+        FROM Rent r, Unit u
+        WHERE r.UnitId = u.UnitId AND r.UnitId IN (SELECT UnitId
+                                                      FROM Unit
+                                                      WHERE UnitType = 1) AND
+              (StatTime BETWEEN #{startTime} AND #{endTime} OR EndTime BETWEEN #{startTime} AND #{endTime})
         LIMIT 1
     </select>
 

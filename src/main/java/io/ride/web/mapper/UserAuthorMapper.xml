@@ -2,30 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.ride.web.dao.UserAuthorDao">
     <insert id="add">
-        INSERT INTO t_user_author (user_id, node_id) VALUES (#{userId}, #{nodeId})
+        INSERT INTO UserAuthor (UserId, NodeId) VALUES (#{userId}, #{nodeId})
     </insert>
 
     <delete id="delete">
-        DELETE FROM t_user_author
-        WHERE user_id = #{userId} AND node_id = #{nodeMark}
+        DELETE FROM UserAuthor
+        WHERE UserId = #{userId} AND NodeId = #{nodeMark}
     </delete>
 
     <delete id="deleteById">
-        DELETE FROM t_user_author
-        WHERE user_author_id = #{userAuthorId}
+        DELETE FROM UserAuthor
+        WHERE UserAuthorId = #{userAuthorId}
     </delete>
 
     <select id="isExists" resultType="java.lang.Integer">
-        SELECT count(0)
-        FROM t_user_author
-        WHERE node_id = #{nodeId} AND user_id = #{userId}
+        SELECT count(1)
+        FROM UserAuthor
+        WHERE NodeId = #{nodeId} AND UserId = #{userId}
     </select>
 
     <select id="list" resultType="io.ride.web.entity.UserAuthor">
         SELECT *
-        FROM t_user_author
-        WHERE user_id IN (SELECT user_id
-                          FROM t_user_info
-                          WHERE unit_id = #{unitId})
+        FROM UserAuthor
+        WHERE UserId IN (SELECT UserId
+                         FROM UserInfo
+                         WHERE UnitId = #{unitId})
     </select>
 </mapper>

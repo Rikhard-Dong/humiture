@@ -8,6 +8,6 @@ package io.ride.web.util;
  */
 public class ParamDivisionUtil {
     public static String[] getParams(String paramsStr) {
-        return paramsStr.split("-");
+        return paramsStr.split("_");
     }
 }

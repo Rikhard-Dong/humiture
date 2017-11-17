@@ -11,7 +11,6 @@ import org.junit.Test;
 public class MD5EncryptTest {
     @Test
     public void encrypt() throws Exception {
-        System.out.println(MD5Encrypt.encrypt("admin"));
     }
 
 }

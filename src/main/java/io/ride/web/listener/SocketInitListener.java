@@ -19,11 +19,11 @@ public class SocketInitListener implements ServletContextListener {
 
     /* 初始 */
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        LOGGER.info("启动socket服务器!");
-        if (t == null) {
-            t = new StartThread();
-        }
-        t.start();
+//        LOGGER.info("启动socket服务器!");
+//        if (t == null) {
+//            t = new StartThread();
+//        }
+//        t.start();
     }
 
     /* 销毁 */
