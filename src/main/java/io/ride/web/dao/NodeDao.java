@@ -44,4 +44,8 @@ public interface NodeDao {
     int deleteById(@Param("id") int id);
 
     int deleteByMark(@Param("mark") String mark);
+
+    List<Node> search(@Param("arg") String arg,
+                      @Param("userType") Integer userType,
+                      @Param("unitId") Integer unitId);
 }

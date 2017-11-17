@@ -82,7 +82,7 @@
     <select id="accountValidate" resultType="UserInfo">
         SELECT
         <include refid="user_with_unit_info"/>
-        FROM t_user_info u LEFT JOIN t_unit un ON u.unit_id = un.unit_id
+        FROM t_user_info u
         WHERE u.username = #{username} AND u.password = #{password} LIMIT 1;
     </select>
     <select id="findByUserId" resultType="io.ride.web.entity.UserInfo">

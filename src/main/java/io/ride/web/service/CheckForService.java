@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
  */
 public interface CheckForService {
 
+
     /**
      * 检查节点是否正确
      *

@@ -31,7 +31,42 @@ public class CheckForParamController {
 
     @GetMapping("/node/{nodeMark}")
     public CheckForDto checkNode(@PathVariable("nodeMark") String nodeMark, HttpSession session) {
-        return checkForService.checkForNode(nodeMark, session);
+        try {
+            return checkForService.checkForNode(nodeMark, session);
+        } catch (Exception e) {
+            LOGGER.error("check for node error = {}", e.getMessage());
+            return CheckForDto.FALSE_RESULT;
+        }
+    }
+
+    @GetMapping("/unit/{title}")
+    public CheckForDto checkForUnit(@PathVariable("title") String title, HttpSession session) {
+        try {
+            return checkForService.checkForUnit(title, session);
+        } catch (Exception e) {
+            LOGGER.error("check for unit error = {}", e.getMessage());
+            return CheckForDto.FALSE_RESULT;
+        }
+    }
+
+    @GetMapping("/getway/{mark}")
+    public CheckForDto checkForGetway(@PathVariable("mark") String mark, HttpSession session) {
+        try {
+            return checkForService.checkForGetway(mark, session);
+        } catch (Exception e) {
+            LOGGER.error("check for getway error = {}", e.getMessage());
+            return CheckForDto.FALSE_RESULT;
+        }
+    }
+
+    @GetMapping("/user/{username}")
+    public CheckForDto checkForUser(@PathVariable("username") String username, HttpSession session) {
+        try {
+            return checkForService.checkForUser(username, session);
+        } catch (Exception e) {
+            LOGGER.error("check for user error = {}", e.getMessage());
+            return CheckForDto.FALSE_RESULT;
+        }
     }
 
 }

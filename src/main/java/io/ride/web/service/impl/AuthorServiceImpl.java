@@ -117,6 +117,20 @@ public class AuthorServiceImpl implements AuthorService {
 
     }
 
+    public void deleteRent(Integer id, HttpSession session)
+            throws HasNoPermissionException, NotFoundException {
+        UserInfo userInfo = PermissionUnit.isLogin(session);
+        if (PermissionUnit.isAdmin(userInfo)) {
+            if (rentDao.delete(id) == 0) {
+                throw new UpdateException("数据库更新异常");
+            }
+
+        } else {
+            throw new HasNoPermissionException("没有权限");
+        }
+
+    }
+
     /*
     ***************************
     *******节点授权*************

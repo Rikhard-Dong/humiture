@@ -25,6 +25,9 @@ public interface AuthorService {
     DataTableResult listGetwayAuthor(Integer page, Integer rows, HttpSession session)
             throws HasNoPermissionException;
 
+    void deleteRent(Integer id, HttpSession session)
+            throws HasNoPermissionException, NotFoundException;
+
     void authorNode(UserAuthorDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException;
 

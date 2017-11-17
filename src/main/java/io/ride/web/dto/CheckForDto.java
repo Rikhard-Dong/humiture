@@ -1,5 +1,8 @@
 package io.ride.web.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by IDEA
  * User: ride
@@ -11,6 +14,10 @@ package io.ride.web.dto;
 public class CheckForDto {
     private boolean isExists;
 
+    private boolean isOnly;
+
+    private List<Object> list = new ArrayList<Object>();
+
     public CheckForDto() {
     }
 
@@ -18,9 +25,14 @@ public class CheckForDto {
         this.isExists = isExists;
     }
 
+    public CheckForDto(boolean isExists, boolean isOnly) {
+        this.isExists = isExists;
+        this.isOnly = isOnly;
+    }
+
     public static CheckForDto TRUE_RESULT = new CheckForDto(true);
 
-    public static CheckForDto FALSE_RESULT = new CheckForDto(false);
+    public static CheckForDto FALSE_RESULT = new CheckForDto(false, false);
 
     public boolean isExists() {
         return isExists;
@@ -28,5 +40,25 @@ public class CheckForDto {
 
     public void setExists(boolean exists) {
         isExists = exists;
+    }
+
+    public boolean isOnly() {
+        return isOnly;
+    }
+
+    public void setOnly(boolean only) {
+        isOnly = only;
+    }
+
+    public List<Object> getList() {
+        return list;
+    }
+
+    public void setList(List<Object> list) {
+        this.list = list;
+    }
+
+    public void add(Object obj) {
+        list.add(obj);
     }
 }

@@ -174,4 +174,17 @@
         FROM t_node
         WHERE node_num = #{num}
     </select>
+
+    <select id="search" resultType="io.ride.web.entity.Node">
+        <choose>
+            <when test="userType == 0">
+                SELECT * FROM t_node WHERE node_mark LIKE '%${arg}%'
+            </when>
+            <when test="userType == 1 or userType == 2">
+                SELECT n.* FROM t_node n, t_unit u, t_rent r WHERE r.getway_id = n.getway_id AND r.unit_id = u.unit_id
+                AND node_mark LIKE '%${arg}%' AND current_timestamp BETWEEN r.start_time AND r.end_time AND u.unit_id =
+                #{unitId}
+            </when>
+        </choose>
+    </select>
 </mapper>

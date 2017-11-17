@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="@115.29.175.26">
+  <database-model serializer="dbm" rdbms="MSSQL" format-version="4.4">
+    <root id="1">
+      <ServerType>standalone</ServerType>
+    </root>
+    <database id="2" parent="1" name="NewTemperMonit">
+      <ObjectId>30</ObjectId>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </database>
+    <database id="3" parent="1" name="master">
+      <ObjectId>1</ObjectId>
+    </database>
+    <database id="4" parent="1" name="tempdb">
+      <ObjectId>2</ObjectId>
+    </database>
+    <database id="5" parent="1" name="model">
+      <ObjectId>3</ObjectId>
+    </database>
+    <database id="6" parent="1" name="msdb">
+      <ObjectId>4</ObjectId>
+    </database>
+    <database id="7" parent="1" name="SXDGDB">
+      <ObjectId>5</ObjectId>
+    </database>
+    <database id="8" parent="1" name="CQ_CMS">
+      <ObjectId>6</ObjectId>
+    </database>
+    <database id="9" parent="1" name="HouseKeeping">
+      <ObjectId>7</ObjectId>
+    </database>
+    <database id="10" parent="1" name="daka">
+      <ObjectId>8</ObjectId>
+    </database>
+    <database id="11" parent="1" name="MedicineBook">
+      <ObjectId>9</ObjectId>
+    </database>
+    <database id="12" parent="1" name="SYSDK">
+      <ObjectId>10</ObjectId>
+    </database>
+    <database id="13" parent="1" name="LabManage">
+      <ObjectId>11</ObjectId>
+    </database>
+    <database id="14" parent="1" name="ZHITWEB">
+      <ObjectId>12</ObjectId>
+    </database>
+    <database id="15" parent="1" name="XunFeiMS">
+      <ObjectId>13</ObjectId>
+    </database>
+    <database id="16" parent="1" name="login">
+      <ObjectId>14</ObjectId>
+    </database>
+    <database id="17" parent="1" name="PRIZE">
+      <ObjectId>15</ObjectId>
+    </database>
+    <database id="18" parent="1" name="Inte">
+      <ObjectId>16</ObjectId>
+    </database>
+    <database id="19" parent="1" name="Survey">
+      <ObjectId>17</ObjectId>
+    </database>
+    <database id="20" parent="1" name="MedicimeMS">
+      <ObjectId>18</ObjectId>
+    </database>
+    <database id="21" parent="1" name="MeetingRoom">
+      <ObjectId>19</ObjectId>
+    </database>
+    <database id="22" parent="1" name="Convenience service">
+      <ObjectId>20</ObjectId>
+    </database>
+    <database id="23" parent="1" name="Storage">
+      <ObjectId>21</ObjectId>
+    </database>
+    <database id="24" parent="1" name="Activiti">
+      <ObjectId>22</ObjectId>
+    </database>
+    <database id="25" parent="1" name="YG_MES">
+      <ObjectId>23</ObjectId>
+    </database>
+    <database id="26" parent="1" name="TemperMonit">
+      <ObjectId>24</ObjectId>
+    </database>
+    <database id="27" parent="1" name="OpenfireTest">
+      <ObjectId>25</ObjectId>
+    </database>
+    <database id="28" parent="1" name="OnlineTrain">
+      <ObjectId>26</ObjectId>
+    </database>
+    <database id="29" parent="1" name="HFMES2.0">
+      <ObjectId>27</ObjectId>
+    </database>
+    <database id="30" parent="1" name="SXDG2_hc">
+      <ObjectId>28</ObjectId>
+    </database>
+    <database id="31" parent="1" name="Sign">
+      <ObjectId>29</ObjectId>
+    </database>
+    <database id="32" parent="1" name="SXDG2_xs">
+      <ObjectId>31</ObjectId>
+    </database>
+    <database id="33" parent="1" name="SXDG2_mgs">
+      <ObjectId>32</ObjectId>
+    </database>
+    <database id="34" parent="1" name="SXDG2">
+      <ObjectId>33</ObjectId>
+    </database>
+    <database id="35" parent="1" name="DevcRepair">
+      <ObjectId>34</ObjectId>
+    </database>
+    <schema id="36" parent="2" name="dbo">
+      <ObjectId>1</ObjectId>
+      <IntrospectionTimestamp>2017-11-17.13:49:10.343</IntrospectionTimestamp>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="37" parent="2" name="guest">
+      <ObjectId>2</ObjectId>
+    </schema>
+    <schema id="38" parent="2" name="INFORMATION_SCHEMA">
+      <ObjectId>3</ObjectId>
+    </schema>
+    <schema id="39" parent="2" name="sys">
+      <ObjectId>4</ObjectId>
+    </schema>
+    <schema id="40" parent="2" name="db_owner">
+      <ObjectId>16384</ObjectId>
+    </schema>
+    <schema id="41" parent="2" name="db_accessadmin">
+      <ObjectId>16385</ObjectId>
+    </schema>
+    <schema id="42" parent="2" name="db_securityadmin">
+      <ObjectId>16386</ObjectId>
+    </schema>
+    <schema id="43" parent="2" name="db_ddladmin">
+      <ObjectId>16387</ObjectId>
+    </schema>
+    <schema id="44" parent="2" name="db_backupoperator">
+      <ObjectId>16389</ObjectId>
+    </schema>
+    <schema id="45" parent="2" name="db_datareader">
+      <ObjectId>16390</ObjectId>
+    </schema>
+    <schema id="46" parent="2" name="db_datawriter">
+      <ObjectId>16391</ObjectId>
+    </schema>
+    <schema id="47" parent="2" name="db_denydatareader">
+      <ObjectId>16392</ObjectId>
+    </schema>
+    <schema id="48" parent="2" name="db_denydatawriter">
+      <ObjectId>16393</ObjectId>
+    </schema>
+    <table id="49" parent="36" name="Getway">
+      <ObjectId>725577623</ObjectId>
+      <CreatedTimestamp>2017-11-03.13:59:37.447</CreatedTimestamp>
+      <ModifiedTimestamp>2017-11-08.17:16:15.777</ModifiedTimestamp>
+    </table>
+    <table id="50" parent="36" name="Humid">
+      <ObjectId>277576027</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:19:02.370</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:19:02.370</ModifiedTimestamp>
+    </table>
+    <table id="51" parent="36" name="Node">
+      <ObjectId>533576939</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:28:13.780</CreatedTimestamp>
+      <ModifiedTimestamp>2017-11-03.13:46:54.740</ModifiedTimestamp>
+    </table>
+    <table id="52" parent="36" name="Rent">
+      <ObjectId>149575571</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:16:26.760</CreatedTimestamp>
+      <ModifiedTimestamp>2017-11-08.17:43:02.317</ModifiedTimestamp>
+    </table>
+    <table id="53" parent="36" name="Repair">
+      <ObjectId>405576483</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:22:38.627</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:22:38.627</ModifiedTimestamp>
+    </table>
+    <table id="54" parent="36" name="Temper">
+      <ObjectId>341576255</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:20:42.650</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:20:42.650</ModifiedTimestamp>
+    </table>
+    <table id="55" parent="36" name="TemperHumid">
+      <ObjectId>757577737</ObjectId>
+      <CreatedTimestamp>2017-11-03.14:00:02.280</CreatedTimestamp>
+      <ModifiedTimestamp>2017-11-03.14:00:02.380</ModifiedTimestamp>
+    </table>
+    <table id="56" parent="36" name="Unit">
+      <ObjectId>21575115</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:08:41.570</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:13:51.093</ModifiedTimestamp>
+    </table>
+    <table id="57" parent="36" name="UserAuthor">
+      <ObjectId>213575799</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:17:38.263</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:17:38.263</ModifiedTimestamp>
+    </table>
+    <table id="58" parent="36" name="UserBind">
+      <ObjectId>469576711</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:23:56.550</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:23:56.550</ModifiedTimestamp>
+    </table>
+    <table id="59" parent="36" name="UserInfo">
+      <ObjectId>85575343</ObjectId>
+      <CreatedTimestamp>2017-10-31.23:13:32.143</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:13:32.143</ModifiedTimestamp>
+    </table>
+    <column id="60" parent="49" name="GetwayId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="61" parent="49" name="GetwayMark">
+      <Position>2</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="62" parent="49" name="SpareNode">
+      <Position>3</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="63" parent="49" name="NodeNum">
+      <Position>4</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="64" parent="49" name="NowTemper">
+      <Position>5</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="65" parent="49" name="Humidity">
+      <Position>6</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="66" parent="49" name="Status">
+      <Position>7</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <column id="67" parent="49" name="TimeInter">
+      <Position>8</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <column id="68" parent="49" name="Memo">
+      <Position>9</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="69" parent="49" name="GetwayName">
+      <Position>10</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <index id="70" parent="49" name="PK__Getway__424BCBC429572725">
+      <Position>1</Position>
+      <ColNames>GetwayId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="71" parent="49" name="PK__Getway__424BCBC429572725">
+      <ObjectId>741577680</ObjectId>
+      <CreatedTimestamp>2017-11-03.13:59:37.757</CreatedTimestamp>
+      <ModifiedTimestamp>2017-11-03.13:59:37.757</ModifiedTimestamp>
+      <ColNames>GetwayId</ColNames>
+      <UnderlyingIndexName>PK__Getway__424BCBC429572725</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="72" parent="50" name="HumidId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="73" parent="50" name="NodeMark">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="74" parent="50" name="Humidity">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="75" parent="50" name="ReportTime">
+      <Position>4</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="76" parent="50" name="Type">
+      <Position>5</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <index id="77" parent="50" name="PK__Humid__2A815A411273C1CD">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>HumidId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="78" parent="50" name="PK__Humid__2A815A411273C1CD">
+      <ObjectId>325576198</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:19:02.370</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:19:02.370</ModifiedTimestamp>
+      <ColNames>HumidId</ColNames>
+      <UnderlyingIndexName>PK__Humid__2A815A411273C1CD</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="79" parent="51" name="NodeId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="80" parent="51" name="NodeMark">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="81" parent="51" name="SpareNode">
+      <Position>4</Position>
+      <DataType>bit|0</DataType>
+    </column>
+    <column id="82" parent="51" name="NodeNum">
+      <Position>5</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="83" parent="51" name="Type">
+      <Position>7</Position>
+      <DataType>smallint|0</DataType>
+    </column>
+    <column id="84" parent="51" name="Status">
+      <Position>8</Position>
+      <DataType>smallint|0</DataType>
+    </column>
+    <column id="85" parent="51" name="NowTemper">
+      <Position>9</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="86" parent="51" name="Humidity">
+      <Position>10</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="87" parent="51" name="Memo">
+      <Position>12</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="88" parent="51" name="GetwayId">
+      <Position>13</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <index id="89" parent="51" name="PK__Node__6BAE226321B6055D">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>NodeId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="90" parent="51" name="PK__Node__6BAE226321B6055D">
+      <ObjectId>581577110</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:28:13.783</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:28:13.783</ModifiedTimestamp>
+      <ColNames>NodeId</ColNames>
+      <UnderlyingIndexName>PK__Node__6BAE226321B6055D</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="91" parent="52" name="RentId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="92" parent="52" name="GetwayId">
+      <Position>2</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <column id="93" parent="52" name="UnitId">
+      <Position>3</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <column id="94" parent="52" name="StartTime">
+      <Position>4</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="95" parent="52" name="EndTime">
+      <Position>5</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="96" parent="52" name="Pay">
+      <Position>6</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="97" parent="52" name="Status">
+      <Position>7</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <index id="98" parent="52" name="PK__Rent__783D47F50AD2A005">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>RentId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="99" parent="52" name="PK__Rent__783D47F50AD2A005">
+      <ObjectId>197575742</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:16:26.760</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:16:26.760</ModifiedTimestamp>
+      <ColNames>RentId</ColNames>
+      <UnderlyingIndexName>PK__Rent__783D47F50AD2A005</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="100" parent="53" name="RepairId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="101" parent="53" name="NodeMark">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="102" parent="53" name="FaultDesc">
+      <Position>3</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="103" parent="53" name="Phone">
+      <Position>4</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="104" parent="53" name="Person">
+      <Position>5</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="105" parent="53" name="Address">
+      <Position>6</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="106" parent="53" name="FaultTime">
+      <Position>7</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="107" parent="53" name="Status">
+      <Position>8</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <index id="108" parent="53" name="PK__Repair__07D0BC2D1A14E395">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>RepairId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="109" parent="53" name="PK__Repair__07D0BC2D1A14E395">
+      <ObjectId>453576654</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:22:38.627</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:22:38.627</ModifiedTimestamp>
+      <ColNames>RepairId</ColNames>
+      <UnderlyingIndexName>PK__Repair__07D0BC2D1A14E395</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="110" parent="54" name="NodeTemperId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="111" parent="54" name="NodeMark">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="112" parent="54" name="Temper">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="113" parent="54" name="ReportTime">
+      <Position>4</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="114" parent="54" name="Type">
+      <Position>5</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <index id="115" parent="54" name="PK__Temper__3656B4EE164452B1">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>NodeTemperId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="116" parent="54" name="PK__Temper__3656B4EE164452B1">
+      <ObjectId>389576426</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:20:42.653</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:20:42.653</ModifiedTimestamp>
+      <ColNames>NodeTemperId</ColNames>
+      <UnderlyingIndexName>PK__Temper__3656B4EE164452B1</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="117" parent="55" name="TemperHumidId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="118" parent="55" name="NodeMark">
+      <Position>2</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="119" parent="55" name="Temper">
+      <Position>3</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="120" parent="55" name="Humidity">
+      <Position>4</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="121" parent="55" name="ReportTime">
+      <Position>5</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="122" parent="55" name="Type">
+      <Position>6</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <index id="123" parent="55" name="PK__TemperHu__53D528FB25869641">
+      <Position>1</Position>
+      <ColNames>TemperHumidId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="124" parent="55" name="PK__TemperHu__53D528FB25869641">
+      <ObjectId>773577794</ObjectId>
+      <CreatedTimestamp>2017-11-03.14:00:02.373</CreatedTimestamp>
+      <ModifiedTimestamp>2017-11-03.14:00:02.373</ModifiedTimestamp>
+      <ColNames>TemperHumidId</ColNames>
+      <UnderlyingIndexName>PK__TemperHu__53D528FB25869641</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="125" parent="56" name="UnitId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="126" parent="56" name="Title">
+      <Position>2</Position>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="127" parent="56" name="Address">
+      <Position>3</Position>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="128" parent="56" name="Person">
+      <Position>4</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="129" parent="56" name="Phone">
+      <Position>5</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="130" parent="56" name="Email">
+      <Position>6</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="131" parent="56" name="UnitType">
+      <Position>7</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="132" parent="56" name="Memo">
+      <Position>8</Position>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <index id="133" parent="56" name="PK__Unit__44F5ECB503317E3D">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>UnitId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="134" parent="56" name="PK__Unit__44F5ECB503317E3D">
+      <ObjectId>69575286</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:08:41.570</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:08:41.570</ModifiedTimestamp>
+      <ColNames>UnitId</ColNames>
+      <UnderlyingIndexName>PK__Unit__44F5ECB503317E3D</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="135" parent="57" name="UserAuthorId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="136" parent="57" name="NodeId">
+      <Position>2</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <column id="137" parent="57" name="UserId">
+      <Position>3</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <index id="138" parent="57" name="PK__UserAuth__93D714E40EA330E9">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>UserAuthorId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="139" parent="57" name="PK__UserAuth__93D714E40EA330E9">
+      <ObjectId>261575970</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:17:38.320</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:17:38.320</ModifiedTimestamp>
+      <ColNames>UserAuthorId</ColNames>
+      <UnderlyingIndexName>PK__UserAuth__93D714E40EA330E9</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="140" parent="58" name="UserBindId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="141" parent="58" name="OpenId">
+      <Position>2</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <column id="142" parent="58" name="Status">
+      <Position>3</Position>
+      <DataType>int|0</DataType>
+    </column>
+    <column id="143" parent="58" name="Name">
+      <Position>4</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="144" parent="58" name="NodeMark">
+      <Position>5</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <index id="145" parent="58" name="PK__UserBind__B64C4F691DE57479">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>UserBindId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="146" parent="58" name="PK__UserBind__B64C4F691DE57479">
+      <ObjectId>517576882</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:23:56.553</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:23:56.553</ModifiedTimestamp>
+      <ColNames>UserBindId</ColNames>
+      <UnderlyingIndexName>PK__UserBind__B64C4F691DE57479</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="147" parent="59" name="UserId">
+      <Position>1</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="148" parent="59" name="UnitId">
+      <Position>2</Position>
+      <DataType>int|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="149" parent="59" name="Name">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="150" parent="59" name="UserType">
+      <Position>4</Position>
+      <DataType>smallint|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="151" parent="59" name="UserName">
+      <Position>5</Position>
+      <DataType>varchar(32)|0</DataType>
+    </column>
+    <column id="152" parent="59" name="Password">
+      <Position>6</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="153" parent="59" name="Memo">
+      <Position>7</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <index id="154" parent="59" name="PK__UserInfo__1788CC4C07020F21">
+      <Position>1</Position>
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>UserId</ColNames>
+      <Clustering>1</Clustering>
+      <Unique>1</Unique>
+    </index>
+    <key id="155" parent="59" name="PK__UserInfo__1788CC4C07020F21">
+      <ObjectId>133575514</ObjectId>
+      <NameSurrogate>1</NameSurrogate>
+      <CreatedTimestamp>2017-10-31.23:13:32.160</CreatedTimestamp>
+      <ModifiedTimestamp>2017-10-31.23:13:32.160</ModifiedTimestamp>
+      <ColNames>UserId</ColNames>
+      <UnderlyingIndexName>PK__UserInfo__1788CC4C07020F21</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>

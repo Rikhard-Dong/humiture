@@ -1,6 +1,9 @@
 package io.ride.web.service.impl;
 
+import io.ride.web.dao.GetwayDao;
 import io.ride.web.dao.NodeDao;
+import io.ride.web.dao.UnitDao;
+import io.ride.web.dao.UserInfoDao;
 import io.ride.web.dto.CheckForDto;
 import io.ride.web.entity.Getway;
 import io.ride.web.entity.Node;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by IDEA
@@ -26,55 +30,112 @@ public class CheckForServiceImpl implements CheckForService {
     @Autowired
     private NodeDao nodeDao;
 
+    @Autowired
+    private UserInfoDao userInfoDao;
+
+    @Autowired
+    private UnitDao unitDao;
+
+    @Autowired
+    private GetwayDao getwayDao;
+
     public CheckForDto checkForNode(String nodeMark, HttpSession session) {
         UserInfo user = PermissionUnit.isLogin(session);
-        Node node = null;
+        List<Node> nodes;
         if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
-            node = nodeDao.findByMark(nodeMark, user.getUserType(), user.getUnitId());
-        }
-        if (node != null) {
-            return CheckForDto.TRUE_RESULT;
+            nodes = nodeDao.search(nodeMark, user.getUserType(), user.getUnitId());
+            if (nodes == null || nodes.size() == 0) {
+                return CheckForDto.FALSE_RESULT;
+            } else {
+                CheckForDto dto = new CheckForDto(true);
+                for (Node node : nodes) {
+                    dto.add(node.getNodeMark());
+                }
+                if (nodes.size() == 1) {
+                    dto.setOnly(true);
+                } else {
+                    dto.setOnly(false);
+                }
+                return dto;
+            }
         } else {
-            return CheckForDto.FALSE_RESULT;
+            throw new HasNoPermissionException("没有权限");
         }
+
     }
 
     public CheckForDto checkForGetway(String getwayMark, HttpSession session) {
         UserInfo user = PermissionUnit.isLogin(session);
-        Getway getway = null;
-        if (PermissionUnit.isAdmin(user)) {
-
-        }
-        if (getway != null) {
-            return CheckForDto.TRUE_RESULT;
+        List<Getway> getways;
+        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+            getways = getwayDao.search(getwayMark, user.getUserType(), user.getUnitId());
+            if (getways == null || getways.size() == 0) {
+                return CheckForDto.FALSE_RESULT;
+            } else {
+                CheckForDto dto = new CheckForDto(true);
+                for (Getway getway : getways) {
+                    dto.add(getway.getGetwayMark());
+                }
+                if (getways.size() == 1) {
+                    dto.setOnly(true);
+                } else {
+                    dto.setOnly(false);
+                }
+                return dto;
+            }
         } else {
-            return CheckForDto.FALSE_RESULT;
+            throw new HasNoPermissionException("没有权限");
         }
+
     }
 
     public CheckForDto checkForUnit(String title, HttpSession session) {
         UserInfo user = PermissionUnit.isLogin(session);
-        Unit unit = null;
+        List<Unit> units;
         if (PermissionUnit.isAdmin(user)) {
-
-        }
-        if (unit != null) {
-            return CheckForDto.TRUE_RESULT;
+            units = unitDao.search(title);
+            if (units == null || units.size() == 0) {
+                return CheckForDto.FALSE_RESULT;
+            } else {
+                CheckForDto dto = new CheckForDto(true);
+                for (Unit unit : units) {
+                    dto.add(unit.getTitle());
+                }
+                if (units.size() == 1) {
+                    dto.setOnly(true);
+                } else {
+                    dto.setOnly(false);
+                }
+                return dto;
+            }
         } else {
-            return CheckForDto.FALSE_RESULT;
+            throw new HasNoPermissionException("没有权限");
         }
+
     }
 
     public CheckForDto checkForUser(String username, HttpSession session) throws HasNoPermissionException {
         UserInfo user = PermissionUnit.isLogin(session);
-        UserInfo checkUser = null;
+        List<UserInfo> checkUsers = null;
         if (PermissionUnit.isAdmin(user)) {
-
-        }
-        if (checkUser != null) {
-            return CheckForDto.TRUE_RESULT;
+            checkUsers = userInfoDao.search(username, user.getUserType(), user.getUnitId());
+            if (checkUsers == null || checkUsers.size() == 0) {
+                return CheckForDto.FALSE_RESULT;
+            } else {
+                CheckForDto dto = new CheckForDto(true);
+                for (UserInfo userInfo : checkUsers) {
+                    dto.add(userInfo.getUsername());
+                }
+                if (checkUsers.size() == 1) {
+                    dto.setOnly(true);
+                } else {
+                    dto.setOnly(false);
+                }
+                return dto;
+            }
         } else {
-            return CheckForDto.FALSE_RESULT;
+            throw new HasNoPermissionException("没有权限");
         }
+
     }
 }
