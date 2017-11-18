@@ -81,6 +81,8 @@ public class SearchServiceImpl implements SearchService {
                     getwayDtos.add(new GetwayDto(getway));
                 } else if (PermissionUnit.isUnitAdmin(user)) {
                     Rent rent = rentDao.findByGetwayIdAndUnitTileAndCurrentTime(getway.getGetwayId(), user.getUnit().getTitle());
+                    //LOGGER.info("----------------------------------------get way-------------------------------\n{}\n\n" +
+                    //        "----------------------------------------------------------------------------------", getway);
                     getwayDtos.add(new GetwayDto(getway, rent.getEndTime()));
                 }
             }

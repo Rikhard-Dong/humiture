@@ -23,7 +23,10 @@ public interface AuthorService {
     * 网关授权管理
      */
 
-    void authorGetway(RentDto dto, HttpSession session)
+    void addRent(RentDto dto, HttpSession session)
+            throws HasNoPermissionException, NotFoundException, UpdateException;
+
+    void updateRent(RentDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException;
 
     DataTableResult listGetwayAuthor(Integer page, Integer rows, HttpSession session)
@@ -32,7 +35,8 @@ public interface AuthorService {
     void deleteRent(Integer id, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
 
-
+    DataTableResult listRentUnitByGetwayMark(String mark, Integer page, Integer rows, HttpSession session)
+            throws HasNoPermissionException, NotFoundException;
 
 
     /*

@@ -7,7 +7,7 @@
         <trim prefix="(" suffixOverrides="," suffix=")">
             <if test="rent.getwayId != null">GetwayId,</if>
             <if test="rent.unitId != null">UnitId,</if>
-            <if test="rent.startTime != null">StatTime,</if>
+            <if test="rent.startTime != null">StartTime,</if>
             <if test="rent.endTime != null">EndTime,</if>
             <if test="rent.pay != null">Pay,</if>
         </trim>
@@ -24,7 +24,7 @@
     <update id="update">
         UPDATE Rent SET
         <trim suffixOverrides=",">
-            <if test="rent.startTime != null">StatTime = #{rent.startTime},</if>
+            <if test="rent.startTime != null">StartTime = #{rent.startTime},</if>
             <if test="rent.endTime != null">EndTime = #{rent.endTime},</if>
             <if test="rent.pay != null">Pay = #{rent.pay},</if>
         </trim>
@@ -33,11 +33,11 @@
 
     <update id="updateStatus">
         UPDATE Rent
-        SET `status` = (CASE WHEN CURRENT_TIME > EndTime
+        SET Status = (CASE WHEN CURRENT_TIME > EndTime
             THEN 0
-                        WHEN CURRENT_TIME <![CDATA[<]]> StatTime
-                            THEN 2
-                        ELSE 1 END)
+                      WHEN CURRENT_TIME <![CDATA[<]]> StartTime
+                          THEN 2
+                      ELSE 1 END)
         WHERE RentId = #{id}
     </update>
 
@@ -59,8 +59,8 @@
     <select id="findByTime" resultType="io.ride.web.entity.Rent">
         SELECT *
         FROM Rent
-        WHERE (#{startTime} BETWEEN StatTime AND EndTime)
-              OR (#{endTime} BETWEEN StatTime AND EndTime)
+        WHERE (#{startTime} BETWEEN StartTime AND EndTime)
+              OR (#{endTime} BETWEEN StartTime AND EndTime)
     </select>
 
     <select id="findByRentId" resultType="io.ride.web.entity.Rent">
@@ -71,27 +71,42 @@
     <select id="findByGetwayIdAndUnitTileAndCurrentTime" resultType="io.ride.web.entity.Rent">
         SELECT *
         FROM Rent
-        WHERE (current_timestamp BETWEEN StatTime AND EndTime) AND GetwayId = #{getwayId}
+        WHERE (GETDATE() BETWEEN StartTime AND EndTime) AND GetwayId = #{getwayId}
               AND UnitId IN (SELECT UnitId
-                              FROM Unit
-                              WHERE title = #{title})
+                             FROM Unit
+                             WHERE title = #{title})
     </select>
 
     <select id="findByUnitIdAndStartTimeAndEndTime" resultType="io.ride.web.entity.Rent">
         SELECT r.*
         FROM Rent r, Unit u
         WHERE r.UnitId = u.UnitId AND r.UnitId = #{unitId} AND
-              (StatTime BETWEEN #{startTime} AND #{endTime} OR EndTime BETWEEN #{startTime} AND #{endTime})
-        LIMIT 1
+              (StartTime BETWEEN #{startTime} AND #{endTime} OR EndTime BETWEEN #{startTime} AND #{endTime})
     </select>
+
     <select id="findByUnitTypeAndStartTimeAndEndTime" resultType="io.ride.web.entity.Rent">
         SELECT r.*
         FROM Rent r, Unit u
         WHERE r.UnitId = u.UnitId AND r.UnitId IN (SELECT UnitId
-                                                      FROM Unit
-                                                      WHERE UnitType = 1) AND
-              (StatTime BETWEEN #{startTime} AND #{endTime} OR EndTime BETWEEN #{startTime} AND #{endTime})
-        LIMIT 1
+                                                   FROM Unit
+                                                   WHERE UnitType = 0) AND
+              (StartTime BETWEEN #{startTime} AND #{endTime} OR EndTime BETWEEN #{startTime} AND #{endTime})
+    </select>
+
+    <select id="findByNodeMarkAndUnitId" resultType="Rent">
+        SELECT *
+        FROM Rent
+        WHERE GetwayId IN (SELECT GetwayId
+                           FROM Getway
+                           WHERE GetwayMark = #{mark}) AND UnitId = #{unitId} AND
+              GETDATE() BETWEEN StartTime AND EndTime;
+    </select>
+    <select id="listWithMark" resultType="io.ride.web.entity.Rent">
+        SELECT *
+        FROM Rent
+        WHERE GetwayId IN (SELECT GetwayId
+                            FROM Getway
+                            WHERE GetwayMark = #{mark})
     </select>
 
 </mapper>

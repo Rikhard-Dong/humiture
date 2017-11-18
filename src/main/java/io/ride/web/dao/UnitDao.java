@@ -36,4 +36,6 @@ public interface UnitDao {
 
     List<Unit> search(@Param("arg") String arg);
 
+    List<Unit> listByRent(@Param("mark") String mark);
+
 }

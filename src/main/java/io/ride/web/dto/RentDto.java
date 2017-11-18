@@ -17,7 +17,6 @@ public class RentDto {
     private String getwayMark;
     private String startTime;
     private String endTime;
-    private String createTime;
     private Integer pay;
     private String status;
 
@@ -31,8 +30,7 @@ public class RentDto {
         this.getwayMark = getwayMark;
         this.startTime = MyDateFormat.format(rent.getStartTime());
         this.endTime = MyDateFormat.format(rent.getEndTime());
-        this.createTime = MyDateFormat.format(rent.getCreateTime());
-        this.pay = Integer.valueOf(rent.getPay());
+        this.pay = rent.getPay() == null ? -1 : Integer.valueOf(rent.getPay());
         this.status = getStatus(rent);
     }
 
@@ -88,13 +86,6 @@ public class RentDto {
         this.endTime = endTime;
     }
 
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
 
     public Integer getPay() {
         return pay;
@@ -120,7 +111,6 @@ public class RentDto {
                 ", getwayMark='" + getwayMark + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
-                ", createTime='" + createTime + '\'' +
                 ", pay=" + pay +
                 '}';
     }

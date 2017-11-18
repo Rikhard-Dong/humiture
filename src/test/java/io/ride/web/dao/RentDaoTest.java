@@ -24,6 +24,12 @@ public class RentDaoTest {
     private RentDao rentDao;
 
     @Test
+    public void findByUnitIdAndStartTimeAndEndTime1() throws Exception {
+        System.out.println(rentDao.findByUnitIdAndStartTimeAndEndTime(7,
+                "2017-11-01 08:35:25", "2017-11-01 08:35:25"));
+    }
+
+    @Test
     public void list() throws Exception {
         System.out.println(rentDao.list());
         System.out.println(rentDao.findByRentId(1));
@@ -37,7 +43,7 @@ public class RentDaoTest {
     public void add() throws Exception {
         Rent rent = new Rent();
         rent.setGetwayId(1);
-        rent.setUnitId(2);
+        rent.setUnitId(7);
         rent.setStartTime(MyDateFormat.str2Date("2017-10-20 10:10:10"));
         rent.setEndTime(MyDateFormat.str2Date("2018-10-10 00:00:00"));
         rent.setPay(String.valueOf(9000000f));

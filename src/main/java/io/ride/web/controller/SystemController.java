@@ -89,8 +89,11 @@ public class SystemController {
      *******************************************************************/
 
     @PostMapping(value = "/user")
-    public Result addUser(UserInfo user,
+    public Result addUser(UserInfo user, @RequestParam("password2") String password2,
                           HttpSession session) {
+        if (!user.getPassword().equals(password2)) {
+            return new Result(false, -1, "密码不匹配");
+        }
         LOGGER.info("添加用户 = {}", user);
         try {
             userService.addUser(user, session);

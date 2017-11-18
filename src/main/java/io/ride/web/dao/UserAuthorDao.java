@@ -20,7 +20,7 @@ public interface UserAuthorDao {
 
     int deleteById(@Param("userAuthorId") Integer userAuthorId);
 
-    int isExists(@Param("userId") Integer userId,
+    boolean isExists(@Param("userId") Integer userId,
                  @Param("nodeId") Integer nodeId);
 
     List<UserAuthor> list(@Param("unitId") Integer unitId);

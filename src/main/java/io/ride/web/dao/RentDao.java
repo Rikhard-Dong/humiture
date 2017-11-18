@@ -1,5 +1,6 @@
 package io.ride.web.dao;
 
+import com.sun.org.apache.regexp.internal.RE;
 import io.ride.web.entity.Rent;
 import org.apache.ibatis.annotations.Param;
 
@@ -81,10 +82,23 @@ public interface RentDao {
      * @param endTime
      * @return
      */
-    Rent findByUnitIdAndStartTimeAndEndTime(@Param("unitId") Integer unitId,
-                                            @Param("startTime") String startTime,
-                                            @Param("endTime") String endTime);
+    List<Rent> findByUnitIdAndStartTimeAndEndTime(@Param("unitId") Integer unitId,
+                                                  @Param("startTime") String startTime,
+                                                  @Param("endTime") String endTime);
 
-    Rent findByUnitTypeAndStartTimeAndEndTime(@Param("startTime") String statTime,
-                                              @Param("endTime") String endTime);
+    List<Rent> findByUnitTypeAndStartTimeAndEndTime(@Param("startTime") String statTime,
+                                                    @Param("endTime") String endTime);
+
+
+    /**
+     * 根据mark和unitId判断当前单位是否对该网关由租赁关系
+     *
+     * @param mark
+     * @param id
+     * @return
+     */
+    Rent findByNodeMarkAndUnitId(@Param("mark") String mark,
+                                 @Param("unitId") Integer id);
+
+    List<Rent> listWithMark(@Param("mark") String mark);
 }

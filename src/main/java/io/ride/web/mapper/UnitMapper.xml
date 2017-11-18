@@ -21,7 +21,7 @@
             <if test="unit.address != null">#{unit.address},</if>
             <if test="unit.person != null">#{unit.person},</if>
             <if test="unit.phone != null">#{unit.phone},</if>
-            <if test="unit.email != null">#{unit.Email},</if>
+            <if test="unit.email != null">#{unit.email},</if>
             <if test="unit.unitType != null">#{unit.unitType},</if>
             <if test="unit.memo != null">#{unit.memo},</if>
         </trim>
@@ -93,5 +93,16 @@
         SELECT *
         FROM Unit
         WHERE Title LIKE '%${arg}%'
+    </select>
+
+    <select id="listByRent" resultType="io.ride.web.entity.Unit">
+        SELECT *
+        FROM Unit
+        WHERE UnitId IN (SELECT UnitId
+                         FROM Rent
+                         WHERE GetwayId IN (SELECT GetWayId
+                                            FROM Getway
+                                            WHERE GetwayMark = #{mark})
+                               AND GETDATE() BETWEEN StartTime AND EndTime)
     </select>
 </mapper>

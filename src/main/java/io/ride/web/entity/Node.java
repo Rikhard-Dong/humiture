@@ -17,7 +17,6 @@ public class Node {
     private Integer status;           // 节点状态
     private String nowTemper;        // 节点当前温度
     private String nowHumidity;      // 节点当前湿度
-    private Integer timeInter;          // 上报时间间隔
     private String memo;            // 备注
 
     private Getway getway;          // 所属网关
@@ -105,13 +104,7 @@ public class Node {
         this.nowHumidity = nowHumidity;
     }
 
-    public Integer getTimeInter() {
-        return timeInter;
-    }
 
-    public void setTimeInter(Integer timeInter) {
-        this.timeInter = timeInter;
-    }
 
     public String getMemo() {
         return memo;
@@ -133,7 +126,6 @@ public class Node {
                 ", status=" + status +
                 ", nowTemper=" + nowTemper +
                 ", nowHumidity=" + nowHumidity +
-                ", timeInter=" + timeInter +
                 ", memo='" + memo + '\'' +
                 '}';
     }

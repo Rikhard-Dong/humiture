@@ -50,7 +50,7 @@ public class SearchController {
             pageInfo = new PageInfo<UserInfo>(users);
         } catch (Exception e) {
             LOGGER.info("error message = {}", e.getMessage());
-            return null;
+            return new DataTableResult();
         }
         return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());
     }
@@ -68,7 +68,7 @@ public class SearchController {
             pageInfo = new PageInfo<Unit>(units);
         } catch (Exception e) {
             LOGGER.info("error message = {}", e.getMessage());
-            return null;
+            return new DataTableResult();
         }
         return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());
     }
@@ -87,7 +87,7 @@ public class SearchController {
             pageInfo = new PageInfo<Repair>(repairs);
         } catch (Exception e) {
             LOGGER.info("error message = {}", e.getMessage());
-            return null;
+            return new DataTableResult();
         }
         return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());
     }
@@ -105,8 +105,9 @@ public class SearchController {
             getwayDtos = searchService.searchGetway(arg, session);
             pageInfo = new PageInfo<GetwayDto>(getwayDtos);
         } catch (Exception e) {
+            // e.printStackTrace();
             LOGGER.info("search getways error message = {}", e.getMessage());
-            return null;
+            return new DataTableResult();
         }
         return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());
     }

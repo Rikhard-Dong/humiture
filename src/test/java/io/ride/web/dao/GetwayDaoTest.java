@@ -1,6 +1,7 @@
 package io.ride.web.dao;
 
 import io.ride.web.entity.Getway;
+import io.ride.web.entity.UserInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ import static org.junit.Assert.assertTrue;
 public class GetwayDaoTest {
     @Autowired
     private GetwayDao getwayDao;
+
+    @Autowired
+    private UserInfoDao userInfoDao;
 
     @Test
     public void addGetway() throws Exception {
@@ -78,7 +82,7 @@ public class GetwayDaoTest {
 
     @Test
     public void test() {
-
+        System.out.println(userInfoDao.findByUsername("sxd", 0, 7));
     }
 
 }

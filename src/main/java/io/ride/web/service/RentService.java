@@ -21,8 +21,6 @@ public interface RentService {
      *
      * @param rent    租赁信息
      * @param session session
-     * @throws GetwayNotFoundException  网关不存在
-     * @throws UnitNotFoundException    单位不存在
      * @throws HasNoPermissionException 权限
      */
     void addRent(Rent rent, HttpSession session)

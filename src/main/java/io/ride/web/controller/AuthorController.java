@@ -5,9 +5,7 @@ import io.ride.web.dto.RentDto;
 import io.ride.web.dto.Result;
 import io.ride.web.dto.UserAuthorDto;
 import io.ride.web.exception.HasNoPermissionException;
-import io.ride.web.exception.NotFoundException;
 import io.ride.web.service.AuthorService;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +29,17 @@ public class AuthorController {
     @Autowired
     private AuthorService authorService;
 
+    /*
+    * 网关授权
+     */
+
     @PostMapping("/getway")
     public Result authorGetway(RentDto rentDto, HttpSession session) {
+        LOGGER.info("add rent = {}", rentDto);
         try {
-            authorService.authorGetway(rentDto, session);
+            authorService.addRent(rentDto, session);
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.error("author getway error = {}", e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
@@ -54,6 +58,19 @@ public class AuthorController {
         }
     }
 
+    @PostMapping("/rents/{mark}/unit")
+    public DataTableResult rentsUnit(@PathVariable("mark") String mark,
+                                     @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                     @RequestParam(value = "rows", required = false, defaultValue = "20") Integer rows,
+                                     HttpSession session) {
+        try {
+            return authorService.listRentUnitByGetwayMark(mark, page, rows, session);
+        } catch (HasNoPermissionException e) {
+            LOGGER.error("author getway list error = {}", e.getMessage());
+            return new DataTableResult();
+        }
+    }
+
     @DeleteMapping("/rent/{id}")
     public Result deleteRent(@PathVariable("id") Integer id,
                              HttpSession session) {
@@ -65,6 +82,12 @@ public class AuthorController {
             return new Result(false, -1, "租约删除失败");
         }
     }
+
+
+
+    /*
+    * 节点租用
+     */
 
     @PostMapping("/node")
     public Result authorNode(UserAuthorDto dto, HttpSession session) {

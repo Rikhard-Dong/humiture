@@ -15,7 +15,7 @@
         WHERE UserAuthorId = #{userAuthorId}
     </delete>
 
-    <select id="isExists" resultType="java.lang.Integer">
+    <select id="isExists" resultType="java.lang.Boolean">
         SELECT count(1)
         FROM UserAuthor
         WHERE NodeId = #{nodeId} AND UserId = #{userId}

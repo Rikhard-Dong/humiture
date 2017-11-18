@@ -44,6 +44,9 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Autowired
     private RepairDao repairDao;
 
+    @Autowired
+    private RentDao rentDao;
+
     @Transactional
     public void batchDeleteUser(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
@@ -159,6 +162,27 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
         } else {
             throw new HasNoPermissionException("没有相应的权限");
         }
+    }
 
+    @Transactional
+    public void batchDeleteRent(String arg, HttpSession session)
+            throws NotFoundException, HasNoPermissionException, UpdateException {
+        UserInfo currentUser = PermissionUnit.isLogin(session);
+        int result;
+        if (PermissionUnit.isAdmin(currentUser)) {
+            String[] ids = ParamDivisionUtil.getParams(arg);
+            for (String id : ids) {
+                Integer rentId = Integer.valueOf(id);
+                if (rentDao.findByRentId(rentId) == null) {
+                    throw new NotFoundException("租用信息未发现");
+                }
+                result = rentDao.delete(rentId);
+                if (result == 0) {
+                    throw new UpdateException("数据库信息更新异常");
+                }
+            }
+        } else {
+            throw new HasNoPermissionException("没有相应的权限");
+        }
     }
 }

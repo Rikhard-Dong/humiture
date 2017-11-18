@@ -69,7 +69,6 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         node.setSpareNode(Integer.valueOf(getway.getSpareNode()));
         node.setNodeNum(getway.getNodeNum());
         node.setStatus(getway.getStatus());
-        node.setTimeInter(getway.getTimeInter());
         node.setMemo(getway.getMemo());
 
         int result = nodeDao.updateNodeByMark(node);
@@ -101,7 +100,6 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
             getway.setSpareNode(String.valueOf(node.getSpareNode()));
             getway.setNodeNum(node.getNodeNum());
             getway.setStatus(node.getStatus());
-            getway.setTimeInter(node.getTimeInter());
             getway.setMemo(node.getMemo());
             result = getwayDao.updateGetwayByMark(getway);
             if (result == 0) {
@@ -280,7 +278,6 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         node.setSpareNode(Integer.valueOf(getway.getSpareNode()));
         node.setNodeNum(getway.getNodeNum());
         node.setStatus(getway.getStatus());
-        node.setTimeInter(getway.getTimeInter());
         node.setMemo(getway.getMemo());
 
         if (nodeDao.isExists(node.getNodeMark())) {

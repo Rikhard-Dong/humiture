@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="io.ride.web.dao.THAvgDao">
+
+    <select id="listDayAvgForMonth" resultType="io.ride.web.entity.THAvg">
+        SELECT
+            DAY(ReportTime)             AS 'ReportTime',
+            avg(convert(INT, Temper))   AS 'TemperAvg',
+            avg(convert(INT, Humidity)) AS 'HumidityAvg'
+        FROM TemperHumid
+        WHERE NodeMark = #{mark} AND MONTH(ReportTime) = #{month} AND YEAR(ReportTime) = #{year}
+        GROUP BY DAY(ReportTime)
+    </select>
+
+    <select id="listMonthAvgForYear" resultType="io.ride.web.entity.THAvg">
+        SELECT
+            MONTH(ReportTime)           AS 'ReportTime',
+            avg(convert(INT, Temper))   AS 'TemperAvg',
+            avg(convert(INT, Humidity)) AS 'HumidityAvg'
+        FROM TemperHumid
+        WHERE NodeMark = #{mark} AND YEAR(ReportTime) = #{year}
+        GROUP BY MONTH(ReportTime)
+    </select>
+
+    <select id="listYearAvg" resultType="io.ride.web.entity.THAvg">
+        SELECT
+            YEAR(ReportTime)            AS 'ReportTime',
+            avg(convert(INT, Temper))   AS 'TemperAvg',
+            avg(convert(INT, Humidity)) AS 'HumidityAvg'
+        FROM TemperHumid
+        WHERE NodeMark = #{mark}
+        GROUP BY YEAR(ReportTime)
+    </select>
+
+</mapper>

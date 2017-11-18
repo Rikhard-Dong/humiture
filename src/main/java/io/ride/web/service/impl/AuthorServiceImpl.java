@@ -56,7 +56,7 @@ public class AuthorServiceImpl implements AuthorService {
     *******网关授权*************
     **************************/
 
-    public void authorGetway(RentDto dto, HttpSession session)
+    public void addRent(RentDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
         UserInfo user = PermissionUnit.isLogin(session);
         if (PermissionUnit.isAdmin(user)) {
@@ -68,18 +68,18 @@ public class AuthorServiceImpl implements AuthorService {
             if (unit == null) {
                 throw new NotFoundException("单位不存在");
             }
-            if (unit.getUnitType() == 0) {
+            if (unit.getUnitType() == 1) {
                 // 特权单位判断授权时间范围内是否已有该单位授权信息
-                Rent rent = rentDao.findByUnitIdAndStartTimeAndEndTime(unit.getUnitId(),
+                List<Rent> rents = rentDao.findByUnitIdAndStartTimeAndEndTime(unit.getUnitId(),
                         dto.getStartTime(), dto.getEndTime());
-                if (rent != null) {
+                if (rents != null && rents.size() != 0) {
                     throw new HasNoPermissionException("该时间段内已有租约");
                 }
             } else {
                 // 普通单位授权时间内只能有一个普通单位授权信息
-                Rent rent = rentDao.findByUnitTypeAndStartTimeAndEndTime(dto.getStartTime(), dto.getEndTime());
-                if (rent != null) {
-                    throw new HasNoPermissionException("该时间段内已有租约");
+                List<Rent> rent = rentDao.findByUnitTypeAndStartTimeAndEndTime(dto.getStartTime(), dto.getEndTime());
+                if (rent != null && rent.size() != 0) {
+                    throw new HasNoPermissionException("该时间段内已有其他单位租约");
                 }
             }
             Rent rent = new Rent();
@@ -89,6 +89,50 @@ public class AuthorServiceImpl implements AuthorService {
             rent.setEndTime(MyDateFormat.str2Date(dto.getEndTime()));
             rent.setPay(String.valueOf(dto.getPay()));
             if (rentDao.add(rent) == 0) {
+                throw new UpdateException("更新异常");
+            }
+        } else {
+            throw new HasNoPermissionException("没有操作权限");
+        }
+    }
+
+    public void updateRent(RentDto dto, HttpSession session)
+            throws HasNoPermissionException, NotFoundException, UpdateException {
+        UserInfo user = PermissionUnit.isLogin(session);
+        if (PermissionUnit.isAdmin(user)) {
+            Getway getway = getwayDao.findByMark(dto.getGetwayMark(), user.getUserType(), user.getUnitId());
+            if (getway == null) {
+                throw new NotFoundException("网关不存在");
+            }
+            Unit unit = unitDao.findByTitle(dto.getTitle());
+            if (unit == null) {
+                throw new NotFoundException("单位不存在");
+            }
+            Rent rent = rentDao.findByRentId(dto.getRentId());
+            if (rent == null) {
+                throw new NotFoundException("没有租约信息!");
+            }
+            if (unit.getUnitType() == 1) {
+                // 特权单位判断授权时间范围内是否已有该单位授权信息
+                List<Rent> rents = rentDao.findByUnitIdAndStartTimeAndEndTime(unit.getUnitId(),
+                        dto.getStartTime(), dto.getEndTime());
+                rents.remove(rent);
+                if (rents.size() != 0) {
+                    throw new HasNoPermissionException("该时间段内已有租约");
+                }
+            } else {
+                // 普通单位授权时间内只能有一个普通单位授权信息
+                List<Rent> rents = rentDao.findByUnitTypeAndStartTimeAndEndTime(dto.getStartTime(), dto.getEndTime());
+                rents.remove(rent);
+                if (rents.size() != 0) {
+                    throw new HasNoPermissionException("该时间段内已有其他单位租约");
+                }
+            }
+            rent = new Rent();
+            rent.setStartTime(MyDateFormat.str2Date(dto.getStartTime()));
+            rent.setEndTime(MyDateFormat.str2Date(dto.getEndTime()));
+            rent.setPay(String.valueOf(dto.getPay()));
+            if (rentDao.update(rent) == 0) {
                 throw new UpdateException("更新异常");
             }
         } else {
@@ -131,6 +175,31 @@ public class AuthorServiceImpl implements AuthorService {
 
     }
 
+    public DataTableResult listRentUnitByGetwayMark(String mark, Integer page, Integer rows, HttpSession session)
+            throws HasNoPermissionException, NotFoundException {
+        UserInfo userInfo = PermissionUnit.isLogin(session);
+        if (PermissionUnit.isAdmin(userInfo)) {
+            Getway getway = getwayDao.findByMark(mark, 0, null);
+            if (getway != null) {
+                PageHelper.startPage(page, rows);
+                List<Rent> rents = rentDao.listWithMark(mark);
+                PageInfo<Rent> pageInfo = new PageInfo<Rent>(rents);
+                List<RentDto> dtos = new ArrayList<RentDto>();
+                if (rents != null) {
+                    for (Rent rent : pageInfo.getList()) {
+                        Unit unit = unitDao.findById(rent.getUnitId());
+                        dtos.add(new RentDto(rent, getway.getGetwayMark(), unit.getTitle()));
+                    }
+                }
+                return new DataTableResult(pageInfo.getTotal(), dtos);
+            } else {
+                throw new NotFoundException("网关未发现");
+            }
+        } else {
+            throw new HasNoPermissionException("权限不足");
+        }
+    }
+
     /*
     ***************************
     *******节点授权*************
@@ -148,7 +217,7 @@ public class AuthorServiceImpl implements AuthorService {
             if (node == null) {
                 throw new NotFoundException("节点不存在");
             }
-            if (userAuthorDao.isExists(user.getUserId(), node.getNodeId()) != 0) {
+            if (userAuthorDao.isExists(user.getUserId(), node.getNodeId())) {
                 throw new IsExistsException("授权已存在");
             }
             if (userAuthorDao.add(user.getUserId(), node.getNodeId()) == 0) {

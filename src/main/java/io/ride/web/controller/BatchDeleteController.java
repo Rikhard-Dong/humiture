@@ -107,4 +107,17 @@ public class BatchDeleteController {
         }
         return new Result(true, 1, "批量删除报修信息成功");
     }
+
+    @DeleteMapping(value = "/rent/{arg}")
+    public Result deleteRentBatch(@PathVariable("arg") String arg, HttpSession session) {
+        LOGGER.info("待删除租用信息: {}", Arrays.toString(ParamDivisionUtil.getParams(arg)));
+
+        try {
+            batchDeleteService.batchDeleteRent(arg, session);
+        } catch (Exception e) {
+            LOGGER.error("error message = {}", e.getMessage());
+            return new Result(false, -1, e.getMessage());
+        }
+        return new Result(true, 1, "批量删除报修信息成功");
+    }
 }

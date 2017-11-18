@@ -3,6 +3,7 @@ package io.ride.web.dto;
 import io.ride.web.dao.GetwayDao;
 import io.ride.web.entity.Getway;
 import io.ride.web.util.MyDateFormat;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 
@@ -24,14 +25,26 @@ public class GetwayDto {
     public GetwayDto(Getway getway) {
         this.getwayMark = getway.getGetwayMark();
         this.status = getway.getStatus();
-        this.statusDesc = this.status == 0 ? "不在线" : "在线";
+        if (this.status != null) {
+            if (this.status == 0) {
+                this.statusDesc = "不在线";
+            } else {
+                this.statusDesc = "在线";
+            }
+        }
         this.endTime = "";
     }
 
     public GetwayDto(Getway getway, Date endTime) {
         this.getwayMark = getway.getGetwayMark();
         this.status = getway.getStatus();
-        this.statusDesc = this.status == 0 ? "不在线" : "在线";
+        if (this.status != null) {
+            if (this.status == 0) {
+                this.statusDesc = "不在线";
+            } else {
+                this.statusDesc = "在线";
+            }
+        }
         this.endTime = MyDateFormat.format(endTime);
     }
 

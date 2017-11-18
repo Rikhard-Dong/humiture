@@ -19,6 +19,10 @@ public class UnitDaoTest {
 
     @Autowired
     private UnitDao unitDao;
+    @Test
+    public void listByRent() throws Exception {
+        System.out.println(unitDao.listByRent("GW001-00008-2"));
+    }
 
     @Test
     public void list() throws Exception {

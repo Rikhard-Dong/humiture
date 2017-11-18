@@ -18,7 +18,6 @@
     <insert id="addNode">
         INSERT INTO Node
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="node.nodeMark != null">NodeId,</if>
             <if test="node.nodeMark != null">NodeMark,</if>
             <if test="node.getwayId != null">GetwayId,</if>
             <if test="node.spareNode != null">SpareNode,</if>
@@ -27,12 +26,10 @@
             <if test="node.status != null">Status,</if>
             <if test="node.nowTemper != null">NowTemper,</if>
             <if test="node.nowHumidity != null">Humidity,</if>
-            <if test="node.timeInter != null">TimeInter,</if>
             <if test="node.memo != null">Memo,</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="node.nodeMark != null">#{node.nodeMark},</if>
             <if test="node.nodeMark != null">#{node.nodeMark},</if>
             <if test="node.getwayId != null">#{node.getwayId},</if>
             <if test="node.spareNode != null">#{node.spareNode},</if>
@@ -41,7 +38,6 @@
             <if test="node.status != null">#{node.status},</if>
             <if test="node.nowTemper != null">#{node.nowTemper},</if>
             <if test="node.nowHumidity != null">#{node.nowHumidity},</if>
-            <if test="node.timeInter != null">#{node.timeInter},</if>
             <if test="node.memo != null">#{node.memo},</if>
         </trim>
     </insert>
@@ -57,7 +53,6 @@
             <if test="node.status != null">Status = #{node.status},</if>
             <if test="node.nowTemper != null">NowTemper = #{node.nowTemper},</if>
             <if test="node.nowHumidity != null">Humidity = #{node.nowHumidity},</if>
-            <if test="node.timeInter != null">TimeInter = #{node.timeInter},</if>
             <if test="node.memo != null">Memo = #{node.memo},</if>
         </trim>
         WHERE NodeId = #{node.nodeId}
@@ -78,7 +73,6 @@
             <if test="node.status != null">Status = #{node.status},</if>
             <if test="node.nowTemper != null">NowTemper = #{node.nowTemper},</if>
             <if test="node.nowHumidity != null">Humidity = #{node.nowHumidity},</if>
-            <if test="node.timeInter != null">TimeInter = #{node.timeInter},</if>
             <if test="node.memo != null">Memo = #{node.memo},</if>
         </trim>
         WHERE NodeMark = #{node.nodeMark};
@@ -108,7 +102,7 @@
             </when>
             <when test="userType == 1 or userType == 2">
                 SELECT n.* FROM Node n WHERE n.NodeId IN (SELECT n.NodeId FROM Node n, Unit u, Rent r WHERE
-                n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId} AND current_timestamp
+                n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId} AND GETDATE()
                 BETWEEN r.StartTime AND r.EndTime) AND n.NodeId = #{nodeId}
             </when>
         </choose>
@@ -125,7 +119,7 @@
             </when>
             <when test="userType == 1 or userType == 2">
                 SELECT n.* FROM Node n WHERE n.NodeId IN (SELECT n.NodeId FROM Node n, Unit u, Rent r WHERE
-                n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId} AND current_timestamp
+                n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId} AND GETDATE()
                 BETWEEN r.StartTime AND r.EndTime) AND n.NodeMark = #{mark}
             </when>
         </choose>
@@ -163,7 +157,7 @@
             </when>
             <when test="userType == 1 or userType == 2">
                 SELECT n.* FROM Node n, Unit u, Rent r WHERE r.GetwayId = n.GetwayId AND r.UnitId = u.UnitId
-                AND NodeMark LIKE '%${arg}%' AND current_timestamp BETWEEN r.StartTime AND r.EndTime AND u.UnitId =
+                AND NodeMark LIKE '%${arg}%' AND GETDATE() BETWEEN r.StartTime AND r.EndTime AND u.UnitId =
                 #{unitId}
             </when>
         </choose>

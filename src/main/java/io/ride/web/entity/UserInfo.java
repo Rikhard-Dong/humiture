@@ -12,6 +12,7 @@ public class UserInfo {
 
     private Integer userId;
     private Integer unitId;
+    private String title;
     private Integer userType;       // 用户类型:0.系统管理元 1.特权单位管理员 2. 单位管理员 3.用户显示
     private String name;
     private String username;
@@ -19,6 +20,14 @@ public class UserInfo {
     private String memo;
 
     private Unit unit;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Integer getUserId() {
         return userId;

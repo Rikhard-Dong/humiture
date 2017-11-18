@@ -1,16 +1,23 @@
 package io.ride.web.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.ride.web.dao.TemperHumidDao;
+import io.ride.web.dto.DataTableResult;
+import io.ride.web.dto.TemperHumidDto;
 import io.ride.web.entity.TemperHumid;
+import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
 import io.ride.web.service.QueryService;
+import io.ride.web.util.PermissionUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,10 +36,32 @@ public class QueryServiceImpl implements QueryService {
     @Autowired
     private TemperHumidDao thDao;
 
-    public List<TemperHumid> queryThByReportTime(String nodeMark, String startTime, String endTime, HttpSession session)
+    public DataTableResult queryThByReportTime(String nodeMark, String startTime, String endTime,
+                                               Integer page, Integer rows, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        // TODO 权限处理
+        UserInfo currentUser = PermissionUnit.isLogin(session);
 
-        return thDao.listByNodeMarkWithTime(nodeMark, startTime, endTime);
+        List<TemperHumid> ths;
+        PageInfo<TemperHumid> pageInfo = null;
+        if (PermissionUnit.isAuthorNode(nodeMark, currentUser.getUserType(), currentUser.getUnitId(), currentUser.getUsername())) {
+            PageHelper.startPage(page, rows);
+            ths = thDao.listByNodeMarkWithTime(nodeMark, startTime, endTime);
+            LOGGER.info("query th by report time ths i= {}", ths);
+
+            if (ths != null) {
+                pageInfo = new PageInfo<TemperHumid>(ths);
+            }
+        }
+        List<TemperHumidDto> dtos = new ArrayList<TemperHumidDto>();
+        if (pageInfo != null) {
+            LOGGER.info("query th by report time pageinfo i= {}", pageInfo);
+            for (TemperHumid temperHumid : pageInfo.getList()) {
+                dtos.add(new TemperHumidDto(temperHumid));
+            }
+        }
+        if (pageInfo == null) {
+            throw new NotFoundException("未发现");
+        }
+        return new DataTableResult(pageInfo.getTotal(), dtos);
     }
 }

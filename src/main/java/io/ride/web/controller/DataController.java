@@ -302,103 +302,6 @@ public class DataController {
     }
 
 
-    @GetMapping(value = "/temperExcel/{nodeId}")
-    public Result getTemperExcel(HttpServletResponse response, @PathVariable(value = "nodeId") int nodeId) {
-        OutputStream outputStream = null;
-        try {
-            String filename = URLEncoder.encode("节点" + nodeId + "(" + startTime + "至" + endTime + ")"
-                    + "温度信息.xls", "utf-8");
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment;filename*=utf-8'zh_cn'" + filename);
-
-            outputStream = response.getOutputStream();
-            HSSFWorkbook workbook = createTempersWorkBook();
-            workbook.write(outputStream);
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.error(e.getMessage(), e);
-            return new Result(false, -1, e.getMessage());
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-            return new Result(false, -1, e.getMessage());
-        } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.close();
-                } catch (IOException e) {
-                    LOGGER.error("error={}", e);
-                    return new Result(false, -1, e.getMessage());
-                }
-            }
-        }
-
-
-        return new Result(true, 1, "创建excel成功!");
-    }
-
-    /**
-     * 根据查询信息生成excel表格
-     *
-     * @return excel表格
-     */
-    public HSSFWorkbook createTempersWorkBook() {
-
-        // 创建表格
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        // 创建工作薄
-        HSSFSheet sheet = workbook.createSheet("sheet 01");
-        // 创建样式
-        HSSFCellStyle style = workbook.createCellStyle();
-        // 创建字体
-        HSSFFont font = workbook.createFont();
-        // 设置字体
-        font.setColor(HSSFFont.COLOR_NORMAL);
-        style.setFont(font);
-
-        // 创建表头行
-        HSSFRow row = sheet.createRow(0);
-        // 创建列
-        // 节点ID
-        HSSFCell cell_01 = row.createCell(0);
-        cell_01.setCellValue("节点ID");
-        cell_01.setCellStyle(style);
-        // 节点温度
-        HSSFCell cell_02 = row.createCell(1);
-        cell_02.setCellValue("节点温度");
-        cell_02.setCellStyle(style);
-        // 节点湿度
-        HSSFCell cell_03 = row.createCell(2);
-        cell_03.setCellValue("节点湿度");
-        cell_03.setCellStyle(style);
-        // 上报时间
-        HSSFCell cell_04 = row.createCell(3);
-        cell_04.setCellValue("上报时间");
-        cell_04.setCellStyle(style);
-
-        for (int i = 1; i <= tempers.size(); i++) {
-            HSSFRow rowBody = sheet.createRow(i);
-            rowBody.setHeight((short) 300);
-            TemperHumid temper = tempers.get(i - 1);
-            // 节点ID
-            HSSFCell c1 = rowBody.createCell(0);
-            c1.setCellValue(temper.getNodeId());
-            c1.setCellStyle(style);
-            // 节点温度
-            HSSFCell c2 = rowBody.createCell(1);
-            c2.setCellValue(temper.getTemper());
-            c2.setCellStyle(style);
-            // 节点湿度
-            HSSFCell c3 = rowBody.createCell(2);
-            c3.setCellValue(temper.getHumidity());
-            c3.setCellStyle(style);
-            // 上报时间
-            HSSFCell c4 = rowBody.createCell(3);
-            c4.setCellValue(MyDateFormat.format(temper.getReportTime()));
-            c4.setCellStyle(style);
-        }
-
-        return workbook;
-    }
-
 
     /*******************************************************************
      *******************  单位数据显示   *********************************
@@ -454,7 +357,6 @@ public class DataController {
             return null;
         }
         return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());
-
     }
 
     @GetMapping("/unit/{title}")

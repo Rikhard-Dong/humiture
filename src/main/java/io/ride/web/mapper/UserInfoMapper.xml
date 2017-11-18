@@ -27,10 +27,10 @@
         INSERT INTO UserInfo
         <trim prefix="(" suffixOverrides="," suffix=")">
             <if test="user.unitId != null">UnitId,</if>
-            <if test="user.name != null">`Name`,</if>
+            <if test="user.name != null">Name,</if>
             <if test="user.userType != null">UserType,</if>
-            <if test="user.Username != null">UserName,</if>
-            <if test="user.password != null">`Password`,</if>
+            <if test="user.username != null">UserName,</if>
+            <if test="user.password != null">Password,</if>
             <if test="user.memo != null">Memo,</if>
         </trim>
         VALUES
@@ -89,10 +89,10 @@
             <when test="userType == 0">
                 SELECT *
                 FROM UserInfo
-                WHERE username = #{username};
+                WHERE UserName = #{username};
             </when>
             <when test="userType == 1 or userType == 2">
-                SELECT u.* FROM UserInfo u, Unit unit WHERE u.UnitId = unit.UnitId AND username = #{username} and
+                SELECT u.* FROM UserInfo u, Unit unit WHERE u.UnitId = unit.UnitId AND UserName = #{username} and
                 u.UnitId = #{unitId}
             </when>
         </choose>
@@ -119,7 +119,7 @@
     <select id="findFromUnitWithUsername" resultType="io.ride.web.entity.UserInfo">
         SELECT *
         FROM UserInfo
-        WHERE username = #{username} AND UnitId = #{unitId};
+        WHERE UserName = #{username} AND UnitId = #{unitId};
     </select>
 
     <select id="search" resultType="io.ride.web.entity.UserInfo">
@@ -127,12 +127,12 @@
             <when test="userType == 0">
                 SELECT *
                 FROM UserInfo
-                WHERE Name LIKE '%${arg}%' OR username LIKE '%${arg}%'
+                WHERE Name LIKE '%${arg}%' OR UserName LIKE '%${arg}%'
             </when>
             <when test="userType == 1 or userType == 2">
                 SELECT *
                 FROM UserInfo
-                WHERE UnitId = #{unitId} AND (Name LIKE '%${arg}%' OR username LIKE '%${arg}%')
+                WHERE UnitId = #{unitId} AND (Name LIKE '%${arg}%' OR UserName LIKE '%${arg}%')
             </when>
         </choose>
     </select>

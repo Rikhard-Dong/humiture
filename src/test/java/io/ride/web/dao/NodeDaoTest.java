@@ -55,12 +55,11 @@ public class NodeDaoTest {
     public void addNode() {
         Node node = new Node();
         node.setNodeMark("1113");
-        node.setGetwayId(1);
+        node.setGetwayId(7);
         node.setSpareNode(0);
         node.setNodeNum("125");
         node.setType(1);
         node.setStatus(0);
-        node.setTimeInter(10);
         node.setMemo("网关1子节点2");
         nodeDao.addNode(node);
     }

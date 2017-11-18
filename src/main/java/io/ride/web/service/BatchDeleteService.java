@@ -28,4 +28,8 @@ public interface BatchDeleteService {
 
     void batchDeleteRepair(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException;
+
+    void batchDeleteRent(String arg, HttpSession session)
+            throws NotFoundException, HasNoPermissionException, UpdateException;
+
 }

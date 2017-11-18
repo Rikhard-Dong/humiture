@@ -57,7 +57,7 @@ public class RentServiceImpl implements RentService {
         if (getway == null) {
             throw new NotFoundException("网关未找到");
         }
-        if (unit.getUnitType() == 1 &&
+        if (unit.getUnitType() == 0 &&
                 rentDao.findByTime(MyDateFormat.format(rent.getStartTime()), MyDateFormat.format(rent.getEndTime())) != null) {
             throw new HasNoPermissionException("时间冲突! 同一时间点不能有两个普通单位同时租用");
         }
@@ -77,7 +77,7 @@ public class RentServiceImpl implements RentService {
             throw new HasNoPermissionException("当前用户没有该权限");
         }
         Unit unit = unitDao.findById(rent.getGetwayId());
-        if (unit.getUnitType() == 1 &&
+        if (unit.getUnitType() == 0 &&
                 rentDao.findByTime(MyDateFormat.format(rent.getStartTime()), MyDateFormat.format(rent.getEndTime())) != null) {
             throw new HasNoPermissionException("时间冲突! 同一时间点不能有两个普通单位同时租用");
         }

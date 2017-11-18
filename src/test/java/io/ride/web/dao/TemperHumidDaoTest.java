@@ -1,10 +1,13 @@
 package io.ride.web.dao;
 
+import io.ride.web.entity.TemperHumid;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -33,6 +36,9 @@ public class TemperHumidDaoTest {
 
     @Test
     public void listByNodeMark() throws Exception {
+        List<TemperHumid> temperHumids = temperHumidDao.listByNodeMark("SN001-000014-6");
+        System.out.println(temperHumids.size());
+        System.out.println(temperHumids);
     }
 
     @Test

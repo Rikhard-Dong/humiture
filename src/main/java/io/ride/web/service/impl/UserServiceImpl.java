@@ -63,6 +63,12 @@ public class UserServiceImpl implements UserService {
             throws IsExistsException, HasNoPermissionException, PasswordNotEqualsException {
         UserInfo currentUser = PermissionUnit.isLogin(session);
         user.setPassword(user.getPassword());
+        Unit unit = unitDao.findByTitle(user.getTitle());
+        if (unit == null) {
+            throw new NotFoundException("单位不存在");
+        }
+        user.setUnitId(unit.getUnitId());
+        LOGGER.info("添加用户 = {}", user);
         int result = 0;
         if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
             if (userInfoDao.isAccountExists(user.getUsername())) {
@@ -101,9 +107,10 @@ public class UserServiceImpl implements UserService {
 //            throw new PasswordNotEqualsException("密码不一致");
 //        }
 //        user.setPassword(MD5Encrypt.encrypt(user.getPassword()));
+        LOGGER.info("添加用户 = {}", user);
         int result = 0;
         if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
-            if (userInfoDao.findByUsername(user.getUsername(), user.getUserType(), user.getUnitId()) == null) {
+            if (userInfoDao.findByUsername(user.getUsername(), currentUser.getUserType(), currentUser.getUnitId()) == null) {
                 throw new NotFoundException("更新用户失败, 因为用户不存在");
             }
             if (PermissionUnit.isAdmin(currentUser)) {
@@ -226,6 +233,7 @@ public class UserServiceImpl implements UserService {
         if (users != null) {
             for (UserInfo user : users) {
                 user.setUnit(unitDao.findById(user.getUnitId()));
+                user.setTitle(user.getUnit().getTitle());
             }
         }
         return users;
