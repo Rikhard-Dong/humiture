@@ -7,6 +7,7 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IDEA
@@ -22,5 +23,8 @@ public interface THAvgService {
             throws HasNoPermissionException, NotFoundException;
 
     List<THAvg> listYearAvg(String mark, HttpSession session)
+            throws HasNoPermissionException, NotFoundException;
+
+    Map<String, Object> nodeInfo(String mark, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
 }

@@ -91,10 +91,10 @@
                 FROM UserInfo
                 WHERE UserName = #{username};
             </when>
-            <when test="userType == 1 or userType == 2">
+            <otherwise>
                 SELECT u.* FROM UserInfo u, Unit unit WHERE u.UnitId = unit.UnitId AND UserName = #{username} and
                 u.UnitId = #{unitId}
-            </when>
+            </otherwise>
         </choose>
 
     </select>
@@ -129,11 +129,11 @@
                 FROM UserInfo
                 WHERE Name LIKE '%${arg}%' OR UserName LIKE '%${arg}%'
             </when>
-            <when test="userType == 1 or userType == 2">
+            <otherwise>
                 SELECT *
                 FROM UserInfo
                 WHERE UnitId = #{unitId} AND (Name LIKE '%${arg}%' OR UserName LIKE '%${arg}%')
-            </when>
+            </otherwise>
         </choose>
     </select>
 </mapper>

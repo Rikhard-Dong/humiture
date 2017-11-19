@@ -52,13 +52,11 @@
                 SELECT * FROM Repair
             </when>
             <!-- 单位管理员或者特权单位管理员 -->
-            <when test="userType == 1 or userType == 2">
+            <otherwise>
                 SELECT * FROM Repair WHERE NodeId IN (SELECT n.NodeId FROM Node n, Rent r, Unit u
                 WHERE n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId})
-            </when>
-            <otherwise>
-                SELECT NULL;
             </otherwise>
+
         </choose>
     </select>
 
@@ -70,14 +68,11 @@
                 '%${param}%') OR person LIKE '%${param}%'
             </when>
             <!-- 单位管理员或者特权单位管理员 -->
-            <when test="userType == 1 or userType == 2">
+            <otherwise>
                 SELECT * FROM Repair WHERE NodeId IN (SELECT n.NodeId FROM Node n, Rent r, Unit u
                 WHERE n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId}) AND (NodeId IN
                 (SELECT n.NodeId FROM Node n WHERE n.NodeMark LIKE
                 '%${param}%') OR person LIKE '%${param}%')
-            </when>
-            <otherwise>
-                SELECT NULL;
             </otherwise>
         </choose>
     </select>
@@ -89,13 +84,10 @@
                 SELECT * FROM Repair WHERE RepairId = #{repairId}
             </when>
             <!-- 单位管理员或者特权单位管理员 -->
-            <when test="userType == 1 or userType == 2">
+            <otherwise>
                 SELECT * FROM Repair WHERE NodeId IN (SELECT n.NodeId FROM Node n, Rent r, Unit u
                 WHERE n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId}) AND RepairId =
                 #{repairId}
-            </when>
-            <otherwise>
-                SELECT NULL;
             </otherwise>
         </choose>
     </select>

@@ -100,11 +100,11 @@
                 FROM Node
                 WHERE NodeId = #{nodeId}
             </when>
-            <when test="userType == 1 or userType == 2">
+            <otherwise>
                 SELECT n.* FROM Node n WHERE n.NodeId IN (SELECT n.NodeId FROM Node n, Unit u, Rent r WHERE
                 n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId} AND GETDATE()
                 BETWEEN r.StartTime AND r.EndTime) AND n.NodeId = #{nodeId}
-            </when>
+            </otherwise>
         </choose>
 
     </select>
@@ -117,11 +117,11 @@
                 FROM Node
                 WHERE NodeMark = #{mark};
             </when>
-            <when test="userType == 1 or userType == 2">
+            <otherwise>
                 SELECT n.* FROM Node n WHERE n.NodeId IN (SELECT n.NodeId FROM Node n, Unit u, Rent r WHERE
                 n.GetwayId = r.GetwayId AND r.UnitId = u.UnitId AND u.UnitId = #{unitId} AND GETDATE()
                 BETWEEN r.StartTime AND r.EndTime) AND n.NodeMark = #{mark}
-            </when>
+            </otherwise>
         </choose>
     </select>
 
@@ -155,11 +155,11 @@
             <when test="userType == 0">
                 SELECT * FROM Node WHERE NodeMark LIKE '%${arg}%'
             </when>
-            <when test="userType == 1 or userType == 2">
+            <otherwise>
                 SELECT n.* FROM Node n, Unit u, Rent r WHERE r.GetwayId = n.GetwayId AND r.UnitId = u.UnitId
                 AND NodeMark LIKE '%${arg}%' AND GETDATE() BETWEEN r.StartTime AND r.EndTime AND u.UnitId =
                 #{unitId}
-            </when>
+            </otherwise>
         </choose>
     </select>
 </mapper>

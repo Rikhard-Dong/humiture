@@ -64,11 +64,11 @@ public class QueryController {
         }
     }
 
-    @GetMapping(value = "/excel/{nodeMark}/{startTime}/{endTime}")
+    @PostMapping(value = "/excel")
     public Result getTemperExcel(HttpServletResponse response,
-                                 @PathVariable(value = "nodeMark") String nodeMark,
-                                 @PathVariable(value = "startTime") String startTime,
-                                 @PathVariable(value = "endTime") String endTime,
+                                 @RequestParam(value = "nodeMark") String nodeMark,
+                                 @RequestParam(value = "startTime") String startTime,
+                                 @RequestParam(value = "endTime") String endTime,
                                  HttpSession session) {
         LOGGER.info("请求excel表格");
 
