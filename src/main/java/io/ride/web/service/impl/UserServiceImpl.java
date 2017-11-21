@@ -1,24 +1,19 @@
 package io.ride.web.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import io.ride.web.dao.UnitDao;
 import io.ride.web.dao.UserInfoDao;
 import io.ride.web.entity.Unit;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.*;
 import io.ride.web.service.UserService;
-import io.ride.web.util.MD5Encrypt;
 import io.ride.web.util.MyDateFormat;
-import io.ride.web.util.ParamDivisionUtil;
-import io.ride.web.util.PermissionUnit;
+import io.ride.web.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +46,7 @@ public class UserServiceImpl implements UserService {
             LOGGER.error("用户名或者密码错误!登录失败");
             throw new UsernameOrPasswordException("用户名或者密码错误!");
         }
-        if (!PermissionUnit.isAdmin(user)) {
+        if (!PermissionUtil.isAdmin(user)) {
             Unit unit = unitDao.findById(user.getUnitId());
             user.setUnit(unit);
         }
@@ -61,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     public void addUser(UserInfo user, HttpSession session)
             throws IsExistsException, HasNoPermissionException, PasswordNotEqualsException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         user.setPassword(user.getPassword());
         Unit unit = unitDao.findByTitle(user.getTitle());
         if (unit == null) {
@@ -70,13 +65,13 @@ public class UserServiceImpl implements UserService {
         user.setUnitId(unit.getUnitId());
         LOGGER.info("添加用户 = {}", user);
         int result = 0;
-        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser) || PermissionUtil.isUnitAdmin(currentUser)) {
             if (userInfoDao.isAccountExists(user.getUsername())) {
                 throw new IsExistsException("添加用户失败, 因为该用户已经存在");
             }
-            if (PermissionUnit.isAdmin(currentUser)) {
+            if (PermissionUtil.isAdmin(currentUser)) {
                 result = userInfoDao.addUser(user);
-            } else if (PermissionUnit.isUnitAdmin(currentUser)) {
+            } else if (PermissionUtil.isUnitAdmin(currentUser)) {
                 // 单位管理员只能新建本单位的普通用户
                 user.setUserType(3);
                 user.setUnitId(currentUser.getUnitId());
@@ -102,20 +97,20 @@ public class UserServiceImpl implements UserService {
      */
     public void updateUser(UserInfo user, HttpSession session)
             throws NotFoundException, HasNoPermissionException, PasswordNotEqualsException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
 //        if (!user.getPassword().equals(password2)) {
 //            throw new PasswordNotEqualsException("密码不一致");
 //        }
 //        user.setPassword(MD5Encrypt.encrypt(user.getPassword()));
         LOGGER.info("添加用户 = {}", user);
         int result = 0;
-        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser) || PermissionUtil.isUnitAdmin(currentUser)) {
             if (userInfoDao.findByUsername(user.getUsername(), currentUser.getUserType(), currentUser.getUnitId()) == null) {
                 throw new NotFoundException("更新用户失败, 因为用户不存在");
             }
-            if (PermissionUnit.isAdmin(currentUser)) {
+            if (PermissionUtil.isAdmin(currentUser)) {
                 result = userInfoDao.updateByUsername(user);
-            } else if (PermissionUnit.isUnitAdmin(currentUser)) {
+            } else if (PermissionUtil.isUnitAdmin(currentUser)) {
                 if (userInfoDao.findFromUnitWithUsername(user.getUsername(), currentUser.getUnitId()) != null) {
                     // 如果是单位管理, 则不能修改用户身份以及用户所属单位
                     UserInfo oldUser = userInfoDao.findByUsername(user.getUsername(),
@@ -138,23 +133,23 @@ public class UserServiceImpl implements UserService {
 
     public void deleteUser(String username, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         int result = 0;
-        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser) || PermissionUtil.isUnitAdmin(currentUser)) {
             if (userInfoDao.findByUsername(username, currentUser.getUserType(), currentUser.getUnitId()) == null) {
                 throw new NotFoundException("删除用户失败, 因为用户不存在");
             }
             if (username.equals(currentUser.getUsername())) {
                 throw new HasNoPermissionException("不能删除自身!");
             }
-            if (PermissionUnit.isUnitAdmin(currentUser)) {
+            if (PermissionUtil.isUnitAdmin(currentUser)) {
                 // 单位管理员只能删除本单位用户
                 if (userInfoDao.findFromUnitWithUsername(username, currentUser.getUnitId()) != null) {
                     result = userInfoDao.deleteByUsername(username);
                 } else {
                     throw new HasNoPermissionException("单位管理员只能删除本单位用户");
                 }
-            } else if (PermissionUnit.isAdmin(currentUser)) {
+            } else if (PermissionUtil.isAdmin(currentUser)) {
                 result = userInfoDao.deleteByUsername(username);
             }
         } else {
@@ -168,15 +163,15 @@ public class UserServiceImpl implements UserService {
 
     public UserInfo findUser(Integer id, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         UserInfo user = null;
-        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser) || PermissionUtil.isUnitAdmin(currentUser)) {
             if (userInfoDao.findByUserId(id) == null) {
                 throw new NotFoundException("查找用户失败, 因为用户不存在");
             }
-            if (PermissionUnit.isUnitAdmin(currentUser)) {
+            if (PermissionUtil.isUnitAdmin(currentUser)) {
                 user = userInfoDao.findFromUnitWithUserId(id, currentUser.getUnitId());
-            } else if (PermissionUnit.isAdmin(currentUser)) {
+            } else if (PermissionUtil.isAdmin(currentUser)) {
                 user = userInfoDao.findByUserId(id);
             }
         } else {
@@ -190,15 +185,15 @@ public class UserServiceImpl implements UserService {
 
     public UserInfo findUser(String username, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         UserInfo user = null;
-        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser) || PermissionUtil.isUnitAdmin(currentUser)) {
             if (userInfoDao.findByUsername(username, currentUser.getUserType(), currentUser.getUnitId()) == null) {
                 throw new NotFoundException("查找用户失败, 因为用户不存在");
             }
-            if (PermissionUnit.isUnitAdmin(currentUser)) {
+            if (PermissionUtil.isUnitAdmin(currentUser)) {
                 user = userInfoDao.findFromUnitWithUsername(username, currentUser.getUnitId());
-            } else if (PermissionUnit.isAdmin(currentUser)) {
+            } else if (PermissionUtil.isAdmin(currentUser)) {
                 user = userInfoDao.findByUsername(username, currentUser.getUserType(), currentUser.getUnitId());
             }
         } else {
@@ -219,12 +214,12 @@ public class UserServiceImpl implements UserService {
      */
     public List<UserInfo> listUser(HttpSession session)
             throws HasNoPermissionException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         List<UserInfo> users;
-        if (PermissionUnit.isAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser)) {
             // 系统管理员返回全部用户信息
             users = userInfoDao.list();
-        } else if (PermissionUnit.isUnitAdmin(currentUser)) {
+        } else if (PermissionUtil.isUnitAdmin(currentUser)) {
             // 单位管理员返回该单位用户
             users = userInfoDao.listFromUnit(currentUser.getUnitId());
         } else {

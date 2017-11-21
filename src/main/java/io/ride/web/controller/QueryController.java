@@ -1,17 +1,14 @@
 package io.ride.web.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import io.ride.web.dao.TemperHumidDao;
 import io.ride.web.dto.DataTableResult;
 import io.ride.web.dto.Result;
 import io.ride.web.entity.TemperHumid;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.HasNoPermissionException;
-import io.ride.web.exception.NotFoundException;
 import io.ride.web.service.QueryService;
 import io.ride.web.util.MyDateFormat;
-import io.ride.web.util.PermissionUnit;
+import io.ride.web.util.PermissionUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +71,7 @@ public class QueryController {
 
         UserInfo currentUser;
         try {
-            currentUser = PermissionUnit.isLogin(session);
+            currentUser = PermissionUtil.isLogin(session);
         } catch (HasNoPermissionException e) {
             e.printStackTrace();
             LOGGER.info("未登录!");

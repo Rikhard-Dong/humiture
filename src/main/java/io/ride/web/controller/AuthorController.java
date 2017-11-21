@@ -86,7 +86,7 @@ public class AuthorController {
 
 
     /*
-    * 节点租用
+    * 节点授权
      */
 
     @PostMapping("/node")
@@ -100,7 +100,7 @@ public class AuthorController {
         return new Result(true, 1, "节点授权成功");
     }
 
-    @PostMapping("/nodeAuthor")
+    @PostMapping("/userAuthor")
     public DataTableResult nodeAuthors(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                        @RequestParam(value = "rows", required = false, defaultValue = "20") Integer rows,
                                        HttpSession session) {

@@ -25,4 +25,6 @@ public interface UserAuthorDao {
 
     List<UserAuthor> list(@Param("unitId") Integer unitId);
 
+    UserAuthor findById(@Param("id") Integer id);
+
 }

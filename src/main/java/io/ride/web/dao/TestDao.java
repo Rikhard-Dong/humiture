@@ -7,5 +7,5 @@ package io.ride.web.dao;
  * Time: 下午2:52
  */
 public interface TestDao {
-    public boolean test(String date);
+    boolean test(String date);
 }

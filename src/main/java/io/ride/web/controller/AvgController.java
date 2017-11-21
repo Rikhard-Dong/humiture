@@ -31,12 +31,28 @@ public class AvgController {
     @Autowired
     private THAvgService thAvgService;
 
+    @GetMapping("/avg/{mark}/{year}/{month}/{day}")
+    public Object listDayAvg(@PathVariable("mark") String mark,
+                             @PathVariable("year") Integer year,
+                             @PathVariable("month") Integer month,
+                             @PathVariable("day") Integer day,
+                             HttpSession session) {
+        try {
+            return thAvgService.listDayAvg(mark, year, month, day, session);
+        } catch (Exception e) {
+            LOGGER.error("list day avg for day error = {}", e.getMessage());
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("msg", e.getMessage());
+            return map;
+        }
+    }
+
 
     @GetMapping("/avg/{mark}/{year}/{month}")
     public Object listDayAvgForMonth(@PathVariable("mark") String mark,
-                                          @PathVariable("year") Integer year,
-                                          @PathVariable("month") Integer month,
-                                          HttpSession session) {
+                                     @PathVariable("year") Integer year,
+                                     @PathVariable("month") Integer month,
+                                     HttpSession session) {
         try {
             return thAvgService.listDayAvgForMonth(mark, year, month, session);
         } catch (Exception e) {
@@ -49,8 +65,8 @@ public class AvgController {
 
     @GetMapping("/avg/{mark}/{year}")
     public Object listMonthAvgForMonth(@PathVariable("mark") String mark,
-                                            @PathVariable("year") Integer year,
-                                            HttpSession session) {
+                                       @PathVariable("year") Integer year,
+                                       HttpSession session) {
         try {
             return thAvgService.listMonthAvgForYear(mark, year, session);
         } catch (Exception e) {
@@ -63,7 +79,7 @@ public class AvgController {
 
     @GetMapping("/avg/{mark}")
     public Object listYearAvg(@PathVariable("mark") String mark,
-                                   HttpSession session) {
+                              HttpSession session) {
         try {
             return thAvgService.listYearAvg(mark, session);
         } catch (Exception e) {

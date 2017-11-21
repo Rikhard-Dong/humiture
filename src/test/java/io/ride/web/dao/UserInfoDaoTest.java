@@ -51,7 +51,8 @@ public class UserInfoDaoTest {
 
     @Test
     public void list() throws Exception {
-        System.out.println(userInfoDao.list());
+        System.out.println(userInfoDao.findByUserId(1));
+//        System.out.println(userInfoDao.list());
     }
 
     @Test

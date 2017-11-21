@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * Created by IDEA
@@ -18,8 +17,8 @@ import java.util.List;
  * Date: 17-11-8
  * Time: 下午9:46
  */
-public class PermissionUnit {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PermissionUnit.class);
+public class PermissionUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PermissionUtil.class);
 
     private static UserInfo TEST_ADMIN = GET_TEST_ADMIN();               // 系统管理员
     private static UserInfo TEST_UNIT_ADMIN = GET_TEST_UNIT_ADMIN();     // 单位管理员

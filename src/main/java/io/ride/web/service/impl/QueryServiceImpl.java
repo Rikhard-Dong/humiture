@@ -10,7 +10,7 @@ import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
 import io.ride.web.service.QueryService;
-import io.ride.web.util.PermissionUnit;
+import io.ride.web.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +39,11 @@ public class QueryServiceImpl implements QueryService {
     public DataTableResult queryThByReportTime(String nodeMark, String startTime, String endTime,
                                                Integer page, Integer rows, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
 
         List<TemperHumid> ths;
         PageInfo<TemperHumid> pageInfo = null;
-        if (PermissionUnit.isAuthorNode(nodeMark, currentUser.getUserType(), currentUser.getUnitId(), currentUser.getUsername())) {
+        if (PermissionUtil.isAuthorNode(nodeMark, currentUser.getUserType(), currentUser.getUnitId(), currentUser.getUsername())) {
             PageHelper.startPage(page, rows);
             ths = thDao.listByNodeMarkWithTime(nodeMark, startTime, endTime);
             LOGGER.info("query th by report time ths i= {}", ths);

@@ -10,13 +10,11 @@ import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
 import io.ride.web.exception.UpdateException;
 import io.ride.web.service.RepairService;
-import io.ride.web.util.ParamDivisionUtil;
-import io.ride.web.util.PermissionUnit;
+import io.ride.web.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -40,8 +38,8 @@ public class RepairServiceImpl implements RepairService {
 
     public void add(RepairDto repairDto, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(user) || PermissionUtil.isUnitAdmin(user)) {
             Node node = nodeDao.findByMark(repairDto.getNodeMark(), user.getUserType(), user.getUnitId());
 
             if (node == null) {
@@ -59,8 +57,8 @@ public class RepairServiceImpl implements RepairService {
 
     public List<RepairDto> list(HttpSession session)
             throws HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isUnitAdmin(user) || PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isUnitAdmin(user) || PermissionUtil.isAdmin(user)) {
             List<Repair> repairs = repairDao.list(user.getUserType(), user.getUnitId());
             List<RepairDto> repairDtos = new ArrayList<RepairDto>();
             for (Repair repair : repairs) {
@@ -77,8 +75,8 @@ public class RepairServiceImpl implements RepairService {
 
     public void update(RepairDto repairDto, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isUnitAdmin(user) || PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isUnitAdmin(user) || PermissionUtil.isAdmin(user)) {
             Repair old = repairDao.findById(repairDto.getRepairId(), user.getUserType(), user.getUnitId());
             if (old == null) {
                 throw new NotFoundException("报修信息不存在, 所以无法修改");
@@ -95,8 +93,8 @@ public class RepairServiceImpl implements RepairService {
 
     public void updateStatus(Integer repairId, Integer status, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(user)) {
             if (repairDao.findById(repairId, user.getUserType(), user.getUnitId()) == null) {
                 throw new NotFoundException("该报修信息不存在, 无法更新");
             }

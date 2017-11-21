@@ -2,7 +2,6 @@ package io.ride.web.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.regexp.internal.RE;
 import io.ride.web.dao.*;
 import io.ride.web.dto.DataTableResult;
 import io.ride.web.dto.RentDto;
@@ -14,10 +13,9 @@ import io.ride.web.exception.NotFoundException;
 import io.ride.web.exception.UpdateException;
 import io.ride.web.service.AuthorService;
 import io.ride.web.util.MyDateFormat;
-import io.ride.web.util.PermissionUnit;
-import org.apache.ibatis.annotations.Update;
-import org.aspectj.weaver.ast.Not;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
+import io.ride.web.util.PermissionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +31,8 @@ import java.util.List;
  */
 @Service("authorService")
 public class AuthorServiceImpl implements AuthorService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthorServiceImpl.class);
+
     @Autowired
     private RentDao rentDao;
 
@@ -58,8 +58,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     public void addRent(RentDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(user)) {
             Getway getway = getwayDao.findByMark(dto.getGetwayMark(), user.getUserType(), user.getUnitId());
             if (getway == null) {
                 throw new NotFoundException("网关不存在");
@@ -98,8 +98,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     public void updateRent(RentDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(user)) {
             Getway getway = getwayDao.findByMark(dto.getGetwayMark(), user.getUserType(), user.getUnitId());
             if (getway == null) {
                 throw new NotFoundException("网关不存在");
@@ -142,8 +142,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     public DataTableResult listGetwayAuthor(Integer page, Integer rows, HttpSession session)
             throws HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(user)) {
             PageHelper.startPage(page, rows);
             List<Rent> rents = rentDao.list();
             PageInfo<Rent> pageInfo = new PageInfo<Rent>(rents);
@@ -163,8 +163,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     public void deleteRent(Integer id, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(userInfo)) {
             if (rentDao.delete(id) == 0) {
                 throw new UpdateException("数据库更新异常");
             }
@@ -177,8 +177,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     public DataTableResult listRentUnitByGetwayMark(String mark, Integer page, Integer rows, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(userInfo)) {
             Getway getway = getwayDao.findByMark(mark, 0, null);
             if (getway != null) {
                 PageHelper.startPage(page, rows);
@@ -207,8 +207,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     public void authorNode(UserAuthorDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isUnitAdmin(currentUser)) {
+        UserInfo currentUser = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isUnitAdmin(currentUser)) {
             UserInfo user = userInfoDao.findByUsername(dto.getUsername(), currentUser.getUserType(), currentUser.getUnitId());
             if (user == null) {
                 throw new NotFoundException("用户不存在");
@@ -230,16 +230,22 @@ public class AuthorServiceImpl implements AuthorService {
 
     public DataTableResult listNodeAuthor(Integer page, Integer rows, HttpSession session)
             throws HasNoPermissionException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isUnitAdmin(currentUser)) {
+        UserInfo currentUser = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isUnitAdmin(currentUser)) {
             PageHelper.startPage(page, rows);
             List<UserAuthor> userAuthors = userAuthorDao.list(currentUser.getUnitId());
             PageInfo<UserAuthor> pageInfo = new PageInfo<UserAuthor>(userAuthors);
             List<UserAuthorDto> userAuthorDtos = new ArrayList<UserAuthorDto>();
+//            LOGGER.info("user authors is {}", pageInfo.getList());
             for (UserAuthor userAuthor : pageInfo.getList()) {
+//                LOGGER.info("user authors is {}", userAuthor);
                 UserInfo user = userInfoDao.findByUserId(userAuthor.getUserId());
+//                LOGGER.info("list node author user {}", user);
                 Node node = nodeDao.findById(userAuthor.getNodeId(), currentUser.getUserType(), currentUser.getUnitId());
-                userAuthorDtos.add(new UserAuthorDto(userAuthor.getUserAuthorId(), user.getUsername(), node.getNodeMark()));
+//                LOGGER.info("list node author node {}", node);
+                UserAuthorDto dto = new UserAuthorDto(userAuthor.getUserAuthorId(), node.getNodeMark(), user.getUsername());
+//                LOGGER.info("list node author dto {}", dto);
+                userAuthorDtos.add(dto);
             }
             return new DataTableResult(pageInfo.getTotal(), userAuthorDtos);
         } else {
@@ -251,8 +257,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     public void deleteAuthorNode(Integer id, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isUnitAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isUnitAdmin(userInfo)) {
             if (userAuthorDao.deleteById(id) == 0) {
                 throw new UpdateException("数据库更新异常");
             }

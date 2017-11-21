@@ -6,9 +6,7 @@ import io.ride.web.dto.UserAuthorDto;
 import io.ride.web.entity.*;
 import io.ride.web.exception.*;
 import io.ride.web.service.GetwayNodeService;
-import io.ride.web.util.ParamDivisionUtil;
-import io.ride.web.util.PermissionUnit;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
+import io.ride.web.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +53,8 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     @Transactional
     public void updateGetway(Getway getway, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要系统管理员权限!");
         }
         if (!getwayDao.isExists(getway.getGetwayMark())) {
@@ -84,9 +82,9 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     @Transactional
     public void updateNode(Node node, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         Integer unitId = user.getUnitId();
-        if (!PermissionUnit.isAdmin(user)) {
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要系统管理员权限!");
         }
         if (!nodeDao.isExists(node.getNodeMark())) {
@@ -113,7 +111,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     }
 
     public List<Getway> listGetwayWithSubnode(HttpSession session) {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         Integer unitId = user.getUnit() == null ? null : user.getUnitId();
 
         List<Getway> getways = getwayDao.list(user.getUserType(), unitId);
@@ -139,7 +137,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     }
 
     public List<GetwayDto> listGetwaySimple(HttpSession session) throws HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         List<Getway> getways = getwayDao.list(user.getUserType(), user.getUnitId());
         List<GetwayDto> getwayDtos = new ArrayList<GetwayDto>();
         for (Getway getway : getways) {
@@ -157,13 +155,13 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
 
 
     public List<Node> listNodeWithGetway(String mark, HttpSession session) throws HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
 
         return getwayDao.listSubNodeByNodeMark(mark);
     }
 
     public Getway findGetwayByMark(String mark, HttpSession session) throws NotFoundException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         Integer unitId = user.getUnitId();
 
         LOGGER.info("mark = {}", mark);
@@ -178,8 +176,8 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     }
 
     public Node findNodeByMark(String mark, HttpSession session) throws NotFoundException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(user) || PermissionUtil.isUnitAdmin(user)) {
             Node node = nodeDao.findByMark(mark, user.getUserType(), user.getUnitId());
             if (node == null) {
                 throw new NotFoundException("节点不存在");
@@ -193,8 +191,8 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
 
     public Node findNodeById(Integer nodeId, HttpSession session)
             throws NotFoundException, HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (PermissionUtil.isAdmin(user) || PermissionUtil.isUnitAdmin(user)) {
             Node node = nodeDao.findById(nodeId, user.getUserType(), user.getUnitId());
             if (node == null) {
                 throw new NotFoundException("节点不存在");
@@ -213,7 +211,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (user == null) {
             throw new HasNoPermissionException("登录后操作");
         }
-        if (!PermissionUnit.isAdmin(user)) {
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要系统管理员权限!");
         }
         if (!getwayDao.isExists(mark)) {
@@ -231,7 +229,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (user == null) {
             throw new HasNoPermissionException("登录后操作");
         }
-        if (!PermissionUnit.isAdmin(user)) {
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要系统管理员权限!");
         }
         if (!nodeDao.isExists(mark)) {
@@ -252,10 +250,10 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
 
     @Transactional
     public void addGetway(Getway getway, HttpSession session)
-            throws IsExistsException, HasNoPermissionException, IsExistsException, UpdateException {
-        UserInfo user = PermissionUnit.isLogin(session);
+            throws HasNoPermissionException, IsExistsException, UpdateException {
+        UserInfo user = PermissionUtil.isLogin(session);
         Integer unitId = user.getUnitId();
-        if (!PermissionUnit.isAdmin(user)) {
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要超级管理员权限!");
         }
         if (getwayDao.isExists(getway.getGetwayMark())) {
@@ -296,7 +294,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (user == null) {
             throw new HasNoPermissionException("登录后操作");
         }
-        if (!PermissionUnit.isAdmin(user)) {
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要超级管理员权限!");
         }
         if (nodeDao.isExists(node.getNodeMark())) {
@@ -310,11 +308,11 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
 
     public List<Map<String, Object>> showNodeTree(HttpSession session) throws HasNoPermissionException {
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         List<Getway> getways = null;
-        if (PermissionUnit.isAdmin(user)) {
+        if (PermissionUtil.isAdmin(user)) {
             getways = listGetwayWithSubnode(session);
-        } else if (PermissionUnit.isUnitAdmin(user)) {
+        } else if (PermissionUtil.isUnitAdmin(user)) {
             // TODO 单位管理员返回该单位所管理的网关
         }
         if (getways != null) {
@@ -342,8 +340,8 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     @Transactional
     public void nodeAuthorization(Integer userId, Integer nodeId, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isUnitAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isUnitAdmin(user)) {
             throw new HasNoPermissionException("没有权限操作!");
         }
         UserInfo subUser = userInfoDao.findFromUnitWithUserId(userId, user.getUnitId());
@@ -377,8 +375,8 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
     @Transactional
     public void nodeReleaseAuthorization(Integer userId, Integer nodeId, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isUnitAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isUnitAdmin(user)) {
             throw new HasNoPermissionException("没有权限操作!");
         }
         UserInfo subUser = userInfoDao.findFromUnitWithUserId(userId, user.getUnitId());
@@ -411,8 +409,8 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
 
     public void authorNode(UserAuthorDto dto, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isUnitAdmin(currentUser)) {
+        UserInfo currentUser = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isUnitAdmin(currentUser)) {
             UserInfo user = userInfoDao.findByUsername(dto.getUsername(),
                     currentUser.getUserType(), currentUser.getUnitId());
             if (user == null) {

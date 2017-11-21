@@ -4,6 +4,7 @@ import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
 import io.ride.web.exception.UpdateException;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -30,6 +31,9 @@ public interface BatchDeleteService {
             throws NotFoundException, HasNoPermissionException, UpdateException;
 
     void batchDeleteRent(String arg, HttpSession session)
+            throws NotFoundException, HasNoPermissionException, UpdateException;
+
+    void batchDeleteUserAuthor(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException;
 
 }

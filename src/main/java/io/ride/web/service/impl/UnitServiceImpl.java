@@ -8,8 +8,7 @@ import io.ride.web.exception.IsExistsException;
 import io.ride.web.exception.NotFoundException;
 import io.ride.web.exception.UpdateException;
 import io.ride.web.service.UnitService;
-import io.ride.web.util.PermissionUnit;
-import org.aspectj.weaver.ast.Not;
+import io.ride.web.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +32,8 @@ public class UnitServiceImpl implements UnitService {
 
     public List<Unit> list(HttpSession session)
             throws HasNoPermissionException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(userInfo)) {
             throw new HasNoPermissionException("查询失败, 需要系统管理员权限");
         }
         List<Unit> units = unitDao.list();
@@ -45,8 +44,8 @@ public class UnitServiceImpl implements UnitService {
     }
 
     public List<Unit> listSimple(HttpSession session) throws HasNoPermissionException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(userInfo)) {
             throw new HasNoPermissionException("查询失败, 需要系统管理员权限");
         }
         return unitDao.list();
@@ -54,8 +53,8 @@ public class UnitServiceImpl implements UnitService {
 
     public void addUnit(Unit unit, HttpSession session)
             throws HasNoPermissionException, IsExistsException, UpdateException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(userInfo)) {
             throw new HasNoPermissionException("查询失败, 需要系统管理员权限");
         }
         if (unitDao.findByTitle(unit.getTitle()) != null) {
@@ -70,8 +69,8 @@ public class UnitServiceImpl implements UnitService {
 
     public void updateUnit(Unit unit, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(userInfo)) {
             throw new HasNoPermissionException("查询失败, 需要系统管理员权限");
         }
         if (unitDao.findByTitle(unit.getTitle()) == null) {
@@ -85,8 +84,8 @@ public class UnitServiceImpl implements UnitService {
 
     public void deleteUnit(Integer id, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(userInfo)) {
             throw new HasNoPermissionException("查询失败, 需要系统管理员权限");
         }
         if (!unitDao.isExists(id)) {
@@ -100,8 +99,8 @@ public class UnitServiceImpl implements UnitService {
 
     public void deleteUnit(String title, HttpSession session)
             throws HasNoPermissionException, NotFoundException, UpdateException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(userInfo)) {
             throw new HasNoPermissionException("查询失败, 需要系统管理员权限");
         }
         if (unitDao.findByTitle(title) == null) {
@@ -115,8 +114,8 @@ public class UnitServiceImpl implements UnitService {
 
     public Unit findUnit(Integer id, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(userInfo)) {
             throw new HasNoPermissionException("查询失败, 需要系统管理员权限");
         }
         Unit unit = unitDao.findById(id);
@@ -132,8 +131,8 @@ public class UnitServiceImpl implements UnitService {
 
     public Unit findUnit(String title, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo userInfo = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(userInfo)) {
+        UserInfo userInfo = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(userInfo)) {
             throw new HasNoPermissionException("查询失败, 需要系统管理员权限");
         }
         Unit unit = unitDao.findByTitle(title);

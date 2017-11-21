@@ -16,6 +16,10 @@ import java.util.Map;
  * Time: 下午7:28
  */
 public interface THAvgService {
+
+    List<THAvg> listDayAvg(String mark, Integer year, Integer month, Integer day, HttpSession session)
+            throws HasNoPermissionException, NotFoundException;
+
     List<THAvg> listDayAvgForMonth(String mark, Integer year, Integer month, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
 

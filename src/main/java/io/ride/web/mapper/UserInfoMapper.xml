@@ -81,7 +81,7 @@
     <select id="findByUserId" resultType="io.ride.web.entity.UserInfo">
         SELECT *
         FROM UserInfo
-        WHERE UnitId = #{id};
+        WHERE UserId = #{id};
     </select>
 
     <select id="findByUsername" resultType="io.ride.web.entity.UserInfo">

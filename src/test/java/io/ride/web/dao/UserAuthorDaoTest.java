@@ -18,9 +18,14 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = "classpath:spring/spring-mybatis.xml")
 public class UserAuthorDaoTest {
+
+
     @Autowired
     private UserAuthorDao userAuthorDao;
-
+    @Test
+    public void findById() throws Exception {
+        System.out.println(userAuthorDao.findById(39));
+    }
     @Test
     public void add() throws Exception {
     }

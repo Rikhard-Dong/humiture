@@ -7,8 +7,7 @@ import io.ride.web.exception.NotFoundException;
 import io.ride.web.exception.UpdateException;
 import io.ride.web.service.BatchDeleteService;
 import io.ride.web.util.ParamDivisionUtil;
-import io.ride.web.util.PermissionUnit;
-import org.apache.ibatis.annotations.Param;
+import io.ride.web.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +46,15 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Autowired
     private RentDao rentDao;
 
+    @Autowired
+    private UserAuthorDao userAuthorDao;
+
     @Transactional
     public void batchDeleteUser(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         int result;
-        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser) || PermissionUtil.isUnitAdmin(currentUser)) {
             String[] usernames = ParamDivisionUtil.getParams(arg);
 
             for (String username : usernames) {
@@ -81,9 +83,9 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Transactional
     public void batchDeleteUnit(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         int result;
-        if (PermissionUnit.isAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser)) {
             String[] titles = ParamDivisionUtil.getParams(arg);
 
             for (String title : titles) {
@@ -103,9 +105,9 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Transactional
     public void batchDeleteGetway(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         int result;
-        if (PermissionUnit.isAdmin(user)) {
+        if (PermissionUtil.isAdmin(user)) {
             String[] marks = ParamDivisionUtil.getParams(arg);
             for (String mark : marks) {
                 if (getwayDao.findByMark(mark, user.getUserType(), user.getUnitId()) == null) {
@@ -124,9 +126,9 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Transactional
     public void batchDeleteNode(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         int result;
-        if (PermissionUnit.isAdmin(user)) {
+        if (PermissionUtil.isAdmin(user)) {
             String[] marks = ParamDivisionUtil.getParams(arg);
             for (String mark : marks) {
                 if (nodeDao.findByMark(mark, user.getUserType(), user.getUnitId()) == null) {
@@ -145,9 +147,9 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Transactional
     public void batchDeleteRepair(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         int result;
-        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser) || PermissionUtil.isUnitAdmin(currentUser)) {
             String[] repairIds = ParamDivisionUtil.getParams(arg);
             for (String repairId : repairIds) {
                 Integer id = Integer.valueOf(repairId);
@@ -167,9 +169,9 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
     @Transactional
     public void batchDeleteRent(String arg, HttpSession session)
             throws NotFoundException, HasNoPermissionException, UpdateException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         int result;
-        if (PermissionUnit.isAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser)) {
             String[] ids = ParamDivisionUtil.getParams(arg);
             for (String id : ids) {
                 Integer rentId = Integer.valueOf(id);
@@ -177,6 +179,29 @@ public class BatchDeleteServiceImpl implements BatchDeleteService {
                     throw new NotFoundException("租用信息未发现");
                 }
                 result = rentDao.delete(rentId);
+                if (result == 0) {
+                    throw new UpdateException("数据库信息更新异常");
+                }
+            }
+        } else {
+            throw new HasNoPermissionException("没有相应的权限");
+        }
+    }
+
+    @Transactional
+    public void batchDeleteUserAuthor(String arg, HttpSession session)
+            throws NotFoundException, HasNoPermissionException, UpdateException {
+        UserInfo currentUser = PermissionUtil.isLogin(session);
+        int result;
+        if (PermissionUtil.isUnitAdmin(currentUser)) {
+            String[] ids = ParamDivisionUtil.getParams(arg);
+            for (String id : ids) {
+                Integer userAuthorId = Integer.valueOf(id);
+                LOGGER.info("batch delete user author user ----> user author id = {}", userAuthorId);
+                if (userAuthorDao.findById(userAuthorId) == null) {
+                    throw new NotFoundException("租用信息未发现");
+                }
+                result = userAuthorDao.deleteById(userAuthorId);
                 if (result == 0) {
                     throw new UpdateException("数据库信息更新异常");
                 }

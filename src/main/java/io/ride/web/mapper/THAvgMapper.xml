@@ -33,4 +33,15 @@
         GROUP BY YEAR(ReportTime)
     </select>
 
+    <select id="listDayAvg" resultType="io.ride.web.entity.THAvg">
+        SELECT
+            DATENAME(HOUR, ReportTime) + '时' + DATENAME(MINUTE, ReportTime) + '分' + DATENAME(SECOND, ReportTime) +
+            '秒'      AS 'ReportTime',
+            Temper   AS 'TemperAvg',
+            Humidity AS 'HumidityAvg'
+        FROM TemperHumid
+        WHERE NodeMark = #{mark} AND MONTH(ReportTime) = #{month} AND YEAR(ReportTime) = #{year} AND
+              DAY(ReportTime) = #{day}
+    </select>
+
 </mapper>

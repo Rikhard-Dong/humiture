@@ -11,7 +11,7 @@ import io.ride.web.entity.Unit;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.service.CheckForService;
-import io.ride.web.util.PermissionUnit;
+import io.ride.web.util.PermissionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +40,9 @@ public class CheckForServiceImpl implements CheckForService {
     private GetwayDao getwayDao;
 
     public CheckForDto checkForNode(String nodeMark, HttpSession session) {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         List<Node> nodes;
-        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+        if (PermissionUtil.isAdmin(user) || PermissionUtil.isUnitAdmin(user)) {
             nodes = nodeDao.search(nodeMark, user.getUserType(), user.getUnitId());
             if (nodes == null || nodes.size() == 0) {
                 return CheckForDto.FALSE_RESULT;
@@ -65,9 +65,9 @@ public class CheckForServiceImpl implements CheckForService {
     }
 
     public CheckForDto checkForGetway(String getwayMark, HttpSession session) {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         List<Getway> getways;
-        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+        if (PermissionUtil.isAdmin(user) || PermissionUtil.isUnitAdmin(user)) {
             getways = getwayDao.search(getwayMark, user.getUserType(), user.getUnitId());
             if (getways == null || getways.size() == 0) {
                 return CheckForDto.FALSE_RESULT;
@@ -90,9 +90,9 @@ public class CheckForServiceImpl implements CheckForService {
     }
 
     public CheckForDto checkForUnit(String title, HttpSession session) {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         List<Unit> units;
-        if (PermissionUnit.isAdmin(user)) {
+        if (PermissionUtil.isAdmin(user)) {
             units = unitDao.search(title);
             if (units == null || units.size() == 0) {
                 return CheckForDto.FALSE_RESULT;
@@ -115,9 +115,9 @@ public class CheckForServiceImpl implements CheckForService {
     }
 
     public CheckForDto checkForUser(String username, HttpSession session) throws HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         List<UserInfo> checkUsers = null;
-        if (PermissionUnit.isAdmin(user)) {
+        if (PermissionUtil.isAdmin(user)) {
             checkUsers = userInfoDao.search(username, user.getUserType(), user.getUnitId());
             if (checkUsers == null || checkUsers.size() == 0) {
                 return CheckForDto.FALSE_RESULT;

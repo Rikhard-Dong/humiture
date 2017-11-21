@@ -6,7 +6,7 @@ import io.ride.web.entity.*;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
 import io.ride.web.service.SearchService;
-import io.ride.web.util.PermissionUnit;
+import io.ride.web.util.PermissionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +46,9 @@ public class SearchServiceImpl implements SearchService {
 
     public List<UserInfo> searchUser(String arg, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         List<UserInfo> users;
-        if (PermissionUnit.isAdmin(currentUser) || PermissionUnit.isUnitAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser) || PermissionUtil.isUnitAdmin(currentUser)) {
             users = userInfoDao.search(arg, currentUser.getUserType(), currentUser.getUnitId());
         } else {
             throw new HasNoPermissionException("当前用户没有权限");
@@ -59,9 +59,9 @@ public class SearchServiceImpl implements SearchService {
 
     public List<Unit> searchUnit(String arg, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         List<Unit> units;
-        if (PermissionUnit.isAdmin(currentUser)) {
+        if (PermissionUtil.isAdmin(currentUser)) {
             units = unitDao.search(arg);
         } else {
             throw new HasNoPermissionException("当前用户没有权限");
@@ -72,14 +72,14 @@ public class SearchServiceImpl implements SearchService {
 
     public List<GetwayDto> searchGetway(String arg, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         List<GetwayDto> getwayDtos = new ArrayList<GetwayDto>();
-        if (PermissionUnit.isAdmin(user) || PermissionUnit.isUnitAdmin(user)) {
+        if (PermissionUtil.isAdmin(user) || PermissionUtil.isUnitAdmin(user)) {
             List<Getway> getways = getwayDao.search(arg, user.getUserType(), user.getUnitId());
             for (Getway getway : getways) {
-                if (PermissionUnit.isAdmin(user)) {
+                if (PermissionUtil.isAdmin(user)) {
                     getwayDtos.add(new GetwayDto(getway));
-                } else if (PermissionUnit.isUnitAdmin(user)) {
+                } else if (PermissionUtil.isUnitAdmin(user)) {
                     Rent rent = rentDao.findByGetwayIdAndUnitTileAndCurrentTime(getway.getGetwayId(), user.getUnit().getTitle());
                     //LOGGER.info("----------------------------------------get way-------------------------------\n{}\n\n" +
                     //        "----------------------------------------------------------------------------------", getway);
@@ -99,7 +99,7 @@ public class SearchServiceImpl implements SearchService {
 
     public List<Repair> searchRepair(String arg, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo user = PermissionUnit.isLogin(session);
+        UserInfo user = PermissionUtil.isLogin(session);
         return repairDao.search(arg, user.getUserType(), user.getUnitId());
     }
 }

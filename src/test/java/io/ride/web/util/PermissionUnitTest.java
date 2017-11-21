@@ -3,15 +3,11 @@ package io.ride.web.util;
 import io.ride.web.dao.TemperHumidDao;
 import io.ride.web.dao.UserAuthorDao;
 import io.ride.web.dao.UserInfoDao;
-import io.ride.web.entity.UserAuthor;
-import io.ride.web.entity.UserInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by IDEA
@@ -40,12 +36,12 @@ public class PermissionUnitTest {
     public void isAuthorNode() throws Exception {
         System.out.println(userInfoDao.findByUsername("testUser", 2, 8));
         System.out.println(userAuthorDao.isExists(12, 29));
-        System.out.println(PermissionUnit.isAuthorNode("SN001-000014-6", 3, 8, "testUser"));
+        System.out.println(PermissionUtil.isAuthorNode("SN001-000014-6", 3, 8, "testUser"));
     }
 
     @Test
     public void isRepairGetway() throws Exception {
-        System.out.println(PermissionUnit.isRepairGetway("GW001-00007-9", 1, 7));
+        System.out.println(PermissionUtil.isRepairGetway("GW001-00007-9", 1, 7));
 
 
     }

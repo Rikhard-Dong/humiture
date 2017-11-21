@@ -14,16 +14,20 @@ import java.util.Date;
  * Time: 下午5:01
  */
 public class GetwayDto {
+    private Integer getwayId;    // 网关ID
     private String getwayMark;  // 网关号
     private Integer status;     // 网关状态
     private String statusDesc;  // 状态描述
+    private String snr;
     private String endTime;     // 结束时间
 
     public GetwayDto() {
     }
 
     public GetwayDto(Getway getway) {
+        this.getwayId = getway.getGetwayId();
         this.getwayMark = getway.getGetwayMark();
+        this.snr = getway.getNodeNum();
         this.status = getway.getStatus();
         if (this.status != null) {
             if (this.status == 0) {
@@ -36,8 +40,10 @@ public class GetwayDto {
     }
 
     public GetwayDto(Getway getway, Date endTime) {
+        this.getwayId = getway.getGetwayId();
         this.getwayMark = getway.getGetwayMark();
         this.status = getway.getStatus();
+        this.snr = getway.getNodeNum();
         if (this.status != null) {
             if (this.status == 0) {
                 this.statusDesc = "不在线";
@@ -78,6 +84,22 @@ public class GetwayDto {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getGetwayId() {
+        return getwayId;
+    }
+
+    public void setGetwayId(Integer getwayId) {
+        this.getwayId = getwayId;
+    }
+
+    public String getSnr() {
+        return snr;
+    }
+
+    public void setSnr(String snr) {
+        this.snr = snr;
     }
 
     @Override

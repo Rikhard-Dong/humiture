@@ -12,6 +12,11 @@ import java.util.List;
  */
 public interface THAvgDao {
 
+    List<THAvg> listDayAvg(@Param("mark") String mark,
+                           @Param("year") Integer year,
+                           @Param("month") Integer month,
+                           @Param("day") Integer day);
+
     List<THAvg> listDayAvgForMonth(@Param("mark") String mark,
                                    @Param("year") Integer year,
                                    @Param("month") Integer month);

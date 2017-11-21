@@ -12,7 +12,7 @@ import io.ride.web.exception.NotFoundException;
 import io.ride.web.exception.UpdateException;
 import io.ride.web.service.RentService;
 import io.ride.web.util.MyDateFormat;
-import io.ride.web.util.PermissionUnit;
+import io.ride.web.util.PermissionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,8 +45,8 @@ public class RentServiceImpl implements RentService {
 
     public void addRent(Rent rent, HttpSession session)
             throws NotFoundException, HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("当前用户没有该权限");
         }
         Unit unit = unitDao.findById(rent.getGetwayId());
@@ -72,8 +72,8 @@ public class RentServiceImpl implements RentService {
     @Transactional
     public void updateRent(Rent rent, HttpSession session)
             throws NotFoundException, HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("当前用户没有该权限");
         }
         Unit unit = unitDao.findById(rent.getGetwayId());
@@ -93,8 +93,8 @@ public class RentServiceImpl implements RentService {
 
     public void deleteRent(int rentId, HttpSession session)
             throws NotFoundException, HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("当前用户没有该权限");
         }
         int result = rentDao.delete(rentId);
@@ -105,15 +105,15 @@ public class RentServiceImpl implements RentService {
 
     public List<Map<String, Object>> list(HttpSession session)
             throws HasNoPermissionException {
-        UserInfo user = PermissionUnit.isLogin(session);
-        if (!PermissionUnit.isAdmin(user)) {
+        UserInfo user = PermissionUtil.isLogin(session);
+        if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("当前用户没有该权限");
         }
 
         List<Map<String, Object>> result = null;
-        if (PermissionUnit.isAdmin(user)) {
+        if (PermissionUtil.isAdmin(user)) {
 
-        } else if (PermissionUnit.isUnitAdmin(user)) {
+        } else if (PermissionUtil.isUnitAdmin(user)) {
 
         }
 

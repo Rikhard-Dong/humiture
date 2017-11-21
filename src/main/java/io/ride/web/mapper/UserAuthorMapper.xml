@@ -28,4 +28,9 @@
                          FROM UserInfo
                          WHERE UnitId = #{unitId})
     </select>
+    <select id="findById" resultType="io.ride.web.entity.UserAuthor">
+        SELECT *
+        FROM UserAuthor
+        WHERE UserAuthorId = #{id}
+    </select>
 </mapper>

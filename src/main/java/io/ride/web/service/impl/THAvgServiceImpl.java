@@ -10,7 +10,7 @@ import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
 import io.ride.web.service.THAvgService;
-import io.ride.web.util.PermissionUnit;
+import io.ride.web.util.PermissionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,30 +38,47 @@ public class THAvgServiceImpl implements THAvgService {
     @Autowired
     private GetwayDao getwayDao;
 
+    public List<THAvg> listDayAvg(String mark, Integer year, Integer month, Integer day, HttpSession session) throws HasNoPermissionException, NotFoundException {
+        PermissionUtil.isLogin(session);
+        List<THAvg> ths = thAvgDao.listDayAvg(mark, year, month, day);
+        if (ths != null && ths.size() != 0) {
+            THAvg temp = ths.get(0);
+            for (int i = 1; i < ths.size(); i++) {
+                THAvg temp2 = ths.get(i);
+                if (temp.getHumidityAvg().equals(temp2.getHumidityAvg()) && temp.getTemperAvg().equals(temp2.getTemperAvg())) {
+                    ths.remove(temp2);
+                } else {
+                    temp = temp2;
+                }
+            }
+        }
+        return ths;
+    }
+
     public List<THAvg> listDayAvgForMonth(String mark, Integer year, Integer month, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        PermissionUnit.isLogin(session);
+        PermissionUtil.isLogin(session);
 
         return thAvgDao.listDayAvgForMonth(mark, year, month);
     }
 
     public List<THAvg> listMonthAvgForYear(String mark, Integer year, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        PermissionUnit.isLogin(session);
+        PermissionUtil.isLogin(session);
 
         return thAvgDao.listMonthAvgForYear(mark, year);
     }
 
     public List<THAvg> listYearAvg(String mark, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        PermissionUnit.isLogin(session);
+        PermissionUtil.isLogin(session);
 
         return thAvgDao.listYearAvg(mark);
     }
 
     public Map<String, Object> nodeInfo(String mark, HttpSession session)
             throws HasNoPermissionException, NotFoundException {
-        UserInfo currentUser = PermissionUnit.isLogin(session);
+        UserInfo currentUser = PermissionUtil.isLogin(session);
         Node node = nodeDao.findByMark(mark, currentUser.getUserType(), currentUser.getUnitId());
         if (node == null) {
             throw new NotFoundException("节点未发现");
