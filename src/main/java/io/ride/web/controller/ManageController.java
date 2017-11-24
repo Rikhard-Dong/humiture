@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -88,10 +90,13 @@ public class ManageController {
     }
 
     @PostMapping("/getway")
-    public Result addGetway(Getway getway, HttpSession session) {
+    public Result addGetway(Getway getway, HttpSession session, HttpServletResponse response) {
+        response.setContentType("text/html");
         try {
+            LOGGER.info("getway -----> {}", getway);
             getwayNodeService.addGetway(getway, session);
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.error("添加网关失败   -->" + e.getMessage());
             return new Result(false, -1, e.getMessage());
         }
@@ -104,6 +109,7 @@ public class ManageController {
         try {
             getwayNodeService.addNode(node, session);
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.error(e.getMessage());
             return new Result(false, -1, e.getMessage());
         }

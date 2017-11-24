@@ -141,4 +141,9 @@ public class UnitServiceImpl implements UnitService {
         }
         return unit;
     }
+
+    public List<String> listTitles(HttpSession session) throws HasNoPermissionException {
+        PermissionUtil.isLogin(session);
+        return unitDao.listTitles();
+    }
 }

@@ -45,6 +45,7 @@ public class NodeDaoTest {
 
     @Test
     public void findByIdTest() {
+        System.out.println(nodeDao.findByMark("GW001-00007-9", 0, null));
     }
 
     @Test

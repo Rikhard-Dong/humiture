@@ -9,8 +9,11 @@
         <module name="humiture" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="humiture" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="humiture" target="1.8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-J-Xss1024k" />
   </component>
 </project>

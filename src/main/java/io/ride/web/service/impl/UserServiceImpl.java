@@ -233,4 +233,10 @@ public class UserServiceImpl implements UserService {
         }
         return users;
     }
+
+    public List<String> listUsernames(HttpSession session) throws HasNoPermissionException {
+        UserInfo currentUser = PermissionUtil.isLogin(session);
+
+        return userInfoDao.listUsernames(currentUser.getUnitId());
+    }
 }

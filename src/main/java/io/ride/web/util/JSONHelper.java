@@ -2,6 +2,7 @@ package io.ride.web.util;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +89,11 @@ public class JSONHelper {
             reader.close();
             inputStream = null;
             httpURLConn.disconnect();
-            jsonObject = new JSONArray(buffer.toString());
+            if (buffer.toString().startsWith("[")) {
+                jsonObject = new JSONArray(buffer.toString());
+            } else {
+                jsonObject = new JSONArray("[" + buffer.toString() + "]");
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -104,7 +109,21 @@ public class JSONHelper {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("getwayId", 4);
         try {
-            System.out.println(getJSON(params, NODE_INFO_URL));
+            String result = getJSON(params, NODE_INFO_URL);
+            System.out.println("------------------------------------------------------------");
+            System.out.println(result);
+            System.out.println("------------------------------------------------------------");
+            JSONArray json = new JSONArray(result);
+            JSONObject[] objects = new JSONObject[json.length()];
+            for (int i = 0; i < json.length(); i++) {
+//                objects[i] = new JSONObject(json.get(i).toString());
+                objects[i] = json.optJSONObject(i);
+                System.out.println("------------------------------------------------------------");
+                System.out.println(objects[i]);
+                System.out.println(objects[i].get("nodenum"));
+                System.out.println("------------------------------------------------------------");
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

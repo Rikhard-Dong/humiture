@@ -273,7 +273,9 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         node.setNodeMark(getway.getGetwayMark());
         node.setGetwayId(getway.getGetwayId());
         node.setType(0);
-        node.setSpareNode(Integer.valueOf(getway.getSpareNode()));
+        if (getway.getSpareNode() != null) {
+            node.setSpareNode(Integer.valueOf(getway.getSpareNode()));
+        }
         node.setNodeNum(getway.getNodeNum());
         node.setStatus(getway.getStatus());
         node.setMemo(getway.getMemo());
@@ -310,17 +312,16 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
         UserInfo user = PermissionUtil.isLogin(session);
         List<Getway> getways = null;
-        if (PermissionUtil.isAdmin(user)) {
-            getways = listGetwayWithSubnode(session);
-        } else if (PermissionUtil.isUnitAdmin(user)) {
-            // TODO 单位管理员返回该单位所管理的网关
-        }
+        getways = listGetwayWithSubnode(session);
+
         if (getways != null) {
             for (Getway getway : getways) {
                 String getwayId = getway.getGetwayMark();
                 List<String> subNodeIds = new ArrayList<String>();
                 for (Node node : getway.getNodes()) {
+//                    if (node.getType() == 1) {
                     subNodeIds.add(node.getNodeMark());
+//                    }
                 }
                 Map<String, Object> temp = new HashMap<String, Object>();
                 temp.put("parentId", getwayId);

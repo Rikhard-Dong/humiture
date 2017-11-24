@@ -56,4 +56,5 @@ public interface UserInfoDao {
                           @Param("userType") Integer userType,
                           @Param("unitId") Integer unitId);
 
+    List<String> listUsernames(@Param("id") Integer unitId);
 }

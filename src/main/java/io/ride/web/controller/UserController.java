@@ -2,19 +2,24 @@ package io.ride.web.controller;
 
 import io.ride.web.dto.CurrentUserDto;
 import io.ride.web.dto.Result;
-import io.ride.web.entity.Unit;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.UsernameOrPasswordException;
 import io.ride.web.service.UnitService;
 import io.ride.web.service.UserService;
-import org.apache.ibatis.annotations.ResultType;
+import io.ride.web.util.RandomValidateCodeUtil;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.GET;
 
 /**
  * Created by IDEA
@@ -34,6 +39,28 @@ public class UserController {
 
     @Autowired
     private UnitService unitService;
+
+    @GetMapping("/code")
+    public void getValidateCode(HttpServletRequest request, HttpServletResponse response) {
+        LOGGER.info("code  is  ------------> {}");
+        RandomValidateCodeUtil randCode = new RandomValidateCodeUtil();
+        randCode.getRandcode(request, response);
+//        HttpSession session = request.getSession();
+//        Integer code = (Integer) session.getAttribute(RandomValidateCodeUtil.CODE);
+//        LOGGER.info("code  is  ------------> {}", code);
+    }
+
+
+    @GetMapping("/validate")
+    public Result validateCode(@RequestParam("code") String validateCode, HttpSession session) {
+        String code = (String) session.getAttribute(RandomValidateCodeUtil.CODE);
+        LOGGER.info("code  is  ------------> {}", code);
+        if (validateCode.equals(code)) {
+            return new Result(true, 1, "验证码正确");
+        } else {
+            return new Result(false, -1, "验证码错误");
+        }
+    }
 
     @PostMapping("/login")
     public Result login(@RequestParam("username") String username,

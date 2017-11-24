@@ -105,4 +105,8 @@
                                             WHERE GetwayMark = #{mark})
                                AND GETDATE() BETWEEN StartTime AND EndTime)
     </select>
+    <select id="listTitles" resultType="java.lang.String">
+        SELECT TITLE
+        FROM Unit;
+    </select>
 </mapper>

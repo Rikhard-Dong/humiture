@@ -32,7 +32,7 @@ public interface UserService {
      *
      * @param user    添加用户
      * @param session session
-     * @throws IsExistsException    该用户已存在异常
+     * @throws IsExistsException        该用户已存在异常
      * @throws HasNoPermissionException 权限异常
      */
     void addUser(UserInfo user, HttpSession session)
@@ -96,4 +96,6 @@ public interface UserService {
     List<UserInfo> listUser(HttpSession session)
             throws HasNoPermissionException;
 
+    List<String> listUsernames(HttpSession session)
+            throws HasNoPermissionException;
 }

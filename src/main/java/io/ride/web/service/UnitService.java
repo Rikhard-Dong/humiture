@@ -104,4 +104,6 @@ public interface UnitService {
      */
     Unit findUnit(String title, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
+
+    List<String> listTitles(HttpSession session) throws HasNoPermissionException;
 }

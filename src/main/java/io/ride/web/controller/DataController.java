@@ -2,7 +2,6 @@ package io.ride.web.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.regexp.internal.RE;
 import io.ride.web.dto.DataTableResult;
 import io.ride.web.dto.GetwayDto;
 import io.ride.web.dto.RepairDto;
@@ -11,25 +10,14 @@ import io.ride.web.dto.Result;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.exception.NotFoundException;
 import io.ride.web.service.*;
-import io.ride.web.util.MyDateFormat;
-import org.apache.ibatis.annotations.Param;
-import org.apache.poi.hssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by IDEA
@@ -108,6 +96,7 @@ public class DataController {
     /*******************************************************************
      **************    网关节点数据显示   *********************************
      *******************************************************************/
+
     /**
      * 显示网关信息包括子节点信息
      *
@@ -263,7 +252,7 @@ public class DataController {
     }
 
     @GetMapping(value = "/node/tree")
-    public Result getNodeTree(HttpSession session) {
+    public Object getNodeTree(HttpSession session) {
         List<Map<String, Object>> treeInfo;
         try {
             treeInfo = getwayNodeService.showNodeTree(session);
@@ -272,36 +261,8 @@ public class DataController {
             return new Result(false, -1, e.getMessage());
         }
 
-        return new Result(true, 1, "success").add("tree", treeInfo);
+        return treeInfo;
     }
-
-    /**
-     * 返回指定节点
-     *
-     * @return
-     */
-    @PostMapping("/{nodeId}/tempers")
-    public Result tempersByNode(@PathVariable(value = "nodeId") int nodeId,
-                                @RequestParam(value = "startTime") String startTime,
-                                @RequestParam(value = "endTime") String endTime) {
-        // TODO 返回指定节点, 时间范围内的温度信息
-        LOGGER.info("nodeId={}, startTime={}, endTime={}", nodeId, startTime, endTime);
-        this.startTime = startTime;
-        this.endTime = endTime;
-        PageInfo<UserInfo> pageInfo;
-
-        try {
-        } catch (NotFoundException e) {
-            LOGGER.error("e={}", e.getMessage());
-            return new Result(false, -1, "节点不存在");
-        }
-        if (tempers == null) {
-            return new Result(false, -1, "未查询到相应的信息!");
-        }
-        return new Result(true, 1, "查询指定节点指定时间范围内温度信息成功!").add("tempers", tempers);
-    }
-
-
 
     /*******************************************************************
      *******************  单位数据显示   *********************************
@@ -359,6 +320,15 @@ public class DataController {
         return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());
     }
 
+    @GetMapping("/unitTitles")
+    public Object getUnitTiles(HttpSession session) {
+        try {
+            return unitService.listTitles(session);
+        } catch (HasNoPermissionException e) {
+            return new Result(false, -1, e.getMessage());
+        }
+    }
+
     @GetMapping("/unit/{title}")
     public Result findByTitle(@PathVariable("title") String title, HttpSession session) {
         Unit unit;
@@ -376,6 +346,17 @@ public class DataController {
     /*******************************************************************
      *******************  用户数据显示   *********************************
      *******************************************************************/
+
+
+    @GetMapping("/usernames")
+    public Object listUsernames(HttpSession session) {
+        try {
+            return userService.listUsernames(session);
+        } catch (HasNoPermissionException e) {
+            return new Result(false, -1, e.getMessage());
+
+        }
+    }
 
     @PostMapping(value = "/users")
     public DataTableResult listUsers(@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
@@ -426,7 +407,7 @@ public class DataController {
             PageHelper.startPage(page, rows);
             repairs = repairService.list(session);
             pageInfo = new PageInfo<RepairDto>(repairs);
-        } catch (HasNoPermissionException e) {
+        } catch (Exception e) {
             LOGGER.error("错误! message = {}", e.getMessage());
             return null;
         }

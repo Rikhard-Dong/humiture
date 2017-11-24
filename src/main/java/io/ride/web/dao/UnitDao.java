@@ -38,4 +38,6 @@ public interface UnitDao {
 
     List<Unit> listByRent(@Param("mark") String mark);
 
+
+    List<String> listTitles();
 }

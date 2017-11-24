@@ -1,4 +1,4 @@
-package io.ride.web.dao;
+package io.ride.web.dto;
 
 /**
  * Created by IDEA
@@ -9,6 +9,7 @@ package io.ride.web.dao;
 public class ControllerDto {
     private String nodenum;
     private String autoflag;
+    private String flag;
     private String flag2;
     private String snr;
     private String ss1;
@@ -16,9 +17,16 @@ public class ControllerDto {
     private Integer ssvalue1;
     private Integer ssvalue2;
 
-
     public String getNodenum() {
         return nodenum;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     public void setNodenum(String nodenum) {

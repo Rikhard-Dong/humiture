@@ -18,6 +18,8 @@ public class GetwayDto {
     private String getwayMark;  // 网关号
     private Integer status;     // 网关状态
     private String statusDesc;  // 状态描述
+    private String temper;
+    private String humidity;
     private String snr;
     private String endTime;     // 结束时间
 
@@ -29,6 +31,8 @@ public class GetwayDto {
         this.getwayMark = getway.getGetwayMark();
         this.snr = getway.getNodeNum();
         this.status = getway.getStatus();
+        this.temper = getway.getNowTemper();
+        this.humidity = getway.getNowHumidity();
         if (this.status != null) {
             if (this.status == 0) {
                 this.statusDesc = "不在线";
@@ -44,6 +48,8 @@ public class GetwayDto {
         this.getwayMark = getway.getGetwayMark();
         this.status = getway.getStatus();
         this.snr = getway.getNodeNum();
+        this.temper = getway.getNowTemper();
+        this.humidity = getway.getNowHumidity();
         if (this.status != null) {
             if (this.status == 0) {
                 this.statusDesc = "不在线";
@@ -100,6 +106,22 @@ public class GetwayDto {
 
     public void setSnr(String snr) {
         this.snr = snr;
+    }
+
+    public String getTemper() {
+        return temper;
+    }
+
+    public void setTemper(String temper) {
+        this.temper = temper;
+    }
+
+    public String getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(String humidity) {
+        this.humidity = humidity;
     }
 
     @Override

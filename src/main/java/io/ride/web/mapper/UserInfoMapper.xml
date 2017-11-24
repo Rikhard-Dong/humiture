@@ -136,4 +136,10 @@
             </otherwise>
         </choose>
     </select>
+
+    <select id="listUsernames" resultType="java.lang.String">
+        SELECT UserName
+        FROM UserInfo
+        WHERE UnitId = #{id}
+    </select>
 </mapper>

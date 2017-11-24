@@ -63,6 +63,9 @@ public class RepairServiceImpl implements RepairService {
             List<RepairDto> repairDtos = new ArrayList<RepairDto>();
             for (Repair repair : repairs) {
                 Node node = nodeDao.findById(repair.getNodeId(), user.getUserType(), user.getUnitId());
+                if (node == null) {
+                    throw new NotFoundException("没有发现节点");
+                }
                 RepairDto repairDto = new RepairDto(repair, node.getNodeMark());
                 repairDtos.add(repairDto);
             }
