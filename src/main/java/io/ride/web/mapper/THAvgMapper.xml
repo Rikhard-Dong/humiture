@@ -5,38 +5,41 @@
 
     <select id="listDayAvgForMonth" resultType="io.ride.web.entity.THAvg">
         SELECT
+            NodeMark                    AS 'Mark',
             DAY(ReportTime)             AS 'ReportTime',
             avg(convert(INT, Temper))   AS 'TemperAvg',
             avg(convert(INT, Humidity)) AS 'HumidityAvg'
         FROM TemperHumid
         WHERE NodeMark = #{mark} AND MONTH(ReportTime) = #{month} AND YEAR(ReportTime) = #{year}
-        GROUP BY DAY(ReportTime)
+        GROUP BY DAY(ReportTime), NodeMark
     </select>
 
     <select id="listMonthAvgForYear" resultType="io.ride.web.entity.THAvg">
         SELECT
+            NodeMark                    AS 'Mark',
             MONTH(ReportTime)           AS 'ReportTime',
             avg(convert(INT, Temper))   AS 'TemperAvg',
             avg(convert(INT, Humidity)) AS 'HumidityAvg'
         FROM TemperHumid
         WHERE NodeMark = #{mark} AND YEAR(ReportTime) = #{year}
-        GROUP BY MONTH(ReportTime)
+        GROUP BY MONTH(ReportTime), NodeMark
     </select>
 
     <select id="listYearAvg" resultType="io.ride.web.entity.THAvg">
         SELECT
+            NodeMark                    AS 'Mark',
             YEAR(ReportTime)            AS 'ReportTime',
             avg(convert(INT, Temper))   AS 'TemperAvg',
             avg(convert(INT, Humidity)) AS 'HumidityAvg'
         FROM TemperHumid
         WHERE NodeMark = #{mark}
-        GROUP BY YEAR(ReportTime)
+        GROUP BY YEAR(ReportTime), NodeMark
     </select>
 
     <select id="listDayAvg" resultType="io.ride.web.entity.THAvg">
         SELECT
-            DATENAME(HOUR, ReportTime) + '时' + DATENAME(MINUTE, ReportTime) + '分' + DATENAME(SECOND, ReportTime) +
-            '秒'      AS 'ReportTime',
+            NodeMark                    AS 'Mark',
+            DATENAME(HOUR, ReportTime) + ':' + DATENAME(MINUTE, ReportTime) + ':' + DATENAME(SECOND, ReportTime)    AS 'ReportTime',
             Temper   AS 'TemperAvg',
             Humidity AS 'HumidityAvg'
         FROM TemperHumid

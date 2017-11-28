@@ -81,6 +81,7 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.9.2</version>
         </dependency>
+
         <!-- MySQL -->
         <dependency>
             <groupId>mysql</groupId>
@@ -163,10 +164,16 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+        <!--<dependency>-->
+            <!--<groupId>net.sf.json-lib</groupId>-->
+            <!--<artifactId>json-lib</artifactId>-->
+            <!--<version>2.4</version>-->
+        <!--</dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
         <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.4</version>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.9.1</version>
         </dependency>
 
 
@@ -180,6 +187,7 @@
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.properties</include>
+                    <include>**/*.sql</include>
                 </includes>
             </resource>
             <resource>
@@ -187,6 +195,7 @@
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.properties</include>
+                    <include>**/*.sql</include>
                 </includes>
             </resource>
         </resources>
@@ -208,17 +217,31 @@
                 </dependencies>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://47.100.113.55:8080/manager/text</url>
+                    <username>admin</username>
+                    <password>ride</password>
+                    <update>true</update>
+                    <path>/th</path>
+                </configuration>
+            </plugin>
+
+
             <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>tomcat-maven-plugin</artifactId>-->
-                <!--<version>1.1</version>-->
-                <!--<configuration>-->
-                    <!--<path>/wp</path>-->
-                    <!--<port>8080</port>-->
-                    <!--<uriEncoding>UTF-8</uriEncoding>-->
-                    <!--<url>http://localhost:8080/manager/html</url>-->
-                    <!--<server>tomcat9</server>-->
-                <!--</configuration>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>tomcat-maven-plugin</artifactId>-->
+            <!--<version>1.1</version>-->
+            <!--<configuration>-->
+            <!--<path>/wp</path>-->
+            <!--<port>8080</port>-->
+            <!--<uriEncoding>UTF-8</uriEncoding>-->
+            <!--<url>http://localhost:8080/manager/html</url>-->
+            <!--<server>tomcat9</server>-->
+            <!--</configuration>-->
             <!--</plugin>-->
         </plugins>
     </build>

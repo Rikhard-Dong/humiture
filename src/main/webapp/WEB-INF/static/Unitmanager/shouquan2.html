@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="../easyui/jquery.min.js"></script>
+    <script src="../easyui/jquery.easyui.min.js"></script>
+    <script src="../easyui/plugins/jquery.datagrid.js"></script>
+    <script src="../easyui/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" href="../easyui/themes/default/easyui.css" />
+    <link rel="stylesheet" href="../easyui/themes/icon.css" />
+    <script type="text/javascript">
+        $(function () {
+            $("#dg").datagrid({
+                dataType: 'json',
+                type: 'post',
+                url: "http://192.168.3.2:8888/author/userAuthor",
+                columns: [
+
+                    [{
+                            title: 'userAuthorId',
+                            field: 'userId',
+                            width: 100,
+                            checkbox: true, //这个checkbox:true 就表示让Id这一行显示为复选框的样式。  
+                        },
+                        {
+                            field: 'userAuthorId',
+                            title: 'userAuthorId',
+                            width: 250
+                        },
+                        {
+                            field: 'nodeMark',
+                            title: 'nodeMark',
+                            width: 250
+                        },
+                        {
+                            field: 'username',
+                            title: 'username',
+                            width: 250
+                        }
+                    ]
+                ]
+            })
+
+
+        });
+
+        function searchRole() {
+            alert($("#idd").val());
+            $("#dg").datagrid({
+                dataType: 'json',
+                url: "http://192.168.3.2:8888/search/user/" + $("#idd").val(),
+
+                columns: [
+
+                    [{
+                            title: '编号',
+                            field: 'userId',
+                            width: 100,
+                            checkbox: true, //这个checkbox:true 就表示让Id这一行显示为复选框的样式。  
+                        },
+                        {
+                            field: 'name',
+                            title: '用户姓名',
+                            width: 250
+                        },
+                        {
+                            field: 'username',
+                            title: '用户登录名',
+                            width: 250
+                        },
+                        {
+                            field: 'unitId',
+                            title: '单位ID',
+                            width: 250
+                        },
+                        {
+                            field: 'userType',
+                            title: '用户类型',
+                            width: 250
+                        },
+                        {
+                            field: 'memo',
+                            title: '备注',
+                            width: 250
+                        }
+                    ]
+                ]
+            })
+        }
+
+        function deleteRole() {
+            var selectedRows = $("#dg").datagrid('getSelections');
+
+            if (selectedRows.length == 0) {
+                $.messager.alert('系统提示', '请选择要删除的数据！');
+                return;
+            }
+            var strIds = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                strIds.push(selectedRows[i].userAuthorId);
+            }
+            var ids = strIds.join("_");
+            alert(ids);
+            $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
+                if (r) {
+                    $.ajax({
+                        url: "http://192.168.3.2:8888/batch/userAuthor/" + ids,
+                        type: 'delete',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (result) {
+                            if (result.success == true) {
+                                $.messager.alert('系统提示', "您已成功删除数据！");
+                                $("#dg").datagrid("reload");
+                            } else {
+                                alert("删除失败");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        var url;
+
+        function openRoleAddDialog() {
+            $("#dlg").dialog("open").dialog("setTitle", "添加用户信息");
+            url = "http://192.168.3.2:8888/author/node"; //添加节点信息的时候的url
+        }
+
+        function openRoleModifyDialog() {
+            var selectedRows = $("#dg").datagrid('getSelections');
+            if (selectedRows.length != 1) {
+                $.messager.alert('系统提示', '请选择一条要编辑的数据！');
+                return;
+            }
+            var row = selectedRows[0];
+            $("#dlg").dialog("open").dialog("setTitle", "修改信息");
+            $("#fm").form("load", row);
+            url = "http://192.168.3.2:8888/system/user/update"; //修改的时候的url
+        }
+
+        function saveRole() {
+            $("#fm").form("submit", {
+                url: url,
+                type: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                onSubmit: function () {
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+
+
+                    alert("成功保存");
+                    closeRoleSaveDialog();
+
+                }
+            });
+
+        }
+
+        function closeRoleSaveDialog() {
+            $("#dlg").dialog("close");
+            $("#fm").form('clear');
+        }
+
+        function checkNode(node) {
+            if (!node) {
+
+            } else {
+                checkNode($('#tree').tree('getParent', node.target));
+                $('#tree').tree('check', node.target);
+            }
+        }
+
+        function closeAuthDialog() {
+            $("#dlg2").dialog("close");
+        }
+    </script>
+    <title>用户管理</title>
+</head>
+
+<body style="margin: 1px;">
+    <table id="dg" title="用户管理查询查询" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" fit="true"
+        toolbar="#tb">
+        <thead>
+            <tr>
+            </tr>
+        </thead>
+    </table>
+    <div id="tb">
+        <div>
+            <a href="javascript:openRoleAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+
+            <a href="javascript:deleteRole()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+        </div>
+
+        <div>
+            &nbsp;用户名：&nbsp;
+            <input type="text" name="arg" id="idd" size="20" onkeydown="if(event.keyCode==13) searchRole()" />
+            <a href="javascript:searchRole()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+        </div>
+
+    </div>
+
+    <div id="dlg" class="easyui-dialog" style="width: 570px;height: 350px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
+        <form id="fm" method="post">
+            <table cellspacing="5px;">
+
+                <tr>
+                    <td>用户名：</td>
+                    <td width="80%">
+                        <input type="text" id="username" name="username" class="easyui-validatebox" required="true" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>节点号：</td>
+                    <td width="80%">
+                        <input type="text" id="nodeMark" name="nodeMark" class="easyui-validatebox" required="true" />
+                    </td>
+                </tr>
+
+                </tr>
+            </table>
+        </form>
+    </div>
+
+
+    <div id="dlg-buttons">
+        <a href="javascript:saveRole()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+        <a href="javascript:closeRoleSaveDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width: 300px;height: 450px;padding: 10px 20px" closed="true" buttons="#dlg2-buttons">
+        <ul id="tree" class="easyui-tree"></ul>
+    </div>
+    <div id="dlg2-buttons">
+        <a href="javascript:saveAuth()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+        <a href="javascript:closeAuthDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+    </div>
+</body>
+
+</html>

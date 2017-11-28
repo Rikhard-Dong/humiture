@@ -66,6 +66,8 @@ public class UserController {
     public Result login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
                         HttpSession session) {
+        LOGGER.info("username ---> ", username);
+        LOGGER.info("password ---> ", password);
         UserInfo user;
         try {
             user = userService.login(username, password);

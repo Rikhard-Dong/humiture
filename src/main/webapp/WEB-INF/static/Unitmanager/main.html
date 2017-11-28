@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>温湿度曲线查询表</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://img.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+    <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    <script src="../address.js"></script>
+    <script src="../jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.min.css"></script>
+    <script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        var jj = jQuery.noConflict();
+    </script>
+    <script src="../jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+</head>
+
+<body>
+    <div class="input-group">
+        <span class="input-group-addon">节点号</span>
+        <input type="text" class="input-medium " placeholder="" id="autocomplete">
+    </div>
+    <div class="input-group" style="position:fixed;margin-left:250px;margin-top:-28px;">
+        <span class="input-group-addon">查询年号</span>
+        <input type="text" class="input-medium " placeholder="yyyy" id="year">
+    </div>
+    <div class="input-group" style="position:fixed;margin-left:516px;margin-top:-28px;">
+        <span class="input-group-addon">查询月号</span>
+        <!-- <input type="text" class="input-medium " placeholder="mmmmm" id="month"> -->
+        <select style="height:27px;width:100px" class="input-medium " placeholder="mmmmm" id="month">
+            <option value=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+        </select>
+    </div>
+    <div class="input-group" style="position:fixed;margin-left:800px;margin-top:-28px;">
+        <span class="input-group-addon">查询日</span>
+        <input type="number" class="input-medium " placeholder="dayday" id="day">
+    </div>
+    <button type="button" class="btn btn-default" onclick="search()" style="position:fixed;margin-left:1050px;margin-top:-32px;">确认查询</button>
+    <div id="container1" style="min-width:400px;height:400px"></div>
+    <div id="container2" style="min-width:400px;height:400px;"></div>
+    <div id="container3" style="min-width:400px;height:400px;"></div>
+    <div id="container4" style="min-width:400px;height:400px;"></div>
+    <div id="container5" style="min-width:400px;height:400px;"></div>
+</body>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: address + '/data/node/tree',
+            type: "get",
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (data) {
+                var kaiguan = [];
+
+                for (var value in data) {
+                    var i = data[value].subIds;
+                    kaiguan.push(i);
+                }
+                var a = eval(kaiguan); //所有的节点以及网关号
+                var c = kaiguan[1].concat(kaiguan[0]);
+                var d = c.concat(kaiguan[2]);
+                console.log(d);
+
+                jj("#autocomplete").autocomplete({
+                    source: d
+                });
+            }
+        });
+    });
+
+    function search() {
+        $.ajax({
+            url: address + "/avg/" + $("#autocomplete").val() + "/info",
+            type: 'get',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (data) {
+
+                if (data.isGetway == false) {
+
+
+                    var getwayMark = data.getwayMark; //网关的节点号
+                    alert(getwayMark);
+                    $(function () {
+                        var xmlhttp = new XMLHttpRequest();
+                        var url = address + "/avg/" + $("#autocomplete").val() + "/" + $("#year").val() +
+                            "/" + $("#month").val() + "/" + $("#day").val();
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                if (($("#year").val()).length == 0 && ($("#month").val()).length ==
+                                    0) {
+                                    var time = "年"
+                                } else if (($("#year").val()).length != 0 && ($("#month").val())
+                                    .length ==
+                                    0) {
+                                    var time = "月"
+                                } else {
+                                    var time = "日";
+                                }
+
+                                var myObj = this.responseText;
+                                var a = eval('(' + myObj + ')');
+                                var shidu = [];
+                                var wendu = [];
+                                var report = [];
+                                var warn = [];
+                                for (var value in a) {
+                                    var temper = [];
+                                    var temperavg = a[value].temperAvg;
+                                    var humidityavg = a[value].humidityAvg;
+                                    var resporttime = a[value].reportTime;
+                                    if (temperavg > 50) {
+                                        warn.push(temperavg);
+                                    }
+                                    wendu.push(temperavg);
+                                    shidu.push(humidityavg);
+                                    report.push(resporttime);
+                                }
+                                var aaa = eval(wendu);
+                                var bbb = eval(shidu);
+                                var report = eval((report));
+                                var high = eval(warn);
+                                alert(high);
+                                $('#container2').highcharts({
+                                    chart: {
+                                        zoomType: 'xy'
+                                    },
+                                    title: {
+                                        text: '节点' + $("#autocomplete").val() + "——" +
+                                            time + '平均温度和湿度'
+                                    },
+                                    subtitle: {
+                                        text: '数据来源:'
+                                    },
+                                    xAxis: [{
+                                        categories: report,
+                                        crosshair: true,
+                                     
+                                    
+
+                                    }],
+                                    yAxis: [{
+                                                labels: {
+                                                    format: '{value}°C',
+                                                    style: {
+                                                        color: Highcharts.getOptions().colors[
+                                                            1]
+                                                    }
+                                                },
+
+                                                title: {
+                                                    text: '温度',
+                                                    style: {
+                                                        color: Highcharts.getOptions().colors[
+                                                            1],
+
+                                                    }
+                                                },
+
+                                                plotLines: [{
+                                                    color: 'red', // Color value
+                                                    dashStyle: 'longdashdot', // Style of the plot line. Default to solid
+                                                    value: 100, // Value of where the line will appear
+                                                    width: 2, // Width of the line    
+                                                   
+                                                  }]
+
+                                            },
+
+
+                                            { // Secondary yAxis
+                                                title: {
+                                                    text: '湿度',
+                                                    style: {
+                                                        color: Highcharts.getOptions().colors[
+                                                            0]
+                                                    }
+                                                },
+                                                labels: {
+                                                    format: '{value} %MH',
+                                                    style: {
+                                                        color: Highcharts.getOptions().colors[
+                                                            0]
+                                                    }
+                                                },
+                                                opposite: true
+                                            }
+                                        ]
+
+                                        ,
+                                    tooltip: {
+                                        shared: true
+                                    },
+                                    legend: {
+                                        layout: 'vertical',
+                                        align: 'left',
+                                        x: 120,
+                                        verticalAlign: 'top',
+                                        y: 100,
+                                        floating: true,
+                                        backgroundColor: (Highcharts.theme &&
+                                                Highcharts.theme.legendBackgroundColor) ||
+                                            '#FFFFFF'
+                                    },
+                                    series: [{
+                                        name: '湿度',
+                                        type: 'column',
+                                        yAxis: 1,
+                                        data: bbb,
+                                        tooltip: {
+                                            valueSuffix: ' %MH'
+                                        }
+                                    }, {
+                                        name: '温度',
+                                        type: 'spline',
+                                        data: aaa,
+                                        tooltip: {
+                                            valueSuffix: '°C'
+                                        }
+                                    }]
+
+                                });
+                            }
+                        };
+
+                        xmlhttp.open("get", url, true);
+                        xmlhttp.withCredentials = true;
+                        xmlhttp.send();
+
+
+                    });
+                    $(function () {
+                        var xmlhttp = new XMLHttpRequest();
+                        var url = address + "/avg/" + getwayMark + "/" + $("#year").val() +
+                            "/" + $("#month").val() + "/" + $("#day").val();
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                if (($("#year").val()).length == 0 && ($("#month").val()).length ==
+                                    0) {
+                                    var time = "年"
+                                } else if (($("#year").val()).length != 0 && ($("#month").val())
+                                    .length ==
+                                    0) {
+                                    var time = "月"
+                                } else {
+                                    var time = "日";
+                                }
+
+                                var myObj = this.responseText;
+                                var a = eval('(' + myObj + ')');
+                                var shidu = [];
+                                var wendu = [];
+                                var report = [];
+                                for (var value in a) {
+                                    var temper = [];
+                                    var temperavg = a[value].temperAvg;
+                                    var humidityavg = a[value].humidityAvg;
+                                    var resporttime = a[value].reportTime;
+                                    wendu.push(temperavg);
+                                    shidu.push(humidityavg);
+                                    report.push(resporttime);
+                                }
+                                var aaa = eval(wendu);
+                                var bbb = eval(shidu);
+                                var report = eval((report));
+
+                                $('#container1').highcharts({
+                                    chart: {
+                                        zoomType: 'xy'
+                                    },
+                                    title: {
+                                        text: '网关' + getwayMark + "——" + time +
+                                            '平均温度和湿度'
+                                    },
+                                    subtitle: {
+                                        text: '数据来源:'
+                                    },
+                                    xAxis: [{
+                                        categories: report,
+                                        crosshair: true
+                                    }],
+                                    yAxis: [{ // Primary yAxis
+                                        labels: {
+                                            format: '{value}°C',
+                                            style: {
+                                                color: Highcharts.getOptions().colors[
+                                                    1]
+                                            }
+                                        },
+                                        title: {
+                                            text: '温度',
+                                            style: {
+                                                color: Highcharts.getOptions().colors[
+                                                    1]
+                                            }
+                                        },  plotLines: [{
+                                                    color: 'red', // Color value
+                                                    dashStyle: 'longdashdot', // Style of the plot line. Default to solid
+                                                    value: 100, // Value of where the line will appear
+                                                    width: 2 // Width of the line    
+                                                  }]
+                                    }, { // Secondary yAxis
+                                        title: {
+                                            text: '湿度',
+                                            style: {
+                                                color: Highcharts.getOptions().colors[
+                                                    0]
+                                            }
+                                        },
+                                        labels: {
+                                            format: '{value} %MH',
+                                            style: {
+                                                color: Highcharts.getOptions().colors[
+                                                    0]
+                                            }
+                                        },
+                                        opposite: true
+                                    }],
+                                    tooltip: {
+                                        shared: true
+                                    },
+                                    legend: {
+                                        layout: 'vertical',
+                                        align: 'left',
+                                        x: 120,
+                                        verticalAlign: 'top',
+                                        y: 100,
+                                        floating: true,
+                                        backgroundColor: (Highcharts.theme &&
+                                                Highcharts.theme.legendBackgroundColor) ||
+                                            '#FFFFFF'
+                                    },
+                                    series: [{
+                                        name: '湿度',
+                                        type: 'column',
+                                        yAxis: 1,
+                                        data: bbb,
+                                        tooltip: {
+                                            valueSuffix: ' %MH'
+                                        }
+                                    }, {
+                                        name: '温度',
+                                        type: 'spline',
+                                        data: aaa,
+                                        tooltip: {
+                                            valueSuffix: '°C'
+                                        }
+                                    }]
+
+                                });
+                            }
+                        };
+
+                        xmlhttp.open("get", url, true);
+                        xmlhttp.withCredentials = true;
+                        xmlhttp.send();
+
+
+
+
+
+
+                    })
+
+                } else {
+                    var b = [];
+                    b = data.subMarks;
+                    var count = 0;
+                    for (var i = 0; i < b.length; i++) //b[i]  为其子节点号
+                    {
+                        var xmlhttp = new XMLHttpRequest();
+                        var url = address + "/avg/" + b[i] + "/" + $("#year").val() +
+                            "/" + $("#month").val() + "/" + $("#day").val();
+                        xmlhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                if (($("#year").val()).length == 0 && ($("#month").val()).length == 0) {
+                                    var time = "年"
+                                } else if (($("#year").val()).length != 0 && ($("#month").val()).length ==
+                                    0) {
+                                    var time = "月"
+                                } else {
+                                    var time = "日";
+                                }
+
+                                var myObj = this.responseText;
+                                var a = eval('(' + myObj + ')');
+                                var shidu = [];
+                                var wendu = [];
+                                var report = [];
+                                var mark1 = [];
+                                for (var value in a) {
+
+                                    var temperavg = a[value].temperAvg;
+                                    var humidityavg = a[value].humidityAvg;
+                                    var resporttime = a[value].reportTime;
+                                    var mark11 = a[value].mark;
+                                    wendu.push(temperavg);
+                                    shidu.push(humidityavg);
+                                    report.push(resporttime);
+                                    mark1.push(mark11);
+                                }
+                                var aaa = eval(wendu);
+                                var bbb = eval(shidu);
+                                var report = eval((report));
+
+                                count++;
+
+                                $('#container' + (count)).highcharts({
+                                    chart: {
+                                        zoomType: 'xy'
+                                    },
+                                    title: {
+                                        text: '节点' + mark1[0] + time + '平均温度和湿度'
+                                    },
+                                    subtitle: {
+                                        text: '数据来源:'
+                                    },
+                                    xAxis: [{
+                                        categories: report,
+                                        crosshair: true
+                                    }],
+                                    yAxis: [{ // Primary yAxis
+                                        labels: {
+                                            format: '{value}°C',
+                                            style: {
+                                                color: Highcharts.getOptions().colors[1]
+                                            }
+                                        },
+                                        title: {
+                                            text: '温度',
+                                            style: {
+                                                color: Highcharts.getOptions().colors[1]
+                                            }
+                                        },
+                                        plotLines: [{
+                                                    color: 'red', // Color value
+                                                    dashStyle: 'longdashdot', // Style of the plot line. Default to solid
+                                                    value: 100, // Value of where the line will appear
+                                                    width: 2 // Width of the line    
+                                                  }]
+                                    }, { // Secondary yAxis
+                                        title: {
+                                            text: '湿度',
+                                            style: {
+                                                color: Highcharts.getOptions().colors[0]
+                                            }
+                                        },
+                                        labels: {
+                                            format: '{value} %MH',
+                                            style: {
+                                                color: Highcharts.getOptions().colors[0]
+                                            }
+                                        },
+                                        opposite: true
+                                    }],
+                                    tooltip: {
+                                        shared: true
+                                    },
+                                    legend: {
+                                        layout: 'vertical',
+                                        align: 'left',
+                                        x: 120,
+                                        verticalAlign: 'top',
+                                        y: 100,
+                                        floating: true,
+                                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) ||
+                                            '#FFFFFF'
+                                    },
+                                    series: [{
+                                        name: '湿度',
+                                        type: 'column',
+                                        yAxis: 1,
+                                        data: bbb,
+                                        tooltip: {
+                                            valueSuffix: ' %MH'
+                                        }
+                                    }, {
+                                        name: '温度',
+                                        type: 'spline',
+                                        data: aaa,
+                                        tooltip: {
+                                            valueSuffix: '°C'
+                                        }
+                                    }]
+
+                                });
+                            }
+                        };
+
+                        xmlhttp.open("get", url, true);
+                        xmlhttp.withCredentials = true;
+                        xmlhttp.send();
+
+
+
+
+                    }
+
+
+
+
+                }
+            }
+
+
+
+
+        });
+
+
+
+        // var xmlhttp = new XMLHttpRequest();
+        // var url = "http://192.168.3.2:8888/avg/" + $("#nodeId").val() + "/" + $("#year").val() + "/" + $("#month").val();
+
+        // xmlhttp.onreadystatechange = function () {
+        //     if (this.readyState == 4 && this.status == 200) {
+        //         if (($("#year").val()).length == 0 && ($("#month").val()).length == 0) {
+        //             var time = "年"
+        //         } else if (($("#year").val()).length != 0 && ($("#month").val()).length == 0) {
+        //             var time = "月"
+        //         } else {
+        //             var time = "日";
+        //         }
+
+        //         var myObj = this.responseText;
+        //         var a = eval('(' + myObj + ')');
+        //         var shidu = [];
+        //         var wendu = [];
+        //         var report = [];
+        //         for (var value in a) {
+        //             var temper = [];
+        //             var temperavg = a[value].temperAvg;
+        //             var humidityavg = a[value].humidityAvg;
+        //             var resporttime = a[value].reportTime;
+        //             wendu.push(temperavg)
+        //             shidu.push(humidityavg);
+        //             report.push(resporttime);
+        //         }
+        //         var aaa = eval(wendu);
+        //         var bbb = eval(shidu);
+        //         var report = eval((report));
+
+        //         $('#container2').highcharts({
+        //             chart: {
+        //                 zoomType: 'xy'
+        //             },
+        //             title: {
+        //                 text: time + '平均温度和湿度'
+        //             },
+        //             subtitle: {
+        //                 text: '数据来源:'
+        //             },
+        //             xAxis: [{
+        //                 categories: report,
+        //                 crosshair: true
+        //             }],
+        //             yAxis: [{ // Primary yAxis
+        //                 labels: {
+        //                     format: '{value}°C',
+        //                     style: {
+        //                         color: Highcharts.getOptions().colors[1]
+        //                     }
+        //                 },
+        //                 title: {
+        //                     text: '温度',
+        //                     style: {
+        //                         color: Highcharts.getOptions().colors[1]
+        //                     }
+        //                 }
+        //             }, { // Secondary yAxis
+        //                 title: {
+        //                     text: '湿度',
+        //                     style: {
+        //                         color: Highcharts.getOptions().colors[0]
+        //                     }
+        //                 },
+        //                 labels: {
+        //                     format: '{value} %MH',
+        //                     style: {
+        //                         color: Highcharts.getOptions().colors[0]
+        //                     }
+        //                 },
+        //                 opposite: true
+        //             }],
+        //             tooltip: {
+        //                 shared: true
+        //             },
+        //             legend: {
+        //                 layout: 'vertical',
+        //                 align: 'left',
+        //                 x: 120,
+        //                 verticalAlign: 'top',
+        //                 y: 100,
+        //                 floating: true,
+        //                 backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) ||
+        //                     '#FFFFFF'
+        //             },
+        //             series: [{
+        //                 name: '湿度',
+        //                 type: 'column',
+        //                 yAxis: 1,
+        //                 data: bbb,
+        //                 tooltip: {
+        //                     valueSuffix: ' %MH'
+        //                 }
+        //             }, {
+        //                 name: '温度',
+        //                 type: 'spline',
+        //                 data: aaa,
+        //                 tooltip: {
+        //                     valueSuffix: '°C'
+        //                 }
+        //             }]
+
+        //         });
+        //     }
+        // }
+
+        // xmlhttp.open("get", url, true);
+        // xmlhttp.withCredentials = true;
+        // xmlhttp.send();
+    }
+    // $(function () {
+    //     $('#container').highcharts({
+    //         chart: {
+    //             zoomType: 'xy'
+    //         },
+    //         title: {
+    //             text: '月平均温度和湿度'
+    //         },
+    //         subtitle: {
+    //             text: '数据来源:'
+    //         },
+    //         xAxis: [{
+    //             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    //                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    //             ],
+    //             crosshair: true
+    //         }],
+    //         yAxis: [{ // Primary yAxis
+    //             labels: {
+    //                 format: '{value}°C',
+    //                 style: {
+    //                     color: Highcharts.getOptions().colors[1]
+    //                 }
+    //             },
+    //             title: {
+    //                 text: '温度',
+    //                 style: {
+    //                     color: Highcharts.getOptions().colors[1]
+    //                 }
+    //             }
+    //         }, { // Secondary yAxis
+    //             title: {
+    //                 text: '湿度',
+    //                 style: {
+    //                     color: Highcharts.getOptions().colors[0]
+    //                 }
+    //             },
+    //             labels: {
+    //                 format: '{value} %MH',
+    //                 style: {
+    //                     color: Highcharts.getOptions().colors[0]
+    //                 }
+    //             },
+    //             opposite: true
+    //         }],
+    //         tooltip: {
+    //             shared: true
+    //         },
+    //         legend: {
+    //             layout: 'vertical',
+    //             align: 'left',
+    //             x: 120,
+    //             verticalAlign: 'top',
+    //             y: 100,
+    //             floating: true,
+    //             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) ||
+    //                 '#FFFFFF'
+    //         },
+    //         series: [{
+    //             name: '湿度',
+    //             type: 'column',
+    //             yAxis: 1,
+    //             data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6,
+    //                 54.4
+    //             ],
+    //             tooltip: {
+    //                 valueSuffix: ' %MH'
+    //             }
+    //         }, {
+    //             name: '温度',
+    //             type: 'spline',
+    //             data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+    //             tooltip: {
+    //                 valueSuffix: '°C'
+    //             }
+    //         }]
+    //     });
+    // });
+
+    // $(function () {
+    //     $('#container3').highcharts({
+    //         chart: {
+    //             zoomType: 'xy'
+    //         },
+    //         title: {
+    //             text: '年平均温度和湿度'
+    //         },
+    //         subtitle: {
+    //             text: '数据来源:'
+    //         },
+    //         xAxis: [{
+    //             categories: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
+    //                 2021
+    //             ],
+    //             crosshair: true
+    //         }],
+    //         yAxis: [{ // Primary yAxis
+    //             labels: {
+    //                 format: '{value}°C',
+    //                 style: {
+    //                     color: Highcharts.getOptions().colors[1]
+    //                 }
+    //             },
+    //             title: {
+    //                 text: '温度',
+    //                 style: {
+    //                     color: Highcharts.getOptions().colors[1]
+    //                 }
+    //             }
+    //         }, { // Secondary yAxis
+    //             title: {
+    //                 text: '湿度',
+    //                 style: {
+    //                     color: Highcharts.getOptions().colors[0]
+    //                 }
+    //             },
+    //             labels: {
+    //                 format: '{value} %MH',
+    //                 style: {
+    //                     color: Highcharts.getOptions().colors[0]
+    //                 }
+    //             },
+    //             opposite: true
+    //         }],
+    //         tooltip: {
+    //             shared: true
+    //         },
+    //         legend: {
+    //             layout: 'vertical',
+    //             align: 'left',
+    //             x: 120,
+    //             verticalAlign: 'top',
+    //             y: 100,
+    //             floating: true,
+    //             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) ||
+    //                 '#FFFFFF'
+    //         },
+    //         series: [{
+    //             name: '湿度',
+    //             type: 'column',
+    //             yAxis: 1,
+    //             data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6,
+    //                 54.4
+    //             ],
+    //             tooltip: {
+    //                 valueSuffix: ' %MH'
+    //             }
+    //         }, {
+    //             name: '温度',
+    //             type: 'spline',
+    //             data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+    //             tooltip: {
+    //                 valueSuffix: '°C'
+    //             }
+    //         }]
+    //     });
+    // });
+</script>
+
+</html>

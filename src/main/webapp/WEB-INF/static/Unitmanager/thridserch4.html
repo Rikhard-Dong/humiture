@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script src="../easyui/jquery.min.js"></script>
+    <script src="../easyui/jquery.easyui.min.js"></script>
+    <script src="../easyui/plugins/jquery.datagrid.js"></script>
+    <script src="../easyui/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" href="../easyui/themes/default/easyui.css" />
+    <link rel="stylesheet" href="../easyui/themes/icon.css" />
+
+    </script>
+    <script; type="text/javascript">
+        // function check() {
+        //     var a = $("#search").val();
+           
+        //     console.log(a);
+        //     $.ajax({
+        //         url: "192.168.3.2:8888/checkfor/node/"+a,
+        //         dataType: "json",
+        //         type: "post",
+        //         success: function (data) {
+        //             if (data.exists != true) {
+        //                 alert("不存在该节点");
+
+        //                 function searchRole() {
+        //                     alert("不存在的");
+        //                     return false;
+        //                 }
+        //             } else {
+        //                 alert("对啦");
+        //             }
+        //         },
+        //         error: function () {
+        //             alert("不存在该节点123");
+        //         }
+        //     });
+
+        // };
+
+        $(function () {
+            $("#dg").datagrid({
+                dataType: 'json',
+                url: "http://192.168.3.2:8888/data/repairs",
+                columns: [
+                    [{
+                            title: '编号',
+                            field: 'userId',
+                            width: 100,
+                            checkbox: true, //这个checkbox:true 就表示让Id这一行显示为复选框的样式。  
+                        },
+                        {
+                            field: 'repairId',
+                            title: '报修ID',
+                            width: 250
+                        },
+
+                        {
+                            field: 'nodeMark',
+                            title: '报修节点盒子号',
+                            width: 250
+                        },
+
+
+                        {
+                            field: 'faultDesc',
+                            title: '故障描述',
+                            width: 250
+                        },
+                        {
+                            field: 'person',
+                            title: '联系人',
+                            width: 250
+                        },
+                        {
+                            field: 'phone',
+                            title: '联系电话',
+                            width: 250
+                        },
+                        {
+                            field: 'status',
+                            title: '处理结果',
+                            width: 250
+                        },
+                        {
+                            field: 'repairTime',
+                            title: '上报时间',
+                            width: 250
+                        }
+                    ]
+                ],
+                pagination: true,
+            pageSize: 30,
+            pageList: [10, 20, 30]
+            })
+        });
+        function deleteRole() {
+            var selectedRows = $("#dg").datagrid('getSelections');
+            if (selectedRows.length == 0) {
+                $.messager.alert('系统提示', '请选择要删除的数据！');
+                return;
+            }
+            var strIds = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                strIds.push(selectedRows[i].repairId);
+            }
+            var ids = strIds.join("-");
+            alert(ids);
+            $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
+                if (r) {
+                    $.ajax({
+                        url: "http://192.168.3.2:8888/batch/repair/" + ids,
+                        type: 'delete',
+                        success: function (result) {
+                            if (result.success) {
+                                $.messager.alert('系统提示', "您已成功删除数据！");
+                                $("#dg").datagrid("reload");
+                            } else {
+                                $.messager.alert('系统提示', '<font color=red>' + selectedRows[result.errorIndex]
+                                    .repairId + '</font>' + result.errorMsg);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        var url;
+
+        function openRoleAddDialog() {
+            $("#dlg").dialog("open").dialog("setTitle", "添加报修信息");
+            url = "http://192.168.3.2:8888/system/repair"; //添加单位信息的时候的url
+        }
+
+        function openRoleModifyDialog() {
+            var selectedRows = $("#dg").datagrid('getSelections');
+            if (selectedRows.length != 1) {
+                $.messager.alert('系统提示', '请选择一条要编辑的数据！');
+                return;
+            }
+            var row = selectedRows[0];
+            $("#dlg").dialog("open").dialog("setTitle", "修改信息");
+            $("#fm").form("load", row);
+            url = "http://192.168.3.2:8888/system/repair/update"; //修改的时候的url
+        }
+
+        function saveRole() {
+            $("#fm").form("submit", {
+                url: url,
+
+                onSubmit: function () {
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+                    // var result = eval('(' + result + ')');
+                    if (result.success == true) {
+                        $.messager.alert('系统提示', "<font color=red>" + result.message + "</font>");
+
+                    } else {
+                        $.messager.alert('系统提示', '保存成功');
+                        closeRoleSaveDialog();
+                        $("#dg").datagrid("reload");
+                    }
+                }
+            });
+        }
+
+        function closeRoleSaveDialog() {
+            $("#dlg").dialog("close");
+            $("#fm").form('clear');
+        }
+
+        function checkNode(node) {
+            if (!node) {
+
+            } else {
+                checkNode($('#tree').tree('getParent', node.target));
+                $('#tree').tree('check', node.target);
+            }
+        }
+
+        function closeAuthDialog() {
+            $("#dlg2").dialog("close");
+        }
+
+        function searchRole() {
+            $("#dg").datagrid({
+                dataType: 'json',
+                url: "http://192.168.3.2:8888/search/repair/" + $("#search").val(),
+                columns: [
+                    [{
+                            title: '编号',
+                            field: 'userId',
+                            width: 100,
+                            checkbox: true, //这个checkbox:true 就表示让Id这一行显示为复选框的样式。  
+                        },
+                        {
+                            field: 'repairId',
+                            title: '报修节点号',
+                            width: 250
+                        },
+                        {
+                            field: 'faultDesc',
+                            title: '故障描述',
+                            width: 250
+                        },
+                        {
+                            field: 'person',
+                            title: '联系人',
+                            width: 250
+                        },
+                        {
+                            field: 'phone',
+                            title: '联系电话',
+                            width: 250
+                        },
+                        {
+                            field: 'status',
+                            title: '处理结果',
+                            width: 250
+                        }
+
+                    ]
+                ],
+                pagination: true,
+            pageSize: 20,
+            pageList: [1, 2, 20],
+            })
+        }
+    </script>
+    <title>报修管理</title>
+</head>
+
+<body style="margin: 1px;">
+    <table id="dg" title="报修管理" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" fit="true" toolbar="#tb">
+        <thead>
+            <tr>
+            </tr>
+        </thead>
+    </table>
+    <div id="tb">
+        <div>
+            <a href="javascript:openRoleAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+            <a href="javascript:openRoleModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+            <a href="javascript:deleteRole()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+        </div>
+        <div>
+            &nbsp;报修节点号：&nbsp;
+            <input type="text" name="s_roleName" id="search" size="20" onkeydown="if(event.keyCode==13) searchRole()" onblur="check()"
+            />
+            <a href="javascript:searchRole()" class="easyui-linkbutton" iconCls="icon-search" plain="true" id="search1">搜索</a>
+        </div>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width: 570px;height: 350px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
+        <form id="fm" method="post">
+            <table cellspacing="5px;">
+
+                <tr>
+                    <td>报修ID：</td>
+                    <td width="80%">
+                        <input type="text" id="nodeMark" name="repairId" class="easyui-validatebox" required="true" />
+                    </td>
+                </tr>
+                <tr>
+                    <tr>
+                        <td>报修节点盒子号：</td>
+                        <td width="80%">
+                            <input type="text" id="nodeMark" name="nodeMark" class="easyui-validatebox" required="true" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>故障描述：</td>
+                        <td width="80%">
+                            <input type="text" id="faultDesc" name="faultDesc" class="easyui-validatebox" required="true" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>联系人：</td>
+                        <td width="80%">
+                            <input type="text" id="person" name="person" class="easyui-validatebox" required="true" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>手机号码：</td>
+                        <td width="80%">
+                            <input type="text" id="phone" name="phone" class="easyui-validatebox" required="true" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>上报人地址：</td>
+                        <td width="80%">
+                            <input type="text" id="address" name="address" class="easyui-validatebox" required="true" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>报修状态：</td>
+                        <td width="80%">
+                            <input type="text" id="status" name="status" class="easyui-validatebox" required="true" list="itemlist" />
+                            <datalist id="itemlist">
+                                <option value="0">未处理</option>
+                                <option value="1">处理中</option>
+                                <option value="2">已处理</option>
+                            </datalist>
+                        </td>
+                    </tr>
+            </table>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:saveRole()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+        <a href="javascript:closeRoleSaveDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width: 300px;height: 450px;padding: 10px 20px" closed="true" buttons="#dlg2-buttons">
+        <ul id="tree" class="easyui-tree"></ul>
+    </div>
+</body>
+
+</html>

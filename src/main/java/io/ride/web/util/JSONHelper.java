@@ -50,9 +50,14 @@ public class JSONHelper {
         OutputStreamWriter out = null;
         StringBuffer buffer = new StringBuffer();
         try {
+            StringBuffer params = new StringBuffer();
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                params.append("&" + entry.getKey() + "=" + entry.getValue());
+            }
+            LOGGER.info("请求url ------ >" + toUrl + params);
             // 1. 建立连接
             // 创建链接URL
-            URL url = new URL(toUrl);
+            URL url = new URL(toUrl + params);
             // http传输
             HttpURLConnection httpURLConn = (HttpURLConnection) url.openConnection();
 
@@ -63,19 +68,6 @@ public class JSONHelper {
             // 设置请求方式
             httpURLConn.setRequestMethod("GET");
             httpURLConn.setRequestProperty("content-type", "application/x-www-form-urlencoded");
-
-            // 2.传入参数
-            // 得到请求的输出流对象
-            out = new OutputStreamWriter(httpURLConn.getOutputStream(), "UTF-8");
-            // 把数据写入
-            StringBuffer params = new StringBuffer();
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                params.append("&" + entry.getKey() + "=" + entry.getValue());
-            }
-            LOGGER.info("请求参数 ------ >" + params);
-            out.append(params.toString());
-            out.flush();
-            out.close();
 
             // 获取数据
             InputStream inputStream = httpURLConn.getInputStream();

@@ -3,6 +3,7 @@ package io.ride.web.controller;
 import io.ride.web.dao.NodeDao;
 import io.ride.web.dto.ControllerDto;
 import io.ride.web.dto.RealTimeTHInfo;
+import io.ride.web.dto.Result;
 import io.ride.web.entity.UserInfo;
 import io.ride.web.exception.HasNoPermissionException;
 import io.ride.web.util.JSONHelper;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -68,21 +70,22 @@ public class RemoteCallController {
             int index = 0;
             Collections.sort(infos);
             while (snr != 9) {
-                if (index >= infos.size() || snr != Integer.valueOf(infos.get(index).getSnr())) {
+                if (index < infos.size() && snr != Integer.valueOf(infos.get(index).getSnr())) {
                     RealTimeTHInfo realTimeTHInfo = new RealTimeTHInfo("-1", "-1", "-1", "-1", -1, "-1");
                     realTimeTHInfo.setSnr("0" + snr);
                     infos.add(realTimeTHInfo);
-                    index++;
                     snr++;
                 } else if (snr == Integer.valueOf(infos.get(index).getSnr())) {
                     snr++;
                     index++;
                 }
             }
+            Collections.sort(infos);
             return infos;
         } catch (Exception e) {
             LOGGER.info("error --------------------> nodeInfo error = {}", e.getMessage());
-            return null;
+            e.printStackTrace();
+            return new Result(false, -1, "error!");
         }
     }
 
@@ -119,7 +122,7 @@ public class RemoteCallController {
      * @param session
      */
     @RequestMapping("/nodeSet")
-    public void setNode(ControllerDto dto, HttpSession session) {
+    public Object setNode(ControllerDto dto, HttpSession session) {
         Map<String, Object> params = new HashMap<String, Object>();
         System.out.println(dto);
 
@@ -128,7 +131,7 @@ public class RemoteCallController {
             params.put("autoflag", dto.getAutoflag());
             if (dto.getAutoflag().equals("F")) {
                 if (dto.getNodenum() != null) {
-                    params.put("nodenum", dto.getNodenum());
+                    params.put("nodenum", dto.getNodenum().charAt(1));
                 }
                 if (dto.getSnr() != null) {
                     params.put("snr", dto.getSnr());
@@ -150,7 +153,7 @@ public class RemoteCallController {
                 }
             } else if (dto.getAutoflag().equals("0")) {
                 if (dto.getNodenum() != null) {
-                    params.put("nodenum", dto.getNodenum());
+                    params.put("nodenum", dto.getNodenum().charAt(1));
                 }
                 if (dto.getFlag2() != null) {
                     params.put("flag2", dto.getFlag2());
@@ -170,10 +173,13 @@ public class RemoteCallController {
             }
             LOGGER.info("请求参数 ------ >" + paramsStr);
             // TODO 启动设置
-            // JSONHelper.getJSON(params, JSONHelper.NODE_SET_URL);
+            String result = JSONHelper.getJSON(params, JSONHelper.NODE_SET_URL);
+            LOGGER.info("result -----> " + result);
+            return result;
 
         } catch (Exception e) {
             LOGGER.info("error --------------------> nodeSet error = {}", e.getMessage());
+            return new Result(false, -1, "请求失败");
         }
     }
 
@@ -213,4 +219,21 @@ public class RemoteCallController {
         }
     }
 
+    @RequestMapping("/restart/{snr}")
+    public Result restart(@PathVariable("snr") String snr, HttpSession session) {
+        // TODO 重启网关
+        LOGGER.info("restart getway snr --------> {}", snr);
+        return new Result(true, 1, "");
+
+    }
+
+    @RequestMapping("/timeInter/{snr}")
+    public Result setTimeInter(@PathVariable("snr") String snr,
+                               @RequestParam("time") Integer time,
+                               HttpSession session) {
+        // TODO 设置上报时间
+        LOGGER.info("set timeInter getway snr --------> {}", snr);
+        LOGGER.info("set timeInter getway time -------> {}", time);
+        return new Result(true, 1, "设置上报时间成功!");
+    }
 }

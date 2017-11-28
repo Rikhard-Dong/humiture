@@ -106,6 +106,7 @@ public class ManageController {
     @PostMapping("/node")
     public Result addNode(Node node, HttpSession session) {
         node.setType(1);
+        LOGGER.info("node is --------------------------->\n{}\n--------------------", node);
         try {
             getwayNodeService.addNode(node, session);
         } catch (Exception e) {
