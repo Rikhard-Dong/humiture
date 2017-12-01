@@ -70,12 +70,12 @@ public class RemoteCallController {
             int index = 0;
             Collections.sort(infos);
             while (snr != 9) {
-                if (index < infos.size() && snr != Integer.valueOf(infos.get(index).getSnr())) {
+                if (index >= infos.size() ||  snr != Integer.valueOf(infos.get(index).getSnr())) {
                     RealTimeTHInfo realTimeTHInfo = new RealTimeTHInfo("-1", "-1", "-1", "-1", -1, "-1");
                     realTimeTHInfo.setSnr("0" + snr);
                     infos.add(realTimeTHInfo);
                     snr++;
-                } else if (snr == Integer.valueOf(infos.get(index).getSnr())) {
+                } else {
                     snr++;
                     index++;
                 }

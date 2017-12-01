@@ -135,7 +135,7 @@ public class DataController {
      * @return
      */
     @PostMapping(value = "/getways/simple")
-    public DataTableResult listNodesNotWithoutSubNode(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+    public Object listNodesNotWithoutSubNode(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                                       @RequestParam(value = "rows", required = false, defaultValue = "20") Integer rows,
                                                       HttpSession session) {
         LOGGER.info("getways simple, page = {}, rows = {}", page, rows);
