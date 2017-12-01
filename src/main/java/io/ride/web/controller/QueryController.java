@@ -54,7 +54,7 @@ public class QueryController {
                                                HttpSession session) {
         try {
             return queryService.queryThByReportTime(nodeMark, startTime, endTime, page, rows, session);
-        } catch (HasNoPermissionException e) {
+        } catch (Exception e) {
 //            e.printStackTrace();
             LOGGER.error("query th by report time error = {}", e.getMessage());
             return new DataTableResult();
