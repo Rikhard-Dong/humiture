@@ -228,7 +228,9 @@ public class UserServiceImpl implements UserService {
         if (users != null) {
             for (UserInfo user : users) {
                 user.setUnit(unitDao.findById(user.getUnitId()));
-                user.setTitle(user.getUnit().getTitle());
+                if (user.getUnit() != null) {
+                    user.setTitle(user.getUnit().getTitle());
+                }
             }
         }
         return users;
