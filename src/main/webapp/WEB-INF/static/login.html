@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="renderer" content="webkit">
     <title>登录</title>
     <link rel="stylesheet" href="css/pintuer.css">
@@ -13,55 +14,51 @@
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <script src="address.js"></script>
 </head>
+
 <body>
-<div class="bg"></div>
-<div class="container">
-    <div class="line bouncein">
-        <div class="xs6 xm4 xs3-move xm4-move">
-            <div style="height:150px;"></div>
-            <div class="media media-y margin-big-bottom">
-            </div>
-            <form action="index.html" method="post">
-                <div class="panel loginbox">
-                    <div class="text-center margin-big padding-big-top">
-                        <h1>后台管理中心</h1>
-                    </div>
-                    <div class="panel-body" style="padding:30px; padding-bottom:10px; padding-top:10px;">
-                        <div class="form-group">
-                            <div class="field field-icon-right">
-                                <input type="text" class="input input-big" name="name" id="username" placeholder="登录账号"
-                                       data-validate="required:请填写账号"/>
-                                <span class="icon icon-user margin-small"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="field field-icon-right">
-                                <input type="password" class="input input-big" name="password" id="password"
-                                       placeholder="登录密码" data-validate="required:请填写密码"
-                                />
-                                <span class="icon icon-key margin-small"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="field">
-                                <input type="text" class="input input-big" id="code" name="code" placeholder="填写右侧的验证码"
-                                       data-validate="required:请填写右侧的验证码"
-                                />
-                                <img src="http://47.100.113.55:8080/th/user/code" alt="" width="100" height="32"
-                                     class="passcode" style="height:43px;cursor:pointer;"
-                                     onclick="">
-                            </div>
-                        </div>
-                    </div>
-                    <div style="padding:30px;">
-                        <input type="button" id="button" class="button button-block bg-main text-big input-big"
-                               value="登录">
-                    </div>
+    <div class="bg"></div>
+    <div class="container">
+        <div class="line bouncein">
+            <div class="xs6 xm4 xs3-move xm4-move">
+                <div style="height:150px;"></div>
+                <div class="media media-y margin-big-bottom">
                 </div>
-            </form>
+                <form action="index.html" method="post">
+                    <div class="panel loginbox">
+                        <div class="text-center margin-big padding-big-top">
+                            <h1>后台管理中心</h1>
+                        </div>
+                        <div class="panel-body" style="padding:30px; padding-bottom:10px; padding-top:10px;">
+                            <div class="form-group">
+                                <div class="field field-icon-right">
+                                    <input type="text" class="input input-big" name="name" id="username" placeholder="登录账号" data-validate="required:请填写账号" />
+                                    <span class="icon icon-user margin-small"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="field field-icon-right">
+                                    <input type="password" class="input input-big" name="password" id="password" placeholder="登录密码" data-validate="required:请填写密码"
+                                    />
+                                    <span class="icon icon-key margin-small"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="field">
+                                    <input type="text" class="input input-big" id="code" name="code" placeholder="填写右侧的验证码" data-validate="required:请填写右侧的验证码"
+                                    />
+                                    <img src="http://47.100.113.55:8080/th/user/code" alt="" width="100" height="32" class="passcode" style="height:43px;cursor:pointer;"
+                                        onclick="">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding:30px;">
+                            <input type="button" id="button" class="button button-block bg-main text-big input-big" value="登录">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
 </body>
 <script>
@@ -82,38 +79,86 @@
             },
             success: function (data) {
                 if (data.success == true) {
-                    $.ajax({
-                        url: address + '/user/validate',
-                        method: 'GET',
-                        data: {
-                            'code': $('#code').val()
-                        },
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        crossDomain: true,
-                        success: function (result) {
-                            console.log(result);
-                            if (result.success == true) {
 
-                            } else {
+                    if (data.data.user.userTypeDesc == "系统管理员") {
+                        $.ajax({
+                            url: address + '/user/validate',
+                            method: 'GET',
+                            data: {
+                                'code': $('#code').val()
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            crossDomain: true,
+                            success: function (result) {
+                                console.log(result);
+                                if (result.success == true) {
 
-                                window.location.href = "login.html";
-                                alert("您的验证码出错啦！");
+                                    window.location.href =
+                                        "systemadministrator/index.html";
+                                } else {
+
+                                    window.location.href = "login.html";
+                                    alert("您的验证码出错啦！");
+                                }
                             }
-                        }
-                    });
-                }
+                        });
 
-                if (data.data.user.userTypeDesc == "系统管理员") {
-                    window.location.href = "systemadministrator/index.html";
-                } else if (data.data.user.userTypeDesc == "单位管理员" || data.data.user.userTypeDesc ==
-                    "特权单位管理员") {
+                    } else if (data.data.user.userTypeDesc == "单位管理员" || data.data.user.userTypeDesc ==
+                        "特权单位管理员") 
+                        {
+                            $.ajax({
+                            url: address + '/user/validate',
+                            method: 'GET',
+                            data: {
+                                'code': $('#code').val()
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            crossDomain: true,
+                            success: function (result) {
+                                console.log(result);
+                                if (result.success == true) {
 
-                    window.location.href = "Unitmanager/index.html";
+                                 window.location.href = "Unitmanager/index.html";
+                                } else {
 
-                } else if (data.data.user.userTypeDesc == '普通用户') {
-                    window.location.href = "commonuser/index.html";
+                                    window.location.href = "login.html";
+                                    alert("您的验证码出错啦！");
+                                }
+                            }
+                        });
+                      
+
+                    } else if (data.data.user.userTypeDesc == '普通用户') {
+                        $.ajax({
+                            url: address + '/user/validate',
+                            method: 'GET',
+                            data: {
+                                'code': $('#code').val()
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            crossDomain: true,
+                            success: function (result) {
+                                console.log(result);
+                                if (result.success == true) {
+
+                                      window.location.href = "commonuser/index.html";
+                                } else {
+
+                                    window.location.href = "login.html";
+                                    alert("您的验证码出错啦！");
+                                }
+                            }
+                        });
+                  
+                    }
+
+
                 } else {
                     alert("用户名或密码错误！！！请联系管理员qq:3450236968");
                 }
