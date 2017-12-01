@@ -319,9 +319,9 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
                 String getwayId = getway.getGetwayMark();
                 List<String> subNodeIds = new ArrayList<String>();
                 for (Node node : getway.getNodes()) {
-//                    if (node.getType() == 1) {
+                    if (node.getType() == 1) {
                     subNodeIds.add(node.getNodeMark());
-//                    }
+                    }
                 }
                 Map<String, Object> temp = new HashMap<String, Object>();
                 temp.put("parentId", getwayId);
