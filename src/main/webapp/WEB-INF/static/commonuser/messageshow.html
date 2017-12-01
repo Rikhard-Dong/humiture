@@ -22,7 +22,7 @@
 
     .sxd {
         margin-left: 361px;
-        margin-top: -169px;
+        margin-top: -218px;
         position: absolute;
     }
 
@@ -88,12 +88,11 @@
                 <br>
                 <br>
                 <div id="zidongshezhi" style="display:none">
-
                     标志位：
                     <select name="flag">
-                        <option value="F">温度</option>
+                        <option value="0">温度</option>
 
-                        <option value="0">湿度</option>
+                        <option value="F">湿度</option>
                     </select>
                     <br>
                     <br> 启停位1：
@@ -127,7 +126,7 @@
     <div id="dlg2" class="easyui-dialog" style="width:260px;height:80px;padding: 10px 20px" closed="true">
         <form id="settime">
             
-            <input type="text" name="time" value="50"/>
+            <input type="text" name="time" value="30"/>
             <button onclick="tijiao()">提交</button>
         </form>
     </div>
@@ -177,7 +176,7 @@
             $("#dlg").dialog("open").dialog("setTitle", "添加控制信息");
 
         });
-    });
+    })
 
     $(function () {
         $("#hand1").click(function () {
@@ -185,7 +184,7 @@
             $("#zidongshezhi").hide();
             document.getElementById("auto_or").value = "手动";
         });
-    });
+    })
 
     $(function () {
         $("#auto1").click(function () {
@@ -193,7 +192,7 @@
             $("#shoudong").hide();
             document.getElementById("auto_or").value = "自动";
         });
-    });
+    })
 
     function restart1() {
         $.ajax({
@@ -207,12 +206,15 @@
 
         });
 
-    }
+    };
+
     function setTimes() {
         $("#dlg2").dialog("open").dialog("setTitle", "设置时间间隔");
+     
+
+    };
 
 
-}
     function  tijiao()
     {
         $("#settime").form("submit", {
@@ -447,7 +449,7 @@
 
             }
         });
-    });
+    })
 
     // function f(nodeIdd, temper2, statuss, dianliang, shidu, snr, snrs) {
 
@@ -507,28 +509,24 @@
     }
 
     function saveRole() {
-        //   $.ajax({
-        //     url:'http://192.168.3.2:8888/remote/node/status/'+$("#head").val(),
-        //     type:'get',
-        //     data:{},
-
-        //   });
-
-        $("#fm").form("submit", {
+        $.ajax({
             url: address + '/remote/nodeSet',
             type: 'get',
-            onSubmit: function () {
-                return $(this).form("validate");
-            },
+           data:$("#fm").serialize(),
             xhrFields: {
                 withCredentials: true
             },
             crossDomain: true,
             success: function (result) {
-
-
-                console.log(result);
-
+                if(result=='[true]')
+                {
+                alert("修改成功");
+                closeRoleSaveDialog();
+                window.location.href = "messageshow.html";
+                }
+                else{
+                    alert("修改失败");
+                }
             },
 
         });

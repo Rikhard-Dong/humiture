@@ -5,14 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Document</title>
 </head>
 <script src="../easyui/jquery.min.js"></script>
-<script src="../easyui/jquery.easyui.min.js"></script>
+<script src="../easyui/jquery.easyui.min.1.js"></script>
 <script src="../easyui/plugins/jquery.datagrid.js"></script>
 <script src="../easyui/locale/easyui-lang-zh_CN.js"></script>
 <link rel="stylesheet" href="../easyui/themes/default/easyui.css" />
 <link rel="stylesheet" href="../easyui/themes/icon.css" />
+<script src="../address.js"></script>
 <style>
     * {
         margin: 0px;
@@ -20,9 +22,9 @@
     }
 
     .sxd {
-        margin-left: 510px;
-        margin-top: -251px;
-        position: absolute;
+        margin-left: 472px;
+        margin-top: -215px;
+        position:absolute;
     }
 </style>
 
@@ -35,23 +37,20 @@
         <input type="text" name="title" id="node_id" size="20" onkeydown="if(event.keyCode==13) searchUser()" value="" />
         <button class="easyui-linkbutton" iconCls="icon-search" plain="true" id="sss" onclick="">搜索</button>
     </div> -->
-    <table id="dg" width="510">
-
+    <table id="dg" width="470"  toolbar="#tb" title="网关信息">
     </table>
-    
     <div class="sxd">
-        <table id="w" width="500">
+        <table id="w" width="683" toolbar="#tb2" title="节点信息" >
         </table>
     </div>
-    <table id="chaxun" title="网关节点查询" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" fit="true"
+    <!-- <table id="chaxun" title="网关节点查询" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" fit="true"
         toolbar="#tb">
         <thead>
             <tr>
 
             </tr>
         </thead>
-    </table>
-
+    </table> -->
     <div id="tb">
         <div>
             <a href="javascript:openRoleAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
@@ -64,11 +63,24 @@
             <a href="javascript:searchRole()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
         </div>
     </div>
-    <div id="dlg" class="easyui-dialog" style="width: 570px;height: 350px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
+    <div id="tb2" style="display:none;">
+            <div>
+                <a href="javascript:openRoleAddDialog1()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+                <a href="javascript:openRoleModifyDialog1()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+                <a href="javascript:deleteRole1()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+            </div>
+            <div>
+                &nbsp;节点号：&nbsp;
+                <input type="text" name="mark" id="idd" size="20" onkeydown="if(event.keyCode==13) searchRole()" />
+                <a href="javascript:searchRole()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+            </div>
+        </div>
+
+    <div id="dlg" class="easyui-dialog" style="width: 570px;height: 350px;padding: 10px 20px" closed="true" buttons="#dlg-buttons2">
         <form id="fm" method="post">
             <table cellspacing="5px;">
                 <tr>
-                    <td>节点盒子对应ID：</td>
+                    <td>网关盒子对应ID：</td>
                     <td width="80%">
                         <input type="text" id="roleName" name="getwayMark" class="easyui-validatebox" required="true" />
                     </td>
@@ -78,13 +90,13 @@
                     <td width="80%">
                         <input type="text" id="roleName" name="status" class="easyui-validatebox" required="true" list="itemlist" />
                         <datalist id="itemlist">
-                            <option value="0">在线</option>
-                            <option value="1">不在线</option>
+                            <option value="0">不在线</option>
+                            <option value="1">在线</option>
                         </datalist>
                     </td>
                 </tr>
                 <tr>
-                    <td>是否为备用节点：</td>
+                    <td>是否备用：</td>
                     <td width="80%">
                         <input type="text" id="roleName" name="spareNode" class="easyui-validatebox" required="true" list="itemlist2" />
                         <datalist id="itemlist2">
@@ -94,76 +106,111 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>节点号：</td>
+                    <td>网关编号：</td>
                     <td width="80%">
                         <input type="text" id="roleName" name="nodeNum" class="easyui-validatebox" required="true" />
                     </td>
                 </tr>
                 <tr>
-                    <td>上报时间间隔：</td>
-                    <td width="80%">
-                        <input type="text" id="roleName" name="timeInter" class="easyui-validatebox" required="true" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>备注：</td>
-                    <td width="80%">
-                        <input type="text" id="roleName" name="memo" class="easyui-validatebox" required="true" />
-                    </td>
-                </tr>
+                        <td>备注：</td>
+                        <td width="80%">
+                            <input type="text" id="roleName" name="memo" class="easyui-validatebox" required="true" />
+                        </td>
+                    </tr>
             </table>
         </form>
     </div>
+    <div id="dlg1" class="easyui-dialog" style="width: 570px;height: 350px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
+            <form id="fm2" method="post">
+                <table cellspacing="5px;">
+                    <tr>
+                        <td>节点盒子ID：</td>
+                        <td width="80%">
+                            <input type="text" id="roleName" name="nodeMark" class="easyui-validatebox" required="true" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>节点状态：</td>
+                        <td width="80%">
+                            <input type="text" id="roleName" name="status" class="easyui-validatebox" required="true" list="itemlist" />
+                            <datalist id="itemlist">
+                                <option value="0">不在线</option>
+                                <option value="1">在线</option>
+                            </datalist>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>类型(节点)：</td>
+                        <td width="80%">
+                            <input type="text" id="roleName" name="type" class="easyui-validatebox" required="true" list="itemlist2" />
+                            <datalist id="itemlist2">
+                                <option value="0">否</option>
+                                <option value="1">是</option>
+                            </datalist>
+                        </td>
+                    </tr>
+                
+                </table>
+            </form>
+        </div>
     <div id="dlg-buttons">
-        <a href="javascript:saveRole()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+        <a href="javascript:saveRole1()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
         <a href="javascript:closeRoleSaveDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
     </div>
+
     <div id="dlg2" class="easyui-dialog" style="width: 300px;height: 450px;padding: 10px 20px" closed="true" buttons="#dlg2-buttons">
         <ul id="tree" class="easyui-tree"></ul>
     </div>
-    <!-- <table id="chaxun" width="500">
-        <div id="toolbar">
-            <div id="toolbar3">
-                <a href="#">添加</a>
-                <a href="#">删除</a>
-                <a href="#">修改</a>
-            </div>
+
+    <div id="dlg-buttons2">
+            <a href="javascript:saveRole()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+            <a href="javascript:closeRoleSaveDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
         </div>
-    </table> -->
+        
+        <div id="dlg2" class="easyui-dialog" style="width: 300px;height: 450px;padding: 10px 20px" closed="true" buttons="#dlg2-buttons">
+            <ul id="tree" class="easyui-tree"></ul>
+        </div>
+
+
 </body>
-<!-- 
-<div id="wangguan">
-        <table class="easyui-datagrid" style="width:200px;height:250px"   
-        data-options="url:'wangguan.json',fitColumns:true,singleSelect:true">   
-    <thead>   
-        <tr>   
-            <th data-options="field:'nodeId',width:100">网关号</th>   
-        </tr>   
-    </thead>   
-</table> 
-</div> -->
+
 <script>
+     
     var id;
+
     $(function () {
+      
         $("#dg").datagrid({
             dataType: 'json',
-            url: "http://192.168.3.2:8888/data/getways/simple",
+            url: address+"/data/getways/simple",
             columns: [
                 [{
                         title: '编号',
-                        field: 'Id',
+                        field: 'getwayId',
                         width: 100,
                         checkbox: true, //这个checkbox:true 就表示让Id这一行显示为复选框的样式。  
                     },
                     {
                         field: 'getwayMark',
                         title: '网关号',
-                        width: 250
+                        width:110
                     },
                     {
                         field: 'status',
                         title: '网关状态',
-                        width: 250
+                        width:110
+                    }
+                    ,
+                    {
+                        field: 'snr',
+                        title: '网关编号',
+                        width:110
+                    }
+                    ,
+                    {
+                        field: 'statusDesc',
+                        title: '状态描述',
+                        width:110
                     }
                 ]
             ],
@@ -172,8 +219,10 @@
             pageList: [1, 2, 10],
             onClickRow: function (index, row) {
                 id = row["getwayMark"];
+                getwayid=row["getwayId"];
+               
                 $.ajax({
-                    url: "http://192.168.3.2:8888/data/getway/" + id + "/subNodes",
+                    url: address+"/data/getway/" + id + "/subNodes",
                     type: 'post',
                     success: function () {
 
@@ -182,7 +231,7 @@
                 });
                 $("#w").datagrid({
                     dataType: 'json',
-                    url: "http://192.168.3.2:8888/data/getway/" + id + "/subNodes",
+                    url: address+"/data/getway/" + id + "/subNodes",
                     columns: [
                         [{
                                 title: '编号',
@@ -193,23 +242,57 @@
                             {
                                 field: 'nodeId',
                                 title: '节点号',
-                                width: 248
+                                width: 110
                             },
                             {
                                 field: 'status',
                                 title: '网关状态',
-                                width: 248
+                                width: 110,
+                                formatter: function (value, row, index) {
+
+                                if (value == 1) {
+                                    return "在线"
+                                }  else {
+                                    return "不在线"
+                                }
                             }
+                            }
+                            ,
+                            {
+                                field: 'nodeMark',
+                                title: '节点盒子ID',
+                                width: 110
+                            },
+                            {
+                                field: 'nowTemper',
+                                title: '当前温度',
+                                width: 110
+                            }
+                            ,
+                            {
+                                field: 'nowHumidity',
+                                title: '当前湿度',
+                                width: 110
+                            }
+                            ,
+                            {
+                                field: 'type',
+                                title: '类型(节点)',
+                                width: 100
+                            }
+                            
                         ]
                     ],
+                    pagination: true,
+            pageSize: 8,
+            pageList: [1, 2, 8],
                 });
 
             }
 
 
         });
-    });
-
+    })
     function searchRole() {
         // $.ajax({
         //     type: 'post',
@@ -219,7 +302,7 @@
 
         $("#chaxun").datagrid({
             dataType: 'json',
-            url: "http://192.168.3.2:8888/data/getway/" + $("#idd").val(),
+            url: address+"/search/getway/" + $("#idd").val(),
             columns: [
                 [{
                         title: '编号',
@@ -245,45 +328,88 @@
     //     });
     // }
     var url = "";
-
     function openRoleAddDialog() {
-        $("#dlg").dialog("open").dialog("setTitle", "添加节点信息");
-        url = "http://192.168.3.2:8888/manage/getway"; //添加节点信息的时候的url
+        $("#dlg").dialog("open").dialog("setTitle", "添加网关信息");
+        url = address+"/manage/getway"; //添加网关信息的时候的url
     }
-
+    function openRoleAddDialog1() {
+        $("#dlg1").dialog("open").dialog("setTitle", "添加节点信息");
+        url = address+"/manage/node"; //添加网关信息的时候的url
+    }
+    
     function saveRole() {
-        $("#fm").form("submit", {
-            url: url,
+        
 
-            onSubmit: function () {
-                return $(this).form("validate");
+        $.ajax({
+            url:url,
+          type:"post",
+           data:$("#fm").serialize(),
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (result) {
+              if(result.success==true)
+              {
+                  alert("提交成功!");
+                  closeRoleSaveDialog();
+              }
+              else{
+                  alert("次网关已存在，请重新添加");
+              }
+            },
+
+        });
+
+
+        // $("#fm").form("submit", {
+        //     url: url,
+        //     xhrFields: {
+		// 		withCredentials: true
+        //     },
+          
+		// 	crossDomain:true,
+        //     onSubmit: function () {
+        //         return $(this).form("validate");
+        //     },
+        //     success: function (result) {
+        //         alert(url);
+        //         console.log(result);
+                
+        //     },
+
+        // });
+    }
+    function saveRole1() {
+       
+        
+        $("#fm2").form("submit", {
+            url: url,
+            xhrFields: {
+				withCredentials: true
+			},
+            crossDomain:true,
+            
+            onSubmit: function (param) {
+              param.getwayId=getwayid;
+               console.log(param);
             },
             success: function (result) {
-                alert(url);
-                console.log(result);
-                if (result.success == true) {
-                    $.messager.alert('系统提示', "<font color=red>" + result.message + "</font>");
-
-                } else {
-                    $.messager.alert('系统提示', '保存成功');
-                    closeRoleSaveDialog();
-                    $("#dg").datagrid("reload");
-                }
+               
+                // console.log(result);
+               
+              alert("保存成功");
+                
             },
 
         });
     }
-
-
-
     function closeRoleSaveDialog() {
         $("#dlg").dialog("close");
         $("#fm").form('clear');
     }
-
-
     function deleteRole() {
-        var selectedRows = $("#chaxun").datagrid('getSelections');
+        var selectedRows = $("#dg").datagrid('getSelections');
 
         if (selectedRows.length == 0) {
             $.messager.alert('系统提示', '请选择要删除的数据！');
@@ -297,17 +423,54 @@
         var ids = strIds.join(",");
         $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
             if (r) {
-
                 $.ajax({
-                    url: "http://192.168.3.2:8888/manage/getways/" + strIds,
+                    url: address+"/manage/getway/"+strIds,
                     type: 'delete',
+                    xhrFields: {
+				withCredentials: true
+			},
+			crossDomain:true,
                     success: function (result) {
                         if (result.success) {
                             $.messager.alert('系统提示', "您已成功删除数据！");
                             $("#dg").datagrid("reload");
                         } else {
-                            $.messager.alert('系统提示', '<font color=red>' + selectedRows[result.errorIndex]
-                                .roleName + '</font>' + result.errorMsg);
+                           alert('系统提示删除失败');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    function deleteRole1() {
+        var selectedRows = $("#w").datagrid('getSelections');
+
+        if (selectedRows.length == 0) {
+            $.messager.alert('系统提示', '请选择要删除的数据！');
+            return;
+        }
+        var strIds = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            strIds.push(selectedRows[i].nodeMark);
+        }
+        alert(strIds);
+        var ids = strIds.join(",");
+        $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
+            if (r) {
+
+                $.ajax({
+                    url: address+"/manage/node/"+strIds,
+                    type: 'delete',
+                    xhrFields: {
+				withCredentials: true
+			},
+			crossDomain:true,
+                    success: function (result) {
+                        if (result.success) {
+                            $.messager.alert('系统提示', "您已成功删除数据！");
+                            $("#dg").datagrid("reload");
+                        } else {
+                           alert('系统提示删除失败');
                         }
                     }
                 });
@@ -315,7 +478,7 @@
         });
     }
     function openRoleModifyDialog() {
-        var selectedRows = $("#chaxun").datagrid('getSelections');
+        var selectedRows = $("#dg").datagrid('getSelections');
 
         if (selectedRows.length != 1) {
             $.messager.alert('系统提示', '请选择一条要编辑的数据！');
@@ -324,7 +487,22 @@
         var row = selectedRows[0];
         $("#dlg").dialog("open").dialog("setTitle", "修改信息");
         $("#fm").form("load", row);
-        url = "http://192.168.3.2:8888/manage/getway/update"; //修改的时候的url
+        url = address+"/manage/getway/update"; //修改的时候的url
+    }
+
+
+    function openRoleModifyDialog1() {
+       
+        var selectedRows = $("#w").datagrid('getSelections');
+
+        if (selectedRows.length != 1) {
+            $.messager.alert('系统提示', '请选择一条要编辑的数据！');
+            return;
+        }
+        var row = selectedRows[0];
+        $("#dlg1").dialog("open").dialog("setTitle", "修改信息");
+        $("#fm2").form("load", row);
+        url = address+"/manage/node/update"; //修改的时候的url
     }
 </script>
 </html>

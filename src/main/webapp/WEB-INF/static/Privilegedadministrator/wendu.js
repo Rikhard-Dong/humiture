@@ -48,7 +48,7 @@ $(document).ready(function() {
      
         var tooltip = {
            valueSuffix: '\xB0C'
-        };
+        }
      
         var legend = {
            layout: 'vertical',
@@ -137,7 +137,7 @@ $(document).ready(function() {
  
     var tooltip = {
        valueSuffix: '%RH'
-    };
+    }
  
     var legend = {
        layout: 'vertical',

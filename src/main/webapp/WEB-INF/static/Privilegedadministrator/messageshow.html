@@ -13,6 +13,7 @@
 <script src="../easyui/locale/easyui-lang-zh_CN.js"></script>
 <link rel="stylesheet" href="../easyui/themes/default/easyui.css" />
 <link rel="stylesheet" href="../easyui/themes/icon.css" />
+<script src="../address.js"></script>
 <style>
     * {
         margin: 0px;
@@ -20,8 +21,8 @@
     }
 
     .sxd {
-        margin-left: 510px;
-        margin-top: -205px;
+        margin-left: 361px;
+        margin-top: -218px;
         position: absolute;
     }
 
@@ -41,10 +42,21 @@
         <input type="text" name="title" id="node_id" size="20" onkeydown="if(event.keyCode==13) searchUser()" value="" />
         <button class="easyui-linkbutton" iconCls="icon-search" plain="true" id="sss" onclick="">搜索</button>
     </div> -->
-    <table id="dg" width="510" title="网关的信息显示">
+    <div id="tb" style="display:none">
+        <div>
+            <a href="javascript:openRoleAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">手自动开关</a>
+        </div>
+    </div>
+    <div id="tb2" style="display:none">
+        <div>
+            <a href="javascript:restart1()" class="easyui-linkbutton" iconCls="icon-add" plain="true" id="re">重启网关</a>
+            <a href="javascript:settime()" class="easyui-linkbutton" iconCls="icon-add" plain="true"  id="timee">设置时间间隔</a>
+        </div>
+    </div>
+    <table id="dg" width="360" title="网关的信息显示" toolbar="#tb2">
     </table>
     <div class="sxd">
-        <table id="w" width="760px" toolbar="#tb" title="节点网关的信息显示">
+        <table id="w" width="780px" toolbar="#tb" title="节点网关的信息显示">
         </table>
     </div>
     <!-- <table id="chaxun" title="网关节点查询" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" fit="true"
@@ -61,10 +73,8 @@
                 <input id="snr" name="snr" type="text" value="" />
                 </label>
                 <br>
-                <br>
                 <input id="nodenum" name="nodenum" type="text" value="" />
                 </label>
-                <br>
                 <br>
                 <tr>
                     <label>
@@ -78,12 +88,11 @@
                 <br>
                 <br>
                 <div id="zidongshezhi" style="display:none">
-
                     标志位：
                     <select name="flag">
-                        <option value="F">温度</option>
+                        <option value="0">温度</option>
 
-                        <option value="0">湿度</option>
+                        <option value="F">湿度</option>
                     </select>
                     <br>
                     <br> 启停位1：
@@ -111,6 +120,14 @@
                     </select>
                 </div>
             </table>
+        </form>
+    </div>
+
+    <div id="dlg2" class="easyui-dialog" style="width:260px;height:80px;padding: 10px 20px" closed="true">
+        <form id="settime">
+            
+            <input type="text" name="time" value="30"/>
+            <button onclick="tijiao()">提交</button>
         </form>
     </div>
     <div id="dlg-buttons">
@@ -154,14 +171,12 @@
 
 </body>
 <script>
-
-
     $(function () {
         $("#btn_1").click(function () {
             $("#dlg").dialog("open").dialog("setTitle", "添加控制信息");
 
         });
-    });
+    })
 
     $(function () {
         $("#hand1").click(function () {
@@ -169,7 +184,7 @@
             $("#zidongshezhi").hide();
             document.getElementById("auto_or").value = "手动";
         });
-    });
+    })
 
     $(function () {
         $("#auto1").click(function () {
@@ -177,9 +192,44 @@
             $("#shoudong").hide();
             document.getElementById("auto_or").value = "自动";
         });
-    });
+    })
+
+    function restart1() {
+        $.ajax({
+            url: address + '/remote/restart/' + snrs,
+            type: "post",
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function () {}
+
+        });
+
+    };
+
+    function setTimes() {
+        $("#dlg2").dialog("open").dialog("setTitle", "设置时间间隔");
+     
+
+    };
 
 
+    function  tijiao()
+    {
+        $("#settime").form("submit", {
+            url: address + '/remote//timeInter/' + snrs,
+            type: 'post',
+            onSubmit: function () {
+                return $(this).form("validate");
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+           
+        });
+    }
     var id;
     var nodeIdd;
     var statuss;
@@ -188,7 +238,7 @@
     $(function () {
         $("#dg").datagrid({
             dataType: 'json',
-            url: "http://192.168.3.2:8888/data/getways/simple",
+            url: address + "/data/getways/simple",
             columns: [
 
                 [{
@@ -200,17 +250,27 @@
                     {
                         field: 'getwayMark',
                         title: '网关号',
-                        width: 250
+                        width: 110
                     },
                     {
                         field: 'status',
                         title: '网关状态',
-                        width: 250
+                        width: 110,
+                        formatter: function (value, row, index) {
+
+
+                            if (value == 1) {
+                                return "在线"
+                            } else {
+                                return "不在线"
+                            }
+                        }
+
                     },
                     {
                         field: 'snr',
-                        title: 'snr',
-                        width: 250
+                        title: '网关编号',
+                        width: 110
                     }
                 ]
             ],
@@ -221,6 +281,14 @@
 
                 id = row["getwayId"];
                 snrs = row["snr"];
+                $("#re").click(function () {
+                restart1();
+                   });
+                $("#timee").click(function () {
+                    setTimes();
+                });
+                
+                document.getElementById("snr").value = snrs;
                 // $.ajax({
                 //     url: "http://192.168.3.2:8888/remote/nodeInfo/"+id,
                 //     type: 'post',
@@ -233,7 +301,7 @@
                 // });
                 $("#w").datagrid({
                     dataType: 'json',
-                    url: "http://192.168.3.2:8888/remote/nodeInfo/" + id,
+                    url: address + "/remote/nodeInfo/" + id,
                     type: "get",
                     columns: [
                         [{
@@ -247,38 +315,87 @@
                             {
                                 field: 'nodenum',
                                 title: '节点号',
-                                width: 150
+                                width: 110,
+
+                                formatter: function (value, row, index) {
+                                    if (value == -1) {
+                                        return "";
+                                    } else {
+                                        return value;
+                                    }
+
+                                }
                             },
                             {
                                 field: 'temper',
                                 title: '节点的温度℃',
-                                width: 100
+                                width: 100,
+                                formatter: function (value, row, index) {
+                                    if (value == -1) {
+                                        return "";
+                                    } else {
+                                        return value;
+                                    }
+
+                                }
                             },
                             {
                                 field: 'humid',
                                 title: '节点的湿度RH',
-                                width: 100
+                                width: 100,
+                                formatter: function (value, row, index) {
+                                    if (value == -1) {
+                                        return "";
+                                    } else {
+                                        return value;
+                                    }
+
+                                }
                             },
                             {
                                 field: 'power',
                                 title: '节点的电量%',
-                                width: 100
+                                width: 100,
+                                formatter: function (value, row, index) {
+                                    if (value == -1) {
+                                        return "";
+                                    } else {
+                                        return value;
+                                    }
+
+                                }
 
                             },
                             {
                                 field: 'type',
-                                title: '状态开关',
-                                width: 100
+                                title: '开关(节点)',
+                                width: 100,
+                                formatter: function (value, row, index) {
+                                    if (value == -1) {
+                                        return "";
+                                    } else {
+                                        return value;
+                                    }
+
+                                }
                             },
                             {
                                 field: 'reporttime',
                                 title: '上报时间',
-                                width: 150
+                                width: 150,
+                                formatter: function (value, row, index) {
+                                    if (value == -1) {
+                                        return "";
+                                    } else {
+                                        return value;
+                                    }
+
+                                }
                             },
                             {
                                 field: 'snr',
-                                title: 'snr',
-                                width: 150
+                                title: '节点编号',
+                                width: 89
                             }
                         ]
                     ],
@@ -286,42 +403,45 @@
                     pageSize: 8,
                     pageList: [8],
                     onClickRow: function (index, row) {
+
                         nodeIdd = row["nodenum"];
                         temper2 = row["temper"];
                         statuss = row["type"];
                         dianliang = row["power"];
                         shidu = row["humid"];
-                        snr = row["snr"];
+                        snr2 = row["snr"];
+                        document.getElementById("nodenum").value = snr2;
 
-                        f(nodeIdd, temper2, statuss, dianliang, shidu, snr, snrs);
-                        $("#messageShow").fadeIn("slow");
-                        $.ajax({
-                            url: 'http://192.168.3.2:8888/remote/node/status/' +
-                                snrs,
-                            type: 'get',
-                            success: function (result) {
-                                var a = eval('(' + result + ')');
-                                var  kaiguan=[];
-                             for(var value  in a)
-                             {
-                                var  i=a[value].auto;
-                                kaiguan.push(i);
-                             }
+                        // f(nodeIdd, temper2, statuss, dianliang, shidu, snr, snrs);
+                        // $("#messageShow").fadeIn("slow");
+                        // $.ajax({
+                        //     url: 'http://10.28.44.241:8888/remote/node/status/' +
+                        //         snrs,
+                        //     type: 'get',
+                        //     success: function (result) {
+                        //         var a = eval('(' + result + ')');
+                        //         var  kaiguan=[];
+                        //      for(var value  in a)
+                        //      {
+                        //         var  i=a[value].auto;
+                        //         kaiguan.push(i);
+                        //      }
 
-                             var  b=eval(kaiguan);
-                             var c=parseInt(b);
-                           if(c==0)
-                           {
-                            document.getElementById("auto_or").value = "手动";
-                           }
-                               else{
-                                document.getElementById("auto_or").value = "自动";
-                               }
-                            },
+                        //      var  b=eval(kaiguan);
+                        //      var c=parseInt(b);
+                        //    if(c==0)
+                        //    {
+                        //     document.getElementById("auto_or").value = "手动";
+                        //    }
+                        //        else{
+                        //         document.getElementById("auto_or").value = "自动";
+                        //        }
+                        //     },
 
 
 
-                        });
+                        // });
+
 
                     },
 
@@ -329,18 +449,18 @@
 
             }
         });
-    });
+    })
 
-    function f(nodeIdd, temper2, statuss, dianliang, shidu, snr, snrs) {
+    // function f(nodeIdd, temper2, statuss, dianliang, shidu, snr, snrs) {
 
-        document.getElementById("sun").value = temper2;
-        document.getElementById("windy").value = shidu;
-        document.getElementById("power").value = dianliang;
-        document.getElementById("kaiguan").value = statuss;
-        document.getElementById("head").value = snr;
-        document.getElementById("snr").value = snrs;
-        document.getElementById("nodenum").value = snr;
-    }
+    //     document.getElementById("sun").value = temper2;
+    //     document.getElementById("windy").value = shidu;
+    //     document.getElementById("power").value = dianliang;
+    //     document.getElementById("kaiguan").value = statuss;
+    //     document.getElementById("head").value = snr;
+    //     document.getElementById("snr").value = snrs;
+    //     document.getElementById("nodenum").value = snr;
+    // }
 
 
     function searchRole() {
@@ -352,7 +472,7 @@
 
         $("#w").datagrid({
             dataType: 'json',
-            url: "http://192.168.3.2:8888/data/getway/" + $("#idd").val(),
+            url: address + "/data/getway/" + $("#idd").val(),
             columns: [
                 [{
                         title: '编号',
@@ -385,32 +505,28 @@
 
     function openRoleAddDialog() {
         $("#dlg").dialog("open").dialog("setTitle", "添加节点信息");
-        url = "http://192.168.3.2:8888/manage/getway"; //添加节点信息的时候的url
+        url = address + "/manage/getway"; //添加节点信息的时候的url
     }
 
     function saveRole() {
-        //   $.ajax({
-        //     url:'http://192.168.3.2:8888/remote/node/status/'+$("#head").val(),
-        //     type:'get',
-        //     data:{},
-
-        //   });
-
-        $("#fm").form("submit", {
-            url: 'http://192.168.3.2:8888/remote/nodeSet',
+        $.ajax({
+            url: address + '/remote/nodeSet',
             type: 'get',
-            onSubmit: function () {
-                return $(this).form("validate");
-            },
+           data:$("#fm").serialize(),
             xhrFields: {
                 withCredentials: true
             },
             crossDomain: true,
             success: function (result) {
-
-
-                console.log(result);
-
+                if(result=='[true]')
+                {
+                alert("修改成功");
+                closeRoleSaveDialog();
+                window.location.href = "messageshow.html";
+                }
+                else{
+                    alert("修改失败");
+                }
             },
 
         });
@@ -437,7 +553,7 @@
         $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
             if (r) {
                 $.ajax({
-                    url: "http://192.168.3.2:8888/manage/getways/" + strIds,
+                    url: address + "/manage/getways/" + strIds,
                     type: 'delete',
                     success: function (result) {
                         if (result.success) {
@@ -464,7 +580,7 @@
         var row = selectedRows[0];
         $("#dlg").dialog("open").dialog("setTitle", "修改信息");
         $("#fm").form("load", row);
-        url = "http://192.168.3.2:8888/manage/getway/update"; //修改的时候的url
+        url = address + "/manage/getway/update"; //修改的时候的url
     }
 </script>
 

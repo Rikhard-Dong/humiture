@@ -10,9 +10,9 @@
     <script src="../easyui/locale/easyui-lang-zh_CN.js"></script>
     <link rel="stylesheet" href="../easyui/themes/default/easyui.css" />
     <link rel="stylesheet" href="../easyui/themes/icon.css" />
-
+    <script src="../address.js"></script>
     </script>
-    <script; type="text/javascript">
+    <script type="text/javascript">
         // function check() {
         //     var a = $("#search").val();
            
@@ -43,7 +43,7 @@
         $(function () {
             $("#dg").datagrid({
                 dataType: 'json',
-                url: "http://192.168.3.2:8888/data/repairs",
+                url: address+"/data/repairs",
                 columns: [
                     [{
                             title: '编号',
@@ -95,7 +95,7 @@
             pageSize: 30,
             pageList: [10, 20, 30]
             })
-        });
+        })
         function deleteRole() {
             var selectedRows = $("#dg").datagrid('getSelections');
             if (selectedRows.length == 0) {
@@ -111,7 +111,7 @@
             $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
                 if (r) {
                     $.ajax({
-                        url: "http://192.168.3.2:8888/batch/repair/" + ids,
+                        url: address+"/batch/repair/" + ids,
                         type: 'delete',
                         success: function (result) {
                             if (result.success) {
@@ -130,7 +130,7 @@
 
         function openRoleAddDialog() {
             $("#dlg").dialog("open").dialog("setTitle", "添加报修信息");
-            url = "http://192.168.3.2:8888/system/repair"; //添加单位信息的时候的url
+            url = address+"/system/repair"; //添加单位信息的时候的url
         }
 
         function openRoleModifyDialog() {
@@ -142,7 +142,7 @@
             var row = selectedRows[0];
             $("#dlg").dialog("open").dialog("setTitle", "修改信息");
             $("#fm").form("load", row);
-            url = "http://192.168.3.2:8888/system/repair/update"; //修改的时候的url
+            url = address+"/system/repair/update"; //修改的时候的url
         }
 
         function saveRole() {
@@ -156,7 +156,7 @@
                     // var result = eval('(' + result + ')');
                     if (result.success == true) {
                         $.messager.alert('系统提示', "<font color=red>" + result.message + "</font>");
-
+                        return;
                     } else {
                         $.messager.alert('系统提示', '保存成功');
                         closeRoleSaveDialog();
@@ -173,7 +173,7 @@
 
         function checkNode(node) {
             if (!node) {
-
+                return;
             } else {
                 checkNode($('#tree').tree('getParent', node.target));
                 $('#tree').tree('check', node.target);
@@ -187,7 +187,7 @@
         function searchRole() {
             $("#dg").datagrid({
                 dataType: 'json',
-                url: "http://192.168.3.2:8888/search/repair/" + $("#search").val(),
+                url: address+"/search/repair/" + $("#search").val(), 
                 columns: [
                     [{
                             title: '编号',

@@ -177,7 +177,7 @@
             $("#dlg").dialog("open").dialog("setTitle", "添加控制信息");
 
         });
-    });
+    })
 
     $(function () {
         $("#hand1").click(function () {
@@ -185,7 +185,7 @@
             $("#zidongshezhi").hide();
             document.getElementById("auto_or").value = "手动";
         });
-    });
+    })
 
     $(function () {
         $("#auto1").click(function () {
@@ -193,7 +193,7 @@
             $("#shoudong").hide();
             document.getElementById("auto_or").value = "自动";
         });
-    });
+    })
 
     function restart1() {
         $.ajax({
@@ -207,12 +207,15 @@
 
         });
 
-    }
+    };
+
     function setTimes() {
         $("#dlg2").dialog("open").dialog("setTitle", "设置时间间隔");
+     
+
+    };
 
 
-}
     function  tijiao()
     {
         $("#settime").form("submit", {
@@ -447,7 +450,7 @@
 
             }
         });
-    });
+    })
 
     // function f(nodeIdd, temper2, statuss, dianliang, shidu, snr, snrs) {
 

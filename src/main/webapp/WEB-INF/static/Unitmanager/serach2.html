@@ -18,7 +18,7 @@
     </script>
     <script src="../jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
-
+    <script src="../address.js"></script>
 
 </head>
 <style type="text/css">
@@ -39,7 +39,7 @@
     <table id="dg" title="温湿度查询" class="easyui-datagrid">
         <thead>
             <tr>
-            </tr>
+            </tr
         </thead>
     </table>
     </div>
@@ -48,7 +48,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $.ajax({
-            url: 'http://192.168.3.2:8888/data/node/tree',
+            url: address+'/data/node/tree',
             type: "get",
             dataType: 'json',
             xhrFields: {
@@ -78,7 +78,7 @@
     });
 
     function download() {
-        var url = "http://192.168.3.2:8888/query/excel";
+        var url = address+"/query/excel"
         $("#form").attr("action", url);
         $("#form").submit();
     }
@@ -92,7 +92,7 @@
                 startTime: $("#startTime").val(),
                 endTime: $("#endTime").val(),
             },
-            url: "http://192.168.3.2:8888/query/th/reportTime",
+            url: address+"/query/th/reportTime",
             columns: [
                 [{
                         field: 'nodeMark',

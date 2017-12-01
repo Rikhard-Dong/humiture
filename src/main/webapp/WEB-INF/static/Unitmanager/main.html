@@ -139,7 +139,7 @@
                                     if (temperavg > 50) {
                                         warn.push(temperavg);
                                     }
-                                    wendu.push(temperavg);
+                                    wendu.push(temperavg)
                                     shidu.push(humidityavg);
                                     report.push(resporttime);
                                 }
@@ -248,14 +248,14 @@
 
                                 });
                             }
-                        };
+                        }
 
                         xmlhttp.open("get", url, true);
                         xmlhttp.withCredentials = true;
                         xmlhttp.send();
 
 
-                    });
+                    })
                     $(function () {
                         var xmlhttp = new XMLHttpRequest();
                         var url = address + "/avg/" + getwayMark + "/" + $("#year").val() +
@@ -284,7 +284,7 @@
                                     var temperavg = a[value].temperAvg;
                                     var humidityavg = a[value].humidityAvg;
                                     var resporttime = a[value].reportTime;
-                                    wendu.push(temperavg);
+                                    wendu.push(temperavg)
                                     shidu.push(humidityavg);
                                     report.push(resporttime);
                                 }
@@ -377,7 +377,7 @@
 
                                 });
                             }
-                        };
+                        }
 
                         xmlhttp.open("get", url, true);
                         xmlhttp.withCredentials = true;
@@ -422,7 +422,7 @@
                                     var humidityavg = a[value].humidityAvg;
                                     var resporttime = a[value].reportTime;
                                     var mark11 = a[value].mark;
-                                    wendu.push(temperavg);
+                                    wendu.push(temperavg)
                                     shidu.push(humidityavg);
                                     report.push(resporttime);
                                     mark1.push(mark11);
@@ -513,7 +513,7 @@
 
                                 });
                             }
-                        };
+                        }
 
                         xmlhttp.open("get", url, true);
                         xmlhttp.withCredentials = true;

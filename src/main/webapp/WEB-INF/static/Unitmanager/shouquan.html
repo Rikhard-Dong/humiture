@@ -12,6 +12,7 @@
 <script src="../easyui/locale/easyui-lang-zh_CN.js"></script>
 <link rel="stylesheet" href="../easyui/themes/default/easyui.css" />
 <link rel="stylesheet" href="../easyui/themes/icon.css" />
+<script src="../address.js"></script>
 <style>
     * {
         margin: 0px;
@@ -145,7 +146,7 @@
     $(function () {
         $("#dg").datagrid({
             dataType: 'json',
-            url: "http://192.168.3.2:8888/data/getways/simple",
+            url: address+"/data/getways/simple",
             xhrFields: {
 				withCredentials: true
 			},
@@ -190,7 +191,7 @@
 
                 $("#w").datagrid({
                     dataType: 'json',
-                    url:"http://192.168.3.2:8888/data/getway/" + id + "/subNodes" ,
+                    url:address+"/data/getway/" + id + "/subNodes" ,
                     columns: [
                         [{
                                 title: '编号',
@@ -233,7 +234,7 @@
 
 
         });
-    });
+    })
 
     function searchRole() {
         // $.ajax({
@@ -244,7 +245,7 @@
 
         $("#w").datagrid({
             dataType: 'json',
-            url: "http://192.168.3.2:8888/data/getway/" + $("#idd").val(),
+            url: address+"/data/getway/" + $("#idd").val(),
             columns: [
                 [{
                         title: '编号',
@@ -277,7 +278,7 @@
 
     function openRoleAddDialog() {
         $("#dlg").dialog("open").dialog("setTitle", "添加节点信息");
-        url = "http://192.168.3.2:8888/manage/getway"; //添加节点信息的时候的url
+        url = address+"/manage/getway"; //添加节点信息的时候的url
     }
 
     function saveRole() {
@@ -327,7 +328,7 @@
         $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
             if (r) {
                 $.ajax({
-                    url: "http://192.168.3.2:8888/manage/getways/" + strIds,
+                    url: address+"/manage/getways/" + strIds,
                     type: 'delete',
                     success: function (result) {
                         if (result.success) {
@@ -354,7 +355,7 @@
         var row = selectedRows[0];
         $("#dlg").dialog("open").dialog("setTitle", "修改信息");
         $("#fm").form("load", row);
-        url = "http://192.168.3.2:8888/manage/getway/update"; //修改的时候的url
+        url = address+"/manage/getway/update"; //修改的时候的url
     }
 </script>
 

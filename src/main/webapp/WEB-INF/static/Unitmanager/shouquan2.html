@@ -9,12 +9,13 @@
     <script src="../easyui/locale/easyui-lang-zh_CN.js"></script>
     <link rel="stylesheet" href="../easyui/themes/default/easyui.css" />
     <link rel="stylesheet" href="../easyui/themes/icon.css" />
+    <script src="../address.js"></script>
     <script type="text/javascript">
         $(function () {
             $("#dg").datagrid({
                 dataType: 'json',
                 type: 'post',
-                url: "http://192.168.3.2:8888/author/userAuthor",
+                url: address+"/author/userAuthor",
                 columns: [
 
                     [{
@@ -43,13 +44,13 @@
             })
 
 
-        });
+        })
 
         function searchRole() {
             alert($("#idd").val());
             $("#dg").datagrid({
                 dataType: 'json',
-                url: "http://192.168.3.2:8888/search/user/" + $("#idd").val(),
+                url: address+"/search/user/" + $("#idd").val(),
 
                 columns: [
 
@@ -105,7 +106,7 @@
             $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
                 if (r) {
                     $.ajax({
-                        url: "http://192.168.3.2:8888/batch/userAuthor/" + ids,
+                        url: address+"/batch/userAuthor/" + ids,
                         type: 'delete',
                         xhrFields: {
                             withCredentials: true
@@ -127,7 +128,7 @@
 
         function openRoleAddDialog() {
             $("#dlg").dialog("open").dialog("setTitle", "添加用户信息");
-            url = "http://192.168.3.2:8888/author/node"; //添加节点信息的时候的url
+            url = address+"/author/node"; //添加节点信息的时候的url
         }
 
         function openRoleModifyDialog() {
@@ -139,7 +140,7 @@
             var row = selectedRows[0];
             $("#dlg").dialog("open").dialog("setTitle", "修改信息");
             $("#fm").form("load", row);
-            url = "http://192.168.3.2:8888/system/user/update"; //修改的时候的url
+            url = address+"/system/user/update"; //修改的时候的url
         }
 
         function saveRole() {
@@ -156,7 +157,7 @@
                 success: function (result) {
 
 
-                    alert("成功保存");
+                    alert("成功保存")
                     closeRoleSaveDialog();
 
                 }
@@ -171,7 +172,7 @@
 
         function checkNode(node) {
             if (!node) {
-
+                return;
             } else {
                 checkNode($('#tree').tree('getParent', node.target));
                 $('#tree').tree('check', node.target);
