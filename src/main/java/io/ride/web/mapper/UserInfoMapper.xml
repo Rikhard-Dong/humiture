@@ -105,10 +105,9 @@
     </select>
 
     <select id="listFromUnit" resultType="io.ride.web.entity.UserInfo">
-        SELECT *
-        FROM UserInfo
-            INNER JOIN Unit ON UserInfo.UnitId = Unit.UnitId
-        WHERE Unit.UnitId = #{unitId}
+        SELECT UserInfo.*
+        FROM UserInfo, Unit
+        WHERE  UserInfo.UnitId = Unit.UnitId and UserInfo.UnitId = #{unitId}
     </select>
     <select id="findFromUnitWithUserId" resultType="io.ride.web.entity.UserInfo">
         SELECT *
