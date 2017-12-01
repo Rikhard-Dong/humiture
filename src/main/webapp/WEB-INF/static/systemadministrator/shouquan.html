@@ -115,6 +115,7 @@
  var id;
     $(function () {
         $("#dg").datagrid({
+            singleSelect: true,
             dataType: 'json',
             url: address+"/data/getways/simple",
             columns: [
@@ -161,6 +162,7 @@
                 //     });
 
                 $("#w").datagrid({
+                    singleSelect: true,
                     dataType: 'json',
                     url: address+"/author/rents/" + id + "/unit",
                     columns: [

@@ -27,7 +27,7 @@
 <body>
     <div class="input-group">
         <span class="input-group-addon">节点号</span>
-        <input type="text" class="input-medium " placeholder="" id="autocomplete">
+        <select type="text" class="input-medium " placeholder="" id="autocomplete" style="height:27px"></select>
     </div>
     <div class="input-group" style="position:fixed;margin-left:250px;margin-top:-28px;">
         <span class="input-group-addon">查询年号</span>
@@ -63,7 +63,7 @@
     <div id="container4" style="min-width:400px;height:400px;"></div>
     <div id="container5" style="min-width:400px;height:400px;"></div>
 </body>
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
         $.ajax({
             url: address + '/data/node/tree',
@@ -75,20 +75,57 @@
             crossDomain: true,
             success: function (data) {
                 var kaiguan = [];
-
+                var kaiguan1 = [];
+                var kaiguan2 = [];
+                var kaiguan3 = [];
+                var kaiguan4 = [];
                 for (var value in data) {
                     var i = data[value].subIds;
+                    var j=data[value].parentId;
                     kaiguan.push(i);
+                    kaiguan4.push(j);
                 }
-                var a = eval(kaiguan); //所有的节点以及网关号
+              var p=eval(kaiguan4);
 
-                var c = kaiguan[1].concat(kaiguan[0]);
-                var d = c.concat(kaiguan[2]);
-                console.log(d);
+                var a = eval(kaiguan);
+                for (var value in a[0]) {
+                    var i = a[0][value];
+                    kaiguan1.push(i);
+                }
 
-                jj("#autocomplete").autocomplete({
-                    source: d
-                });
+                var b = eval(kaiguan1);
+
+                for (var value in a[1]) {
+                    var i = a[1][value];
+                    kaiguan2.push(i);
+                }
+                var c = eval(kaiguan2);
+
+                for (var value in a[2]) {
+                    var i = a[2][value];
+                    kaiguan3.push(i);
+                }
+                var d = eval(kaiguan3);
+                
+                for(var i=0;i<p.length;i++)
+                {
+                    $("#autocomplete").append("<option value='" + p[i] + "'>" + p[i] + "</option>");
+                }
+                for(var i=0;i<b.length;i++)
+                {
+                    $("#autocomplete").append("<option value='" + b[i] + "'>" + b[i] + "</option>");
+                }
+                
+                for(var i=0;i<c.length;i++)
+                {
+                    $("#autocomplete").append("<option value='" + c[i] + "'>" + c[i] + "</option>");
+                }
+                for(var i=0;i<d.length;i++)
+                {
+                    $("#autocomplete").append("<option value='" + d[i] + "'>" + d[i] + "</option>");
+                }
+                
+              
             }
         });
     });
@@ -106,7 +143,7 @@
                 if (data.isGetway == false) {
                     
                     var getwayMark = data.getwayMark; //网关的节点号
-                    alert(getwayMark);
+                  
                     $(function () {
                         var xmlhttp = new XMLHttpRequest();
                         var url = address + "/avg/" + $("#autocomplete").val() + "/" + $("#year").val() +

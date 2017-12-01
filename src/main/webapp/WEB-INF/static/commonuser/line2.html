@@ -75,20 +75,47 @@
             crossDomain: true,
             success: function (data) {
                 var kaiguan = [];
-
+                var kaiguan1 = [];
+                var kaiguan2 = [];
+                var kaiguan3 = [];
+                var kaiguan4 = [];
                 for (var value in data) {
                     var i = data[value].subIds;
+                    var j = data[value].parentId;
                     kaiguan.push(i);
+                    kaiguan4.push(j);
                 }
-                var a = eval(kaiguan); //所有的节点以及网关号
+                var p = eval(kaiguan4);
 
-                var c = kaiguan[1].concat(kaiguan[0]);
-                var d = c.concat(kaiguan[2]);
-                console.log(d);
+                var a = eval(kaiguan);
+                for (var value in a[0]) {
+                    var i = a[0][value];
+                    kaiguan1.push(i);
+                }
+                var b = eval(kaiguan1);
+                for (var value in a[1]) {
+                    var i = a[1][value];
+                    kaiguan2.push(i);
+                }
+                var c = eval(kaiguan2);
+                for (var value in a[2]) {
+                    var i = a[2][value];
+                    kaiguan3.push(i);
+                }
+                var d = eval(kaiguan3);
+                for (var i = 0; i < p.length; i++) {
+                    $("#autocomplete").append("<option value='" + p[i] + "'>" + p[i] + "</option>");
+                }
+                for (var i = 0; i < b.length; i++) {
+                    $("#autocomplete").append("<option value='" + b[i] + "'>" + b[i] + "</option>");
+                }
 
-                jj("#autocomplete").autocomplete({
-                    source: d
-                });
+                for (var i = 0; i < c.length; i++) {
+                    $("#autocomplete").append("<option value='" + c[i] + "'>" + c[i] + "</option>");
+                }
+                for (var i = 0; i < d.length; i++) {
+                    $("#autocomplete").append("<option value='" + d[i] + "'>" + d[i] + "</option>");
+                }
             }
         });
     });
@@ -106,7 +133,7 @@
                 if (data.isGetway == false) {
                     
                     var getwayMark = data.getwayMark; //网关的节点号
-                    alert(getwayMark);
+               
                     $(function () {
                         var xmlhttp = new XMLHttpRequest();
                         var url = address + "/avg/" + $("#autocomplete").val() + "/" + $("#year").val() +

@@ -23,7 +23,7 @@
 
     .sxd {
         margin-left: 472px;
-        margin-top: -165px;
+        margin-top: -240px;
         position: absolute;
     }
 </style>
@@ -187,6 +187,7 @@
     $(function () {
       
         $("#dg").datagrid({
+            singleSelect: true,
             dataType: 'json',
             url: address+"/data/getways/simple",
             columns: [
@@ -236,6 +237,7 @@
                     }
                 });
                 $("#w").datagrid({
+                    singleSelect: true,
                     dataType: 'json',
                     url: address+"/data/getway/" + id + "/subNodes",
                     columns: [

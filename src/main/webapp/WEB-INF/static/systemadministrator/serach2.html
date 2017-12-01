@@ -29,15 +29,16 @@
 <body>
     <form method="post" id="form">
         &nbsp;节点号：&nbsp;
-        <input type="text" name="nodeMark" id="autocomplete" size="20" onkeydown="if(event.keyCode==13) searchRole()" /> &nbsp;上报时间：&nbsp;
+        <select type="text" name="nodeMark" id="autocomplete" style="width:140px" onkeydown="if(event.keyCode==13) searchRole()"></select>
+        &nbsp;上报时间：&nbsp;
         <input class="easyui-datetimebox" name="startTime" id="startTime" data-options="required:true,showSeconds:false" value="3/4/2010 2:3"
             style="width:150px" onkeydown="if(event.keyCode==13) searchRole()">__
         <input class="easyui-datetimebox" name="endTime" id="endTime" data-options="required:true,showSeconds:false" value="3/4/2010 2:3"
             style="width:150px" onkeydown="if(event.keyCode==13) searchRole()">
-            <a href="javascript:searchRole()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
-            <a href="javascript:download()" class="easyui-linkbutton" iconCls="icon-search" plain="true">下载</a>
+        <a href="javascript:searchRole()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+        <a href="javascript:download()" class="easyui-linkbutton" iconCls="icon-search" plain="true">下载</a>
     </form>
-  
+
 
     <table id="dg" title="温湿度查询" class="easyui-datagrid">
         <thead>
@@ -47,7 +48,6 @@
     </table>
 
 </body>
-
 <script type="text/javascript">
     $(document).ready(function () {
         $.ajax({
@@ -60,28 +60,47 @@
             crossDomain: true,
             success: function (data) {
                 var kaiguan = [];
-
+                var kaiguan1 = [];
+                var kaiguan2 = [];
+                var kaiguan3 = [];
+                var kaiguan4 = [];
                 for (var value in data) {
                     var i = data[value].subIds;
+                    var j = data[value].parentId;
                     kaiguan.push(i);
+                    kaiguan4.push(j);
                 }
-                var a = eval(kaiguan); //所有的节点以及网关号
-                
-                var c = kaiguan[1].concat(kaiguan[0]);
-                var d = c.concat(kaiguan[2]);
-                console.log(d);
-                $(document).ready(function () {
-                    $("#autocomplete").autocomplete({
-                        source:function (request, response) {
-                            var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(
-                                request.term), "i");
-                            response($.grep(d, function (item) {
-                                return matcher.test(item);
-                            }));
-                        }
+                var p = eval(kaiguan4);
 
-                    });
-                });
+                var a = eval(kaiguan);
+                for (var value in a[0]) {
+                    var i = a[0][value];
+                    kaiguan1.push(i);
+                }
+                var b = eval(kaiguan1);
+                for (var value in a[1]) {
+                    var i = a[1][value];
+                    kaiguan2.push(i);
+                }
+                var c = eval(kaiguan2);
+                for (var value in a[2]) {
+                    var i = a[2][value];
+                    kaiguan3.push(i);
+                }
+                var d = eval(kaiguan3);
+                for (var i = 0; i < p.length; i++) {
+                    $("#autocomplete").append("<option value='" + p[i] + "'>" + p[i] + "</option>");
+                }
+                for (var i = 0; i < b.length; i++) {
+                    $("#autocomplete").append("<option value='" + b[i] + "'>" + b[i] + "</option>");
+                }
+
+                for (var i = 0; i < c.length; i++) {
+                    $("#autocomplete").append("<option value='" + c[i] + "'>" + c[i] + "</option>");
+                }
+                for (var i = 0; i < d.length; i++) {
+                    $("#autocomplete").append("<option value='" + d[i] + "'>" + d[i] + "</option>");
+                }
             }
         });
     });
