@@ -43,14 +43,12 @@ public class QueryServiceImpl implements QueryService {
 
         List<TemperHumid> ths;
         PageInfo<TemperHumid> pageInfo = null;
-        if (PermissionUtil.isAuthorNode(nodeMark, currentUser.getUserType(), currentUser.getUnitId(), currentUser.getUsername())) {
-            PageHelper.startPage(page, rows);
-            ths = thDao.listByNodeMarkWithTime(nodeMark, startTime, endTime);
-            LOGGER.info("query th by report time ths i= {}", ths);
+        PageHelper.startPage(page, rows);
+        ths = thDao.listByNodeMarkWithTime(nodeMark, startTime, endTime);
+        LOGGER.info("query th by report time ths i= {}", ths);
 
-            if (ths != null) {
-                pageInfo = new PageInfo<TemperHumid>(ths);
-            }
+        if (ths != null) {
+            pageInfo = new PageInfo<TemperHumid>(ths);
         }
         List<TemperHumidDto> dtos = new ArrayList<TemperHumidDto>();
         if (pageInfo != null) {
