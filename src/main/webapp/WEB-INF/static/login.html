@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +13,6 @@
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <script src="address.js"></script>
 </head>
-
 <body>
     <div class="bg"></div>
     <div class="container">
@@ -59,7 +57,6 @@
             </div>
         </div>
     </div>
-
 </body>
 <script>
     $("#button").click(function () {
@@ -79,8 +76,6 @@
             },
             success: function (data) {
                 if (data.success == true) {
-
-                    if (data.data.user.userTypeDesc == "系统管理员") {
                         $.ajax({
                             url: address + '/user/validate',
                             method: 'GET',
@@ -92,11 +87,10 @@
                             },
                             crossDomain: true,
                             success: function (result) {
-                                console.log(result);
+                            
                                 if (result.success == true) {
 
-                                    window.location.href =
-                                        "systemadministrator/index.html";
+                                    window.location.href ="systemadministrator/index.html";
                                 } else {
 
                                     window.location.href = "login.html";
@@ -104,62 +98,8 @@
                                 }
                             }
                         });
-
-                    } else if (data.data.user.userTypeDesc == "单位管理员" || data.data.user.userTypeDesc ==
-                        "特权单位管理员") 
-                        {
-                            $.ajax({
-                            url: address + '/user/validate',
-                            method: 'GET',
-                            data: {
-                                'code': $('#code').val()
-                            },
-                            xhrFields: {
-                                withCredentials: true
-                            },
-                            crossDomain: true,
-                            success: function (result) {
-                                console.log(result);
-                                if (result.success == true) {
-
-                                 window.location.href = "Unitmanager/index.html";
-                                } else {
-
-                                    window.location.href = "login.html";
-                                    alert("您的验证码出错啦！");
-                                }
-                            }
-                        });
-                      
-
-                    } else if (data.data.user.userTypeDesc == '普通用户') {
-                        $.ajax({
-                            url: address + '/user/validate',
-                            method: 'GET',
-                            data: {
-                                'code': $('#code').val()
-                            },
-                            xhrFields: {
-                                withCredentials: true
-                            },
-                            crossDomain: true,
-                            success: function (result) {
-                                console.log(result);
-                                if (result.success == true) {
-
-                                      window.location.href = "commonuser/index.html";
-                                } else {
-
-                                    window.location.href = "login.html";
-                                    alert("您的验证码出错啦！");
-                                }
-                            }
-                        });
-                  
-                    }
-
-
-                } else {
+                } 
+                else {
                     alert("用户名或密码错误！！！请联系管理员qq:3450236968");
                 }
             },
@@ -167,9 +107,6 @@
                 alert("用户名或密码错误,忘记密码请联系管理员qq:3450236968");
             }
         });
-
-
     })
 </script>
-
 </html>

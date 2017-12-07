@@ -12,32 +12,7 @@
     <link rel="stylesheet" href="../easyui/themes/icon.css" />
     <script src="../address.js"></script>
     <script type="text/javascript">
-        // function check() {
-        //     var a = $("#search").val();
-           
-        //     console.log(a);
-        //     $.ajax({
-        //         url: "192.168.3.2:8888/checkfor/node/"+a,
-        //         dataType: "json",
-        //         type: "post",
-        //         success: function (data) {
-        //             if (data.exists != true) {
-        //                 alert("不存在该节点");
-
-        //                 function searchRole() {
-        //                     alert("不存在的");
-        //                     return false;
-        //                 }
-        //             } else {
-        //                 alert("对啦");
-        //             }
-        //         },
-        //         error: function () {
-        //             alert("不存在该节点123");
-        //         }
-        //     });
-
-        // };
+    
 
         $(function () {
             $("#dg").datagrid({
@@ -107,7 +82,6 @@
                 strIds.push(selectedRows[i].repairId);
             }
             var ids = strIds.join("_");
-            alert(ids);
             $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
                 if (r) {
                     $.ajax({

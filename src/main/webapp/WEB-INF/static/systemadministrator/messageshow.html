@@ -34,14 +34,6 @@
 </style>
 
 <body>
-    <!-- <div>
-        网关号：
-        <input type="text" name="mark" id="idd" size="20" onkeydown="if(event.keyCode==13) searchUser()" value="" />
-        <button class="easyui-linkbutton" iconCls="icon-search" plain="true" id="sss" onclick="fff()">搜索</button>
-        <br> 单位号：
-        <input type="text" name="title" id="node_id" size="20" onkeydown="if(event.keyCode==13) searchUser()" value="" />
-        <button class="easyui-linkbutton" iconCls="icon-search" plain="true" id="sss" onclick="">搜索</button>
-    </div> -->
     <div id="tb" style="display:none">
         <div>
             <a href="javascript:openRoleAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">手自动开关</a>
@@ -59,14 +51,6 @@
         <table id="w" width="780px" toolbar="#tb" title="节点网关的信息显示">
         </table>
     </div>
-    <!-- <table id="chaxun" title="网关节点查询" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" fit="true"
-        toolbar="#tb">
-        <thead>
-            <tr>
-
-            </tr>
-        </thead>
-    </table> -->
     <div id="dlg" class="easyui-dialog" style="width: 570px;height: 350px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
         <form id="fm" method="post">
             <table cellspacing="5px;">
@@ -290,17 +274,7 @@
                     setTimes();
                 });
                 
-                document.getElementById("snr").value = snrs;
-                // $.ajax({
-                //     url: "http://192.168.3.2:8888/remote/nodeInfo/"+id,
-                //     type: 'post',
-
-                //     success: function () {
-
-                //         $('#w').window('open');
-                //     }
-
-                // });
+                document.getElementById("snr").value = snrs;       
                 $("#w").datagrid({
                     singleSelect: true,
                     dataType: 'json',
@@ -415,37 +389,6 @@
                         snr2 = row["snr"];
                         document.getElementById("nodenum").value = snr2;
 
-                        // f(nodeIdd, temper2, statuss, dianliang, shidu, snr, snrs);
-                        // $("#messageShow").fadeIn("slow");
-                        // $.ajax({
-                        //     url: 'http://10.28.44.241:8888/remote/node/status/' +
-                        //         snrs,
-                        //     type: 'get',
-                        //     success: function (result) {
-                        //         var a = eval('(' + result + ')');
-                        //         var  kaiguan=[];
-                        //      for(var value  in a)
-                        //      {
-                        //         var  i=a[value].auto;
-                        //         kaiguan.push(i);
-                        //      }
-
-                        //      var  b=eval(kaiguan);
-                        //      var c=parseInt(b);
-                        //    if(c==0)
-                        //    {
-                        //     document.getElementById("auto_or").value = "手动";
-                        //    }
-                        //        else{
-                        //         document.getElementById("auto_or").value = "自动";
-                        //        }
-                        //     },
-
-
-
-                        // });
-
-
                     },
 
                 });
@@ -454,24 +397,11 @@
         });
     });
 
-    // function f(nodeIdd, temper2, statuss, dianliang, shidu, snr, snrs) {
-
-    //     document.getElementById("sun").value = temper2;
-    //     document.getElementById("windy").value = shidu;
-    //     document.getElementById("power").value = dianliang;
-    //     document.getElementById("kaiguan").value = statuss;
-    //     document.getElementById("head").value = snr;
-    //     document.getElementById("snr").value = snrs;
-    //     document.getElementById("nodenum").value = snr;
-    // }
+ 
 
 
     function searchRole() {
-        // $.ajax({
-        //     type: 'post',
-        //     url: "http://192.168.3.2:8888/data/getway/" + $("#idd").value,
-        //     success: function (data) {
-        //         // alert($("#idd").val());
+
 
         $("#w").datagrid({
             dataType: 'json',
@@ -551,7 +481,7 @@
         for (var i = 0; i < selectedRows.length; i++) {
             strIds.push(selectedRows[i].nodeId);
         }
-        alert(strIds);
+        
         var ids = strIds.join(",");
         $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
             if (r) {

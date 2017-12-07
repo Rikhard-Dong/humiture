@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title>温湿度查询</title>
@@ -19,13 +18,7 @@
     <script src="../jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
     <script src="../address.js"></script>
-
-
 </head>
-<style type="text/css">
-
-</style>
-
 <body>
     <form method="post" id="form">
         &nbsp;节点号：&nbsp;
@@ -115,6 +108,7 @@
         $("#dg").datagrid({
             dataType: 'json',
             type: 'post',
+            fitColumns:true,
             queryParams: {
                 nodeMark: $("#autocomplete").val(),
                 startTime: $("#startTime").val(),

@@ -127,7 +127,7 @@
                 strIds.push(selectedRows[i].username);
             }
             var ids = strIds.join("_");
-            alert(ids);
+            
             $.messager.confirm("系统提示", "您确认要删除这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
                 if (r) {
                     $.ajax({
@@ -182,7 +182,7 @@
                 },
                 success: function (result) {
 
-                    // var result = eval('(' + result + ')');
+                   
 
                     alert("已保存成功");
                     closeRoleSaveDialog();
@@ -190,23 +190,7 @@
                 }
             });
 
-            // $("#fm2").form("submit", {
-            //     url: url,
-            //     onSubmit: function () {
-            //         return $(this).form("validate");
-            //     },
-            //     success: function (result) {
-            //         // var result = eval('(' + result + ')');
-            //         if (result.success == true) {
-            //             $.messager.alert('系统提示', "<font color=red>" + result.message + "</font>");
-            //             return;
-            //         } else {
-            //             $.messager.alert('系统提示', '保存成功');
-            //             closeRoleSaveDialog();
-            //             $("#dg").datagrid("reload");
-            //         }
-            //     }
-            // });
+        
         }
 
         function closeRoleSaveDialog() {
@@ -302,45 +286,6 @@
         </form>
     </div>
 
-    <!-- <div id="dlg2" class="easyui-dialog" style="width: 570px;height: 350px;padding: 50px 100px" closed="true" buttons="#dlg-buttons">
-    <form id="fm2" method="post">
-            <table cellspacing="5px;">
-                <tr>
-                    <td>用户显示名字：</td>
-                    <td width="80%">
-                        <input type="text" id="roleName" name="name" class="easyui-validatebox" required="true" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>用户登录名：</td>
-                    <td width="80%">
-                        <input readonly= "true " type="text" id="roleName" name="username" class="easyui-validatebox" required="true" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>单位ID：</td>
-                    <td width="80%">
-                        <input type="text" id="roleName" name="unitId" class="easyui-validatebox" required="true" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>用户类型：</td>
-                    <td width="80%">
-                        <input type="text" id="roleName" name="userType" class="easyui-validatebox" required="true" />
-                    </td>
-                </tr>
-     
-                <tr>
-                    <td>备注：</td>
-                    <td width="80%">
-                        <input type="text" id="roleName" name="memo" class="easyui-validatebox" required="true" />
-                    </td>
-                </tr>
-            </table>
-        </form>
-
-
-</div> -->
     <div id="dlg-buttons">
         <a href="javascript:saveRole()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
         <a href="javascript:closeRoleSaveDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>

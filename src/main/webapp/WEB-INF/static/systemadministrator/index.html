@@ -24,7 +24,7 @@
         <img src="../images/y.jpg" class="radius-circle rotate-hover" height="50" alt="" />后台管理中心</h1>
     </div>
     <div class="head-l">
-      <input type="text" name="sxd" id="sxd" size="20" value="" readonly="true" style="border-radius:10px;color:blueviolet"/>
+      <input type="text" name="sxd" id="sxd" size="20" value="" readonly="true" style="border-radius:10px;color:blueviolet" />
       <a class="button button-little bg-red" style="margin-left:70px" href="../login.html">
         <span class="icon-power-off"></span> 安全退出</a>
     </div>
@@ -48,48 +48,43 @@
 
     </ul>
     <h2>
-      <span class="icon-pencil-square-o"></span>网关节点管理</h2>
+      <span id="nodem" class="icon-pencil-square-o"></span>网关节点管理</h2>
     <ul>
       <li>
-        <a href="text.html" target="right">
-          <span class="icon-caret-right"></span>网关节点的信息维护</a>
+        <a id="weihu" href="text.html" target="right">
+          <span id="weihu" class="icon-caret-right"></span>网关节点的信息维护</a>
       </li>
-      <!-- <li>
-        <a href="jiediankongzhi.html" target="right">
-          <span class="icon-caret-right"></span>网关节点的控制</a>
-      </li> -->
       <li>
         <a href="messageshow.html" target="right">
-          <span class="icon-caret-right"></span>实时信息和控制</a>
+          <span class="icon-caret-right"></span>网关实时信息和控制</a>
       </li>
       <li>
-        <a href="shouquan.html" target="right">
-          <span class="icon-caret-right"></span>网关租用授权管理</a>
+        <a id="shouquan" href="shouquan.html" target="right">
+          <span id="shouquan" class="icon-caret-right"></span>网关租用授权管理</a>
       </li>
     </ul>
     <h2>
-      <span class="icon-pencil-square-o"></span>系统管理</h2>
+      <span id="system" class="icon-pencil-square-o"></span>系统管理</h2>
     <ul>
       <li>
-        <a href="thridsearch.html" target="right">
-          <span class="icon-caret-right"></span>用户管理</a>
+        <a id="system1" href="thridsearch.html" target="right">
+          <span id="system1" class="icon-caret-right"></span>用户管理</a>
       </li>
       <li>
-        <a href="thridserch2.html" target="right">
-          <span class="icon-caret-right"></span>单位管理</a>
+        <a id="system2" href="thridserch2.html" target="right">
+          <span id="system2" class="icon-caret-right"></span>单位管理</a>
       </li>
-      
+
       <li>
-        <a href="thridserch4.html" target="right">
+        <a id="xiu" href="thridserch4.html" target="right">
           <span class="icon-caret-right"></span>报修信息管理</a>
       </li>
     </ul>
   </div>
   <script type="text/javascript">
-
     jq321(function ($) {
       $.ajax({
-        url:address +"/user/loginUser",
+        url: address + "/user/loginUser",
         type: "get",
         dataType: 'json',
         xhrFields: {
@@ -97,17 +92,24 @@
         },
         crossDomain: true,
         success: function (data) {
-
-          if (data.login = true) {
-
+          if (data.userTypeDesc == '系统管理员') {
             user = data.username;
             document.getElementById("sxd").value = user + ",欢迎您回来噢！";
+          } else if (data.userTypeDesc == '特权单位管理员') {
+            user = data.username;
+            document.getElementById("sxd").value = user + ",欢迎您回来噢！";
+            $("#xiu").remove();
+          } else {
+            user = data.username;
+            document.getElementById("sxd").value = user + ",欢迎您回来噢！";
+            $("#system1").remove();
+            $("#system2").remove();
+            $("#xiu").remove();
+            $("#weihu").remove();
+            $("#shouquan").remove();
           }
-
-
         }
       });
-
     });
 
 
@@ -125,15 +127,15 @@
   </script>
   <ul class="bread">
     <li>
-      <a href="../demo.html" target="right" class="icon-home"> 首页</a>
+      <a href="../css/demo.html" target="right" class="icon-home"> 首页</a>
     </li>
     <li>
       <a href="##" id="a_leader_txt">网站信息</a>
     </li>
- 
+
   </ul>
   <div class="admin">
-    <iframe scrolling="auto" rameborder="0" src="../demo.html" name="right" width="100%" height="100%"></iframe>
+    <iframe scrolling="auto" rameborder="0" src="../css/demo.html" name="right" width="100%" height="100%"></iframe>
   </div>
 </body>
 

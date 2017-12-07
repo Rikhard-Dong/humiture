@@ -19,45 +19,25 @@
         margin: 0px;
         padding: 0px;
     }
-
     .sxd {
-        margin-left: 363px;
+        margin-left: 401px;
         margin-top: -189px;
         position: absolute;
     }
 </style>
-
 <body>
-    <!-- <div>
-        网关号：
-        <input type="text" name="mark" id="idd" size="20" onkeydown="if(event.keyCode==13) searchUser()" value="" />
-        <button class="easyui-linkbutton" iconCls="icon-search" plain="true" id="sss" onclick="fff()">搜索</button>
-        <br> 单位号：
-        <input type="text" name="title" id="node_id" size="20" onkeydown="if(event.keyCode==13) searchUser()" value="" />
-        <button class="easyui-linkbutton" iconCls="icon-search" plain="true" id="sss" onclick="">搜索</button>
-    </div> -->
-    <table id="dg" width="360" title="网关信息">
+    <table id="dg" width="400" title="网关信息">
     </table>
     <div class="sxd">
-        <table id="w" width="600px" toolbar="#tb" title="用户信息">
+        <table id="w" width="640px" toolbar="#tb" title="用户信息">
         </table>
     </div>
-    <!-- <table id="chaxun" title="网关节点查询" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" fit="true"
-        toolbar="#tb">
-        <thead>
-            <tr>
-
-            </tr>
-        </thead>
-    </table> -->
-
     <div id="tb" style="display:none">
         <div>
             <a href="javascript:openRoleAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
             <a href="javascript:openRoleModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
             <a href="javascript:deleteRole()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
         </div>
-       
     </div>
     <div id="dlg" class="easyui-dialog" style="width: 570px;height: 350px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
         <form id="fm" method="post">
@@ -72,46 +52,38 @@
                     <td>单位名称：</td>
                     <td width="80%">
                         <input type="text" id="roleName" name="title" class="easyui-validatebox" required="true" />
-
                     </td>
                 </tr>
                 <tr>
                     <td>开始时间：</td>
                     <td width="80%">
                         <input type="text" id="roleName" name="startTime" class="easyui-validatebox" required="true" />
-
                     </td>
                 </tr>
                 <tr>
                     <td>结束时间：</td>
                     <td width="80%">
                         <input type="text" id="roleName" name="endTime" class="easyui-validatebox" required="true" />
-
                     </td>
                 </tr>
                 <tr>
                     <td>支付金额：</td>
                     <td width="80%">
                         <input type="text" id="roleName" name="pay" class="easyui-validatebox" required="true" />
-
                     </td>
                 </tr>
             </table>
         </form>
     </div>
-
     <div id="dlg-buttons">
         <a href="javascript:saveRole()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
         <a href="javascript:closeRoleSaveDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
     </div>
-
     <div id="dlg2" class="easyui-dialog" style="width: 300px;height: 450px;padding: 10px 20px" closed="true" buttons="#dlg2-buttons">
         <ul id="tree" class="easyui-tree"></ul>
     </div>
-
 </body>
 <script>
-
  var id;
     $(function () {
         $("#dg").datagrid({
@@ -119,7 +91,6 @@
             dataType: 'json',
             url: address+"/data/getways/simple",
             columns: [
-
                 [{
                         title: '编号',
                         field: 'Id',
@@ -139,7 +110,7 @@
                     {
                         field: 'endTime',
                         title: '租约到期时间',
-                        width: 110
+                        width: 150
                     }
                 ]
             ],
@@ -149,18 +120,6 @@
             onClickRow: function (index, row) {
 
                 var id = row["getwayMark"];
-
-                //     $.ajax({
-                //         url: "http://192.168.3.2:8888/data/getway/" + id + "/subNodes",
-                //         type: 'post',
-
-                //         success: function () {
-
-                //             $('#w').window('open');
-                //         }
-
-                //     });
-
                 $("#w").datagrid({
                     singleSelect: true,
                     dataType: 'json',
@@ -170,7 +129,7 @@
                                 title: '编号',
                                 field: 'rentId',
                                 width: 100,
-                                checkbox: true, //这个checkbox:true 就表示让Id这一行显示为复选框的样式。  
+                                checkbox: true, 
                                 singleSelect: true
 
                             },
@@ -182,12 +141,12 @@
                             {
                                 field: 'startTime',
                                 title: '开始时间',
-                                width: 120
+                                width: 140
                             },
                             {
                                 field: 'endTime',
                                 title: '结束时间',
-                                width: 120
+                                width: 140
                             }
                             ,
                             {
@@ -208,18 +167,13 @@
                     pageSize: 8,
                     pageList: [8],
                 });
-
             }
-
-
         });
     });
-
     function openRoleAddDialog() {
         $("#dlg").dialog("open").dialog("setTitle", "添加租用信息");
         url = address+"/author/getway"; 
     }
- 
     function saveRole() {
         $("#fm").form("submit", {
             url: url,
@@ -257,7 +211,7 @@
         var row = selectedRows[0];
         $("#dlg").dialog("open").dialog("setTitle", "修改信息");
         $("#fm").form("load", row);
-        url = address+"/manage/getway/update"; //修改的时候的url
+        url = address+"/manage/getway/update"; 
     }
 
 
@@ -300,40 +254,7 @@
 </script>
 
 <script>
-  
-   
-//   function saveRole() {
-       
-
-//         $.ajax({
-//             url: url,
-//             type = 'post',
-//             xhrFields: {
-//                 withCredentials: true
-//             },
-//             crossDomain: true,
-//             data: $('#fm').serialize(),
-//             success: function (result) {
-
-//                 if (result.success == true) {
-//                     alert("保存成功");
-
-//                 } else {
-//                     alert("保存失败");
-//                 }
-//             }
-//         });
-//     }
-
-
-
     function searchRole() {
-        // $.ajax({
-        //     type: 'post',
-        //     url: "http://192.168.3.2:8888/data/getway/" + $("#idd").value,
-        //     success: function (data) {
-        //         // alert($("#idd").val());
-
         $("#w").datagrid({
             dataType: 'json',
             url: "http://10.28.44.241:8888/data/getway/" + $("#idd").val(),
@@ -342,7 +263,7 @@
                         title: '编号',
                         field: 'Id',
                         width: 100,
-                        checkbox: true, //这个checkbox:true 就表示让Id这一行显示为复选框的样式。  
+                        checkbox: true,  
                     },
                     {
                         field: 'getwayMark',
@@ -359,20 +280,9 @@
 
         });
     }
-    //     });
-    // }
     function closeRoleSaveDialog() {
         $("#dlg").dialog("close");
         $("#fm").form('clear');
     }
     </script>
-<script>
-
-   
-</script>
-
-
-
-
-
 </html>
