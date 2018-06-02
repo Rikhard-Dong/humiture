@@ -241,7 +241,7 @@ public class AuthorServiceImpl implements AuthorService {
 //                LOGGER.info("user authors is {}", userAuthor);
                 UserInfo user = userInfoDao.findByUserId(userAuthor.getUserId());
 //                LOGGER.info("list node author user {}", user);
-                Node node = nodeDao.findById(userAuthor.getNodeId(), currentUser.getUserType(), currentUser.getUnitId());
+                Node node = nodeDao.findByIdAndUserInfo(userAuthor.getNodeId(), currentUser.getUserType(), currentUser.getUnitId());
 //                LOGGER.info("list node author node {}", node);
                 UserAuthorDto dto = new UserAuthorDto(userAuthor.getUserAuthorId(), node.getNodeMark(), user.getUsername());
 //                LOGGER.info("list node author dto {}", dto);

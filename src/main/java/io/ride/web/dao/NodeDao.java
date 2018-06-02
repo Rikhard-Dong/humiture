@@ -14,11 +14,15 @@ import java.util.List;
 public interface NodeDao {
     boolean isExists(@Param("mark") String mark);
 
+    boolean isExistsById(@Param("id") Integer id);
+
     List<Node> list();
 
-    Node findById(@Param("nodeId") int nodeId,
-                  @Param("userType") Integer userType,
-                  @Param("unitId") Integer unitId);
+    Node findById(@Param("nodeId") int nodeId);
+
+    Node findByIdAndUserInfo(@Param("nodeId") int nodeId,
+                             @Param("userType") Integer userType,
+                             @Param("unitId") Integer unitId);
 
     Node findByMark(@Param("mark") String mark,
                     @Param("userType") Integer userType,

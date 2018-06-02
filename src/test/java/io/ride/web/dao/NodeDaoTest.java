@@ -87,4 +87,14 @@ public class NodeDaoTest {
         assertFalse(nodeDao.isExists("1115"));
 
     }
+
+    @Test
+    public void isExists1() {
+        System.out.println(nodeDao.isExists("123123123123"));
+    }
+
+    @Test
+    public void findById() {
+        System.out.println(nodeDao.findById(159));
+    }
 }

@@ -87,12 +87,15 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (!PermissionUtil.isAdmin(user)) {
             throw new HasNoPermissionException("此操作需要系统管理员权限!");
         }
-        if (!nodeDao.isExists(node.getNodeMark())) {
+        if (!nodeDao.isExistsById(node.getNodeId())) {
             throw new NotFoundException("节点不存在");
         }
         int result;
+
+        Node nodeTemp = nodeDao.findById(node.getNodeId());
+
         // 如果当前节点网关, 则连同更新网关信息
-        if (node.getType() == 0) {
+        if (nodeTemp.getType() == 0) {
             LOGGER.info("当前节点为网关节点, 同步更新网关表");
             Getway getway = getwayDao.findByMark(node.getNodeMark(), user.getUserType(), unitId);
             getway.setSpareNode(String.valueOf(node.getSpareNode()));
@@ -193,7 +196,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
             throws NotFoundException, HasNoPermissionException {
         UserInfo user = PermissionUtil.isLogin(session);
         if (PermissionUtil.isAdmin(user) || PermissionUtil.isUnitAdmin(user)) {
-            Node node = nodeDao.findById(nodeId, user.getUserType(), user.getUnitId());
+            Node node = nodeDao.findByIdAndUserInfo(nodeId, user.getUserType(), user.getUnitId());
             if (node == null) {
                 throw new NotFoundException("节点不存在");
             }
@@ -349,7 +352,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (subUser == null) {
             throw new NotFoundException("本单位没有该用户");
         }
-        Node node = nodeDao.findById(nodeId, user.getUserType(), user.getUnitId());
+        Node node = nodeDao.findByIdAndUserInfo(nodeId, user.getUserType(), user.getUnitId());
         if (node == null) {
             throw new NotFoundException("节点不存在或者没有该节点租约");
         }
@@ -384,7 +387,7 @@ public class GetwayNodeServiceImpl implements GetwayNodeService {
         if (subUser == null) {
             throw new NotFoundException("本单位没有该用户");
         }
-        Node node = nodeDao.findById(nodeId, user.getUserType(), user.getUnitId());
+        Node node = nodeDao.findByIdAndUserInfo(nodeId, user.getUserType(), user.getUnitId());
         if (node == null) {
             throw new NotFoundException("节点不存在或者没有该节点租约");
         }

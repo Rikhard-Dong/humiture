@@ -34,9 +34,9 @@ public class ManageController {
     private GetwayNodeService getwayNodeService;
 
     /*
-    *******************************************************************
-    **********************   节点网关管理   ******************************
-    *******************************************************************/
+     *******************************************************************
+     **********************   节点网关管理   ******************************
+     *******************************************************************/
 
     @DeleteMapping("/node/{mark}")
     public Result deleteNode(@PathVariable("mark") String mark, HttpSession session) {
@@ -133,9 +133,12 @@ public class ManageController {
 
     @PostMapping("/node/update")
     public Result updateNode(Node node, HttpSession session) {
+        LOGGER.info("更新节点信息 ---> {}", node);
+
         try {
             getwayNodeService.updateNode(node, session);
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.error(e.getMessage());
             return new Result(false, -1, e.getMessage());
         }

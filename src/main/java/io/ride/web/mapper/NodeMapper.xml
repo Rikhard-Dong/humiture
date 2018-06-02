@@ -93,6 +93,12 @@
     </select>
 
     <select id="findById" resultMap="nodeResult">
+        select *
+        from Node
+        where NodeId = #{nodeId}
+    </select>
+
+    <select id="findByIdAndUserInfo" resultMap="nodeResult">
         <choose>
             <when test="userType == 0">
                 SELECT
@@ -161,5 +167,11 @@
                 #{unitId}
             </otherwise>
         </choose>
+    </select>
+
+    <select id="isExistsById" resultType="java.lang.Boolean">
+        SELECT count(1)
+        FROM Node
+        WHERE nodeId = #{id};
     </select>
 </mapper>
