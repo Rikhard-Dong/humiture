@@ -136,8 +136,8 @@ public class DataController {
      */
     @PostMapping(value = "/getways/simple")
     public Object listNodesNotWithoutSubNode(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                                      @RequestParam(value = "rows", required = false, defaultValue = "20") Integer rows,
-                                                      HttpSession session) {
+                                             @RequestParam(value = "rows", required = false, defaultValue = "20") Integer rows,
+                                             HttpSession session) {
         LOGGER.info("getways simple, page = {}, rows = {}", page, rows);
         PageHelper.startPage(page, rows);
         List<GetwayDto> getways = null;
@@ -293,6 +293,19 @@ public class DataController {
         }
 
         return new DataTableResult(pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    @GetMapping("/units")
+    public Result listUnits(HttpSession session) {
+        try {
+
+            List<String> units = unitService.listTitles(session);
+            return new Result(true, 200, "单位名称列表").add("unints", units);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return new Result(false, -1, e.getMessage());
+        }
+
     }
 
     /**

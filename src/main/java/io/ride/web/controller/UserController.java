@@ -7,6 +7,7 @@ import io.ride.web.exception.UsernameOrPasswordException;
 import io.ride.web.service.UnitService;
 import io.ride.web.service.UserService;
 import io.ride.web.util.RandomValidateCodeUtil;
+import io.swagger.annotations.Api;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
@@ -28,9 +29,9 @@ import javax.ws.rs.GET;
  * Time: 下午10:41
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Controller
-@ResponseBody
+@RestController
 @RequestMapping("/user")
+@Api(value = "用户操作", description = "用户登录登出一系列接口")
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -42,7 +43,7 @@ public class UserController {
 
     @GetMapping("/code")
     public void getValidateCode(HttpServletRequest request, HttpServletResponse response) {
-        LOGGER.info("code  is  ------------> {}");
+//        LOGGER.info("code  is  ------------> {}");
         RandomValidateCodeUtil randCode = new RandomValidateCodeUtil();
         randCode.getRandcode(request, response);
 //        HttpSession session = request.getSession();

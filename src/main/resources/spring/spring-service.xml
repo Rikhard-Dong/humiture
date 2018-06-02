@@ -9,7 +9,10 @@
 
     <context:component-scan base-package="io.ride.web.service"/>
 
-    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
+
+    <context:annotation-config/>
+    <bean id="swagger2Config" class="io.ride.web.config.Swagger2Config"/>
+    <!--<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">-->
+    <!--<property name="dataSource" ref="dataSource"/>-->
+    <!--</bean>-->
 </beans>

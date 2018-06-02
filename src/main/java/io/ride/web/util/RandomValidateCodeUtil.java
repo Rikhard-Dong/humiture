@@ -1,5 +1,8 @@
 package io.ride.web.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +18,8 @@ import java.util.Random;
  * Time: 下午6:25
  */
 public class RandomValidateCodeUtil {
+
+    Logger logger = LoggerFactory.getLogger(RandomValidateCodeUtil.class);
 
     public static final String CODE = "RANDOMVALIDATECODEKEY";// 放到session中的key
     private Random random = new Random();
@@ -70,6 +75,8 @@ public class RandomValidateCodeUtil {
         }
         session.removeAttribute(CODE);
         session.setAttribute(CODE, randomString.toUpperCase());
+        logger.info("code ---> {}", randomString);
+
         g.dispose();
         try {
             ImageIO.write(image, "JPEG", response.getOutputStream());// 将内存中的图片通过流动形式输出到客户端

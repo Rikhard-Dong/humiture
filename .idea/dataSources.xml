@@ -15,7 +15,16 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="NewTemperMonit_new@115.29.175.26" uuid="18762dbc-b8b4-4a9f-8d9f-e043cf30d23b">
+    <data-source source="LOCAL" name="NewTemperMonit@115.29.175.26" uuid="a0f193bc-6410-4ef2-8a6c-40a13039906a">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://115.29.175.26;database=NewTemperMonit</jdbc-url>
+      <driver-properties>
+        <property name="applicationName" value="DataGrip" />
+      </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="NewTemperMonit_new@115.29.175.26 [2]" uuid="59c5a43c-3017-4ecc-9e08-84d8fb6e6c61">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
@@ -24,7 +33,7 @@
         <property name="applicationName" value="DataGrip" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="NewTemperMonit@115.29.175.26" uuid="a0f193bc-6410-4ef2-8a6c-40a13039906a">
+    <data-source source="LOCAL" name="NewTemperMonit@115.29.175.26 [2]" uuid="e99bf1b6-c79b-4c59-b313-69657b9623ec">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>

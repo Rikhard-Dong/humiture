@@ -105,5 +105,13 @@ public interface UnitService {
     Unit findUnit(String title, HttpSession session)
             throws HasNoPermissionException, NotFoundException;
 
+
+    /**
+     * 列出所有单位名称
+     *
+     * @param session
+     * @return
+     * @throws HasNoPermissionException
+     */
     List<String> listTitles(HttpSession session) throws HasNoPermissionException;
 }

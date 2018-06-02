@@ -32,7 +32,6 @@ public class AuthorController {
     /*
     * 网关授权
      */
-
     @PostMapping("/getway")
     public Result authorGetway(RentDto rentDto, HttpSession session) {
         LOGGER.info("add rent = {}", rentDto);
