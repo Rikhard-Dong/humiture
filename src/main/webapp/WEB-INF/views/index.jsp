@@ -12,8 +12,6 @@
     <title>Index</title>
 </head>
 <body>
-<script>
-    window.location.href = '${pageContext.request.contextPath}/static/login.html'
-</script>
+<h1>温湿度检测项目</h1>
 </body>
 </html>
